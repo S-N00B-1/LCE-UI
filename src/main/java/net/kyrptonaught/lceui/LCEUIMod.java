@@ -2,6 +2,7 @@ package net.kyrptonaught.lceui;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.kyrptonaught.kyrptconfig.config.ConfigManager;
+import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
 
 
@@ -14,5 +15,6 @@ public class LCEUIMod implements ClientModInitializer {
     public void onInitializeClient() {
         configManager.load();
         WhatsThisInit.init();
+        CustomItemGroup.registerItemGroups();
     }
 }

@@ -25,17 +25,17 @@ import java.util.List;
 
 public class DescriptionRenderer {
     private static final Identifier slot = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/slot.png");
-    private static final Identifier TL = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/tl.png");
-    private static final Identifier TM = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/tm.png");
-    private static final Identifier TR = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/tr.png");
+    private static final Identifier TOP_LEFT = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/top_left.png");
+    private static final Identifier TOP_CENTER = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/top_center.png");
+    private static final Identifier TOP_RIGHT = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/top_right.png");
 
-    private static final Identifier ML = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/ml.png");
-    private static final Identifier MM = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/mm.png");
-    private static final Identifier MR = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/mr.png");
+    private static final Identifier MIDDLE_LEFT = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/middle_left.png");
+    private static final Identifier MIDDLE_CENTER = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/middle_center.png");
+    private static final Identifier MIDDLE_RIGHT = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/middle_right.png");
 
-    private static final Identifier BL = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/bl.png");
-    private static final Identifier BM = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/bm.png");
-    private static final Identifier BR = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/br.png");
+    private static final Identifier BOTTOM_LEFT = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/bottom_left.png");
+    private static final Identifier BOTTOM_CENTER = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/bottom_center.png");
+    private static final Identifier BOTTOM_RIGHT = new Identifier(LCEUIMod.MOD_ID, "textures/gui/whatsthis/popup/bottom_right.png");
 
     public static DescriptionInstance renderingDescription;
 
@@ -109,19 +109,19 @@ public class DescriptionRenderer {
     }
 
     private static void renderBackground(MatrixStack matrices, int x, int y, int width, int height) {
-        drawTexture(matrices, x, y, 7, 7, TL);
-        drawTexture(matrices, x + 7, y, width - 14, 7, TM);
-        drawTexture(matrices, x + width - 7, y, 7, 7, TR);
+        drawTexture(matrices, x, y, 7, 7, TOP_LEFT);
+        drawTexture(matrices, x + 7, y, width - 14, 7, TOP_CENTER);
+        drawTexture(matrices, x + width - 7, y, 7, 7, TOP_RIGHT);
 
         y = y + 7;
-        drawTexture(matrices, x, y, 7, height - 14, ML);
-        drawTexture(matrices, x + 7, y, width - 14, height - 14, MM);
-        drawTexture(matrices, x + width - 7, y, 7, height - 14, MR);
+        drawTexture(matrices, x, y, 7, height - 14, MIDDLE_LEFT);
+        drawTexture(matrices, x + 7, y, width - 14, height - 14, MIDDLE_CENTER);
+        drawTexture(matrices, x + width - 7, y, 7, height - 14, MIDDLE_RIGHT);
 
         y = y + height - 14;
-        drawTexture(matrices, x, y, 7, 7, BL);
-        drawTexture(matrices, x + 7, y, width - 14, 7, BM);
-        drawTexture(matrices, x + width - 7, y, 7, 7, BR);
+        drawTexture(matrices, x, y, 7, 7, BOTTOM_LEFT);
+        drawTexture(matrices, x + 7, y, width - 14, 7, BOTTOM_CENTER);
+        drawTexture(matrices, x + width - 7, y, 7, 7, BOTTOM_RIGHT);
     }
 
     private static void drawTexture(MatrixStack matrices, int x, int y, int width, int height, Identifier texture) {

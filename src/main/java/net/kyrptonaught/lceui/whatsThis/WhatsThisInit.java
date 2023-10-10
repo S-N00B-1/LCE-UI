@@ -20,6 +20,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.resource.ResourceType;
 
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -83,12 +84,12 @@ public class WhatsThisInit {
                                         .then(ClientCommandManager.literal("clear")
                                                 .then(ClientCommandManager.argument("block", ViewedBlockArgumentType.viewedBlockArgumentType())
                                                         .executes(context -> {
-                                                            Identifier id = ViewedBlockArgumentType.getViewedBlockArgumentType(context, "block");
-                                                            boolean removed = descriptionManager.viewedDescriptions.remove(id.toString());
+                                                            ViewedBlock viewedBlock = ViewedBlockArgumentType.getViewedBlockArgumentType(context, "block");
+                                                            boolean removed = descriptionManager.viewedDescriptions.remove(viewedBlock.toString());
                                                             if (removed)
-                                                                context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.cleared", id));
+                                                                context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.cleared", viewedBlock));
                                                             else
-                                                                context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.notfound", id));
+                                                                context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.notfound", viewedBlock));
                                                             return Command.SINGLE_SUCCESS;
                                                         })))))));
 
