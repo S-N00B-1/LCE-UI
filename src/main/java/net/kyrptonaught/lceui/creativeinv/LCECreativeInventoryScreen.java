@@ -116,14 +116,14 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
                 this.handler.onSlotClick(slot == null ? slotId : slot.id, button, actionType, this.client.player);
                 if (ScreenHandler.unpackQuickCraftStage(button) == 2) {
                     for (int j = 0; j < 9; ++j) {
-                        this.client.interactionManager.clickCreativeStack(this.handler.getSlot(60 + j).getStack(), 51 + j);
+                        this.client.interactionManager.clickCreativeStack(this.handler.getSlot(INVENTORY.size() + j).getStack(), INVENTORY.size() - 9 + j);
                     }
                 } else if (slot != null) {
                     ItemStack itemStack2 = this.handler.getSlot(slot.id).getStack();
-                    this.client.interactionManager.clickCreativeStack(itemStack2, slot.id - this.handler.slots.size() + 9 + 51);
-                    int k = 60 + button;
+                    this.client.interactionManager.clickCreativeStack(itemStack2, slot.id - this.handler.slots.size() + INVENTORY.size());
+                    int k = INVENTORY.size() + button;
                     if (actionType == SlotActionType.SWAP) {
-                        this.client.interactionManager.clickCreativeStack(itemStack, k - this.handler.slots.size() + 9 + 51);
+                        this.client.interactionManager.clickCreativeStack(itemStack, k - this.handler.slots.size() + INVENTORY.size());
                     } else if (actionType == SlotActionType.THROW && !itemStack.isEmpty()) {
                         ItemStack itemStack4 = itemStack.copy();
                         itemStack4.setCount(button == 0 ? 1 : itemStack4.getMaxCount());
