@@ -176,21 +176,6 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.client.keyboard.setRepeatEvents(false);
     }
 
-    @Override
-    public boolean charTyped(char chr, int modifiers) {
-        return false;
-    }
-
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        return super.keyPressed(keyCode, scanCode, modifiers);
-    }
-
-    @Override
-    public boolean keyReleased(int keyCode, int scanCode, int modifiers) {
-        return super.keyReleased(keyCode, scanCode, modifiers);
-    }
-
     private void drawCenteredText(MatrixStack matrices, Text text, float minX, float maxX, float minY, float maxY, float scale, int color) {
         float textX = ((minX + maxX) / scale - (this.textRenderer.getWidth(text))) / 2;
         float textY = ((minY + maxY) / scale - (this.textRenderer.fontHeight)) / 2;

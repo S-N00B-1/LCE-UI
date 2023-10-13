@@ -1,6 +1,11 @@
 {
-  "id": "building_blocks",
+  "id": "lceui:building_blocks",
   "entries": [
-    "minecraft:stone"
+    "minecraft:stone",
+    "minecraft:diamond_sword",
+    {
+      "id": "minecraft:diamond",
+      "Count": 5
+    }
   ]
 }

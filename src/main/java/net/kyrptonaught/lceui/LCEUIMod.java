@@ -15,6 +15,6 @@ public class LCEUIMod implements ClientModInitializer {
     public void onInitializeClient() {
         configManager.load();
         WhatsThisInit.init();
-        CustomItemGroup.registerItemGroups();
+        CustomItemGroup.init();
     }
 }
