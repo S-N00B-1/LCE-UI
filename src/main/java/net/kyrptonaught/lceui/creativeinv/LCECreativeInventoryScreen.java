@@ -3,6 +3,7 @@ package net.kyrptonaught.lceui.creativeinv;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -28,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Environment(value=EnvType.CLIENT)
 public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreativeInventoryScreen.CreativeScreenHandler> {
-    static final SimpleInventory INVENTORY = new SimpleInventory(60);
+    static final SimpleInventory INVENTORY = new SimpleInventory(50);
     private static int selectedTab = 0;
     private float scrollPosition;
     private boolean scrolling;
@@ -210,15 +211,16 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         } else {
             text = Text.translatable("lceui.itemGroup.unknown");
         }
-        this.drawCenteredText(matrices, text, 0, this.backgroundWidth, 35, 35, 2.0f/3.0f, 0xFF000000);
-        this.drawCreativeInventoryTexture(matrices, 31, 220, 32, 29, 32 * (selectedTab % 8), -1);
+        this.drawCenteredText(matrices, text, 0, this.backgroundWidth, 41, 41, 2.0f/3.0f, 0xFF000000);
+        this.drawCreativeInventoryTexture(matrices, (selectedTab % 8 == 0 ? 31 : (selectedTab % 8 == 7 ? 105 : 68)), 220, 32, 30, 32 * (selectedTab % 8), -1);
         for (CustomItemGroup itemGroup : CustomItemGroup.LCE_ITEM_GROUPS) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, itemGroup.getResourceLocation());
 
             matrices.push();
-            DrawableHelper.drawTexture(matrices, 32 * itemGroup.getIndex() + 3, 1, 0, 0, 26, 26, 26, 26);
+            float widthAndHeight = 26.0f * (2.0f/3.0f);
+            LCEDrawableHelper.drawTexture(matrices, 32 * itemGroup.getIndex() + 3 + ((26.0f - widthAndHeight) / 2.0f), 1 + ((26.0f - widthAndHeight) / 2.0f), widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
             matrices.pop();
         }
     }
@@ -274,9 +276,10 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         if (!this.hasScrollbar()) {
             return false;
         }
-        int i = (this.handler.itemList.size() + 9 - 1) / 9 - 5;
-        float f = (float)(amount / (double)i);
-        this.scrollPosition = MathHelper.clamp(this.scrollPosition - f, 0.0f, 1.0f);
+        int amountOfPages = MathHelper.ceil((float)this.handler.itemList.size() / (CreativeScreenHandler.INVENTORY_WIDTH * CreativeScreenHandler.INVENTORY_HEIGHT));
+        double scroll = amount / (amountOfPages - 1);
+        this.scrollPosition = MathHelper.clamp(this.scrollPosition - (float)scroll, 0.0f, 1.0f);
+        System.out.println(this.scrollPosition);
         this.handler.scrollItems(this.scrollPosition);
         return true;
     }
@@ -300,14 +303,14 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (this.scrolling) {
-            int i = this.y + 18;
-            int j = i + 112;
-            this.scrollPosition = ((float)mouseY - (float)i - 7.5f) / ((float)(j - i) - 15.0f);
-            this.scrollPosition = MathHelper.clamp(this.scrollPosition, 0.0f, 1.0f);
-            this.handler.scrollItems(this.scrollPosition);
-            return true;
-        }
+//        if (this.scrolling) {
+//            int i = this.y + 18;
+//            int j = i + 112;
+//            this.scrollPosition = ((float)mouseY - (float)i - 7.5f) / ((float)(j - i) - 15.0f);
+//            this.scrollPosition = MathHelper.clamp(this.scrollPosition, 0.0f, 1.0f);
+//            this.handler.scrollItems(this.scrollPosition);
+//            return true;
+//        }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
@@ -336,7 +339,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
     protected void renderTabs(MatrixStack matrices, int x, int y) {
         for (int i = 0; i < Math.min(8, CustomItemGroup.LCE_ITEM_GROUPS.size()); i++) {
-            this.drawCreativeInventoryTexture(matrices, 68, 220, 32, 29, 32 * (i % 8) + x, y);
+            this.drawCreativeInventoryTexture(matrices, 142, 220, 32, 30, 32 * (i % 8) + x, y);
         }
     }
 
@@ -380,15 +383,17 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             extends ScreenHandler {
         public final DefaultedList<ItemStack> itemList = DefaultedList.of();
         private final ScreenHandler parent;
+        private static final int INVENTORY_WIDTH = 10;
+        private static final int INVENTORY_HEIGHT = 5;
 
         public CreativeScreenHandler(PlayerEntity player) {
             super(null, 0);
             this.parent = player.playerScreenHandler;
             PlayerInventory playerInventory = player.getInventory();
             
-            for (int x = 0; x < 10; x++) {
-                for (int y = 0; y < 6; y++) {
-                    this.addSlot(new Slot(INVENTORY, x + y * 10, x * 18 + 31, y * 18 + 45));
+            for (int x = 0; x < INVENTORY_WIDTH; x++) {
+                for (int y = 0; y < INVENTORY_HEIGHT; y++) {
+                    this.addSlot(new Slot(INVENTORY, x + y * 10, x * 18 + 31, y * 18 + 57));
                 }
             }
 
@@ -404,25 +409,22 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         }
 
         public void scrollItems(float position) {
-            int i = (this.itemList.size() + 10 - 1) / 10 - 6;
-            int j = (int)((double)(position * (float)i) + 0.5);
-            if (j < 0) {
-                j = 0;
-            }
-            for (int y = 0; y < 6; ++y) {
-                for (int x = 0; x < 10; ++x) {
-                    int m = x + (y + j) * 10;
+            int amountOfPages = MathHelper.ceil((float)this.itemList.size() / (INVENTORY_WIDTH * INVENTORY_HEIGHT));
+            int currentTab = (int)(position * (amountOfPages - 1));
+            for (int y = 0; y < INVENTORY_HEIGHT; ++y) {
+                for (int x = 0; x < INVENTORY_WIDTH; ++x) {
+                    int m = x + (y + currentTab * INVENTORY_HEIGHT) * INVENTORY_WIDTH;
                     if (m >= 0 && m < this.itemList.size()) {
-                        INVENTORY.setStack(x + y * 10, this.itemList.get(m));
+                        INVENTORY.setStack(x + y * INVENTORY_WIDTH, this.itemList.get(m));
                         continue;
                     }
-                    INVENTORY.setStack(x + y * 10, ItemStack.EMPTY);
+                    INVENTORY.setStack(x + y * INVENTORY_WIDTH, ItemStack.EMPTY);
                 }
             }
         }
 
         public boolean shouldShowScrollbar() {
-            return this.itemList.size() > 60;
+            return this.itemList.size() > INVENTORY.size();
         }
 
         @Override
