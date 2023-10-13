@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryListener;
@@ -116,14 +117,14 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
                 this.handler.onSlotClick(slot == null ? slotId : slot.id, button, actionType, this.client.player);
                 if (ScreenHandler.unpackQuickCraftStage(button) == 2) {
                     for (int j = 0; j < 9; ++j) {
-                        this.client.interactionManager.clickCreativeStack(this.handler.getSlot(INVENTORY.size() + j).getStack(), INVENTORY.size() - 9 + j);
+                        this.client.interactionManager.clickCreativeStack(this.handler.getSlot(INVENTORY.size() + j).getStack(), 36 + j);
                     }
                 } else if (slot != null) {
                     ItemStack itemStack2 = this.handler.getSlot(slot.id).getStack();
-                    this.client.interactionManager.clickCreativeStack(itemStack2, slot.id - this.handler.slots.size() + INVENTORY.size());
+                    this.client.interactionManager.clickCreativeStack(itemStack2, slot.id - this.handler.slots.size() + 9 + 36);
                     int k = INVENTORY.size() + button;
                     if (actionType == SlotActionType.SWAP) {
-                        this.client.interactionManager.clickCreativeStack(itemStack, k - this.handler.slots.size() + INVENTORY.size());
+                        this.client.interactionManager.clickCreativeStack(itemStack, k - this.handler.slots.size() + 9 + 36);
                     } else if (actionType == SlotActionType.THROW && !itemStack.isEmpty()) {
                         ItemStack itemStack4 = itemStack.copy();
                         itemStack4.setCount(button == 0 ? 1 : itemStack4.getMaxCount());
@@ -177,14 +178,6 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.client.keyboard.setRepeatEvents(false);
     }
 
-    private void drawCenteredText(MatrixStack matrices, Text text, float minX, float maxX, float minY, float maxY, float scale, int color) {
-        float textX = ((minX + maxX) / scale - (this.textRenderer.getWidth(text))) / 2;
-        float textY = ((minY + maxY) / scale - (this.textRenderer.fontHeight)) / 2;
-        matrices.scale(scale, scale, scale);
-        this.textRenderer.draw(matrices, text, textX, textY, color);
-        matrices.scale(1/scale, 1/scale, 1/scale);
-    }
-
     private void drawCreativeInventoryTexture(MatrixStack matrices, int u, int v, int width, int height, int x, int y) {
         if (this.client == null) return;
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -198,8 +191,8 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-        this.renderTabs(matrices, MathHelper.floor(this.client.getWindow().getScaledWidth() / 2.0f - 128), MathHelper.ceil(this.client.getWindow().getScaledHeight() / 2.0f - 98));
-        this.drawCreativeInventoryTexture(matrices, 0, 20, 256, 193, MathHelper.floor(this.client.getWindow().getScaledWidth() / 2.0f - 128), MathHelper.ceil(this.client.getWindow().getScaledHeight() / 2.0f - 98));
+        this.renderTabs(matrices, this.x, this.y);
+        this.drawCreativeInventoryTexture(matrices, 0, 20, 256, 193, this.x, this.y);
     }
 
     @Override
@@ -211,8 +204,8 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         } else {
             text = Text.translatable("lceui.itemGroup.unknown");
         }
-        this.drawCenteredText(matrices, text, 0, this.backgroundWidth, 41, 41, 2.0f/3.0f, 0xFF000000);
-        this.drawCreativeInventoryTexture(matrices, (selectedTab % 8 == 0 ? 31 : (selectedTab % 8 == 7 ? 105 : 68)), 220, 32, 30, 32 * (selectedTab % 8), -1);
+        LCEDrawableHelper.drawCenteredText(matrices, this.textRenderer, text, 0, this.backgroundWidth, 41, 41, 2.0f/3.0f, 0xFF000000);
+        this.drawCreativeInventoryTexture(matrices, (selectedTab % 8 == 0 ? 31 : (selectedTab % 8 == 7 ? 105 : 68)), 220, 32, 30, 32 * (selectedTab % 8), 0);
         for (CustomItemGroup itemGroup : CustomItemGroup.LCE_ITEM_GROUPS) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -279,7 +272,6 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         int amountOfPages = MathHelper.ceil((float)this.handler.itemList.size() / (CreativeScreenHandler.INVENTORY_WIDTH * CreativeScreenHandler.INVENTORY_HEIGHT));
         double scroll = amount / (amountOfPages - 1);
         this.scrollPosition = MathHelper.clamp(this.scrollPosition - (float)scroll, 0.0f, 1.0f);
-        System.out.println(this.scrollPosition);
         this.handler.scrollItems(this.scrollPosition);
         return true;
     }
@@ -293,12 +285,12 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
     protected boolean isClickInScrollbar(double mouseX, double mouseY) {
         int i = this.x;
-        int j = this.y;
-        int k = i + 175;
-        int l = j + 18;
-        int m = k + 14;
-        int n = l + 112;
-        return mouseX >= (double)k && mouseY >= (double)l && mouseX < (double)m && mouseY < (double)n;
+        int j = this.y - 20;
+        int minX = i + 221;
+        int minY = j + 77;
+        int maxX = i + 232;
+        int maxY = j + 167;
+        return mouseX >= (double)minX && mouseY >= (double)minY && mouseX < (double)maxX && mouseY < (double)maxY;
     }
 
     @Override
@@ -343,37 +335,6 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         }
     }
 
-    protected void renderTabIcon(MatrixStack matrices, ItemGroup group) {
-        boolean bl = group.getIndex() == selectedTab;
-        boolean bl2 = group.isTopRow();
-        int i = group.getColumn();
-        int j = i * 28;
-        int k = 0;
-        int l = this.x + 28 * i;
-        int m = this.y;
-        if (bl) {
-            k += 32;
-        }
-        if (group.isSpecial()) {
-            l = this.x + this.backgroundWidth - 28 * (6 - i);
-        } else if (i > 0) {
-            l += i;
-        }
-        if (bl2) {
-            m -= 28;
-        } else {
-            k += 64;
-            m += this.backgroundHeight - 4;
-        }
-        this.drawTexture(matrices, l, m, j, k, 28, 32);
-        this.itemRenderer.zOffset = 100.0f;
-        int n2 = bl2 ? 1 : -1;
-        ItemStack itemStack = group.getIcon();
-        this.itemRenderer.renderInGuiWithOverrides(itemStack, l += 6, m += 8 + n2);
-        this.itemRenderer.renderGuiItemOverlay(this.textRenderer, itemStack, l, m);
-        this.itemRenderer.zOffset = 0.0f;
-    }
-
     public int getSelectedTab() {
         return selectedTab;
     }
@@ -393,12 +354,12 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             
             for (int x = 0; x < INVENTORY_WIDTH; x++) {
                 for (int y = 0; y < INVENTORY_HEIGHT; y++) {
-                    this.addSlot(new Slot(INVENTORY, x + y * 10, x * 18 + 31, y * 18 + 57));
+                    this.addSlot(new Slot(INVENTORY, x + y * INVENTORY_WIDTH, x * 18 + 31, y * 18 + 58));
                 }
             }
 
             for (int x = 0; x < 9; x++) {
-                this.addSlot(new Slot(playerInventory, x, x * 18 + 40, 158));
+                this.addSlot(new Slot(playerInventory, x, x * 18 + 40, 159));
             }
             this.scrollItems(0.0f);
         }
@@ -429,8 +390,9 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
         @Override
         public ItemStack transferSlot(PlayerEntity player, int index) {
+            System.out.println("transferSlot() called! player: " + player.getEntityName() + ", index: " + index);
             Slot slot = this.slots.get(index);
-            if (index >= this.slots.size() - 10 && index < this.slots.size() && slot.hasStack()) {
+            if (index >= this.slots.size() - 9 && index < this.slots.size() && slot.hasStack()) {
                 slot.setStack(ItemStack.EMPTY);
             }
             return ItemStack.EMPTY;

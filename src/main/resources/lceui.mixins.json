@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "client": [
     "creativeinv.CreativeInvMixin",
+    "creativeinv.CreativeInvMixin$ClientAccessor",
     "titlescreen.TitleScreenMixin",
     "whatsthis.HandledScreenMixin"
   ],

@@ -1,12 +1,21 @@
 package net.kyrptonaught.lceui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
 
 public class LCEDrawableHelper {
+    public static void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, Text text, float minX, float maxX, float minY, float maxY, float scale, int color) {
+        float textX = ((minX + maxX) / scale - (textRenderer.getWidth(text))) / 2;
+        float textY = ((minY + maxY) / scale - (textRenderer.fontHeight)) / 2;
+        matrices.scale(scale, scale, scale);
+        textRenderer.draw(matrices, text, textX, textY, color);
+        matrices.scale(1/scale, 1/scale, 1/scale);
+    }
+
     public static void drawTexture(MatrixStack matrices, float x, float y, float z, float u, float v, float width, float height, float textureWidth, float textureHeight) {
         drawTexture(matrices, x, x + width, y, y + height, z, width, height, u, v, textureWidth, textureHeight);
     }

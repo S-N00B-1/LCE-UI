@@ -8,6 +8,7 @@ import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
 import net.kyrptonaught.lceui.whatsThis.ItemDescription;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
 import net.minecraft.data.dev.NbtProvider;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.function.SetNbtLootFunction;
 import net.minecraft.nbt.NbtCompound;
@@ -17,6 +18,7 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.registry.Registry;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -57,17 +59,15 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
                             }
                         } else {
                             try {
-                                NbtCompound nbtCompound = new NbtCompound();
-                                nbtCompound.putString("id", entry.getAsString());
-                                nbtCompound.putByte("Count", (byte)1);
-                                itemStackList.add(ItemStack.fromNbt(nbtCompound));
+                                Item item = Registry.ITEM.get(new Identifier(entry.getAsString()));
+                                itemStackList.add(new ItemStack(item));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
                     }
 
-                    new CustomItemGroup(groupId, itemStackList);
+                    CustomItemGroup.createAndRegister(groupId, itemStackList);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
