@@ -10,8 +10,8 @@
   "lceui.itemGroup.food": "Food",
   "lceui.itemGroup.materials": "Materials",
   "lceui.itemGroup.miscellaneous": "Miscellaneous",
-  "lceui.itemGroup.potions": "Potions",
+  "lceui.itemGroup.brewing": "Brewing",
   "lceui.itemGroup.redstone_and_transportation": "Redstone & Transportation",
-  "lceui.itemGroup.tools_and_weapons": "Tools & Weapons",
+  "lceui.itemGroup.tools_weapons_and_armor": "Tools, Weapons & Armor",
   "lceui.itemGroup.unknown": "Unknown group"
 }

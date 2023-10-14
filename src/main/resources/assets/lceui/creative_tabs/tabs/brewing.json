@@ -1,0 +1,21 @@
+{
+  "id": "lceui:brewing",
+  "entries": [
+    "minecraft:experience_bottle",
+    "minecraft:dragon_breath",
+    "minecraft:ghast_tear",
+    "minecraft:fermented_spider_eye",
+    "minecraft:blaze_powder",
+    "minecraft:magma_cream",
+    "minecraft:glistering_melon_slice",
+    "minecraft:rabbit_foot",
+    "minecraft:phantom_membrane",
+    "minecraft:empty_bottle",
+    {
+      "id": "minecraft:potion",
+      "tag": {
+        "Potion": "minecraft:water"
+      }
+    }
+  ]
+}

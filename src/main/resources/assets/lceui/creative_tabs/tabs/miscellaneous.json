@@ -50,6 +50,21 @@
     "minecraft:lava_bucket",
     "minecraft:water_bucket",
     "minecraft:milk_bucket",
-    "minecraft:cod_bucket"
+    "minecraft:cod_bucket",
+    "minecraft:salmon_bucket",
+    "minecraft:pufferfish_bucket",
+    "minecraft:tropical_fish_bucket",
+    "minecraft:cauldron",
+    "minecraft:snowball",
+    "minecraft:paper",
+    "minecraft:book",
+    "minecraft:writable_book",
+    "minecraft:ender_pearl",
+    "minecraft:ender_eye",
+    "minecraft:name_tag",
+    "minecraft:nether_star",
+    "minecraft:spawner",
+    "minecraft:turtle_egg",
+    "minecraft:creeper_spawn_egg"
   ]
 }

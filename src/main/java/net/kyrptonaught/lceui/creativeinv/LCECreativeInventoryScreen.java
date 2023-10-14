@@ -6,8 +6,6 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryListener;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -16,7 +14,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenTexts;
@@ -155,7 +152,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             this.client.keyboard.setRepeatEvents(true);
             int i = selectedTab;
             selectedTab = -1;
-            this.setSelectedTab(CustomItemGroup.LCE_ITEM_GROUPS.get(i));
+            this.setSelectedTab(CustomItemGroup.ITEM_GROUPS.get(i));
             this.client.player.playerScreenHandler.removeListener(this.listener);
             this.listener = new CreativeInventoryListener(this.client);
             this.client.player.playerScreenHandler.addListener(this.listener);
@@ -199,21 +196,21 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
         if (this.client == null) return;
         Text text;
-        if (selectedTab < CustomItemGroup.LCE_ITEM_GROUPS.size()) {
-            text = CustomItemGroup.LCE_ITEM_GROUPS.get(selectedTab).getName();
+        if (selectedTab < CustomItemGroup.ITEM_GROUPS.size()) {
+            text = CustomItemGroup.ITEM_GROUPS.get(selectedTab).getName();
         } else {
             text = Text.translatable("lceui.itemGroup.unknown");
         }
         LCEDrawableHelper.drawCenteredText(matrices, this.textRenderer, text, 0, this.backgroundWidth, 41, 41, 2.0f/3.0f, 0xFF000000);
         this.drawCreativeInventoryTexture(matrices, (selectedTab % 8 == 0 ? 31 : (selectedTab % 8 == 7 ? 105 : 68)), 220, 32, 30, 32 * (selectedTab % 8), 0);
-        for (CustomItemGroup itemGroup : CustomItemGroup.LCE_ITEM_GROUPS) {
+        for (CustomItemGroup itemGroup : CustomItemGroup.ITEM_GROUPS) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, itemGroup.getResourceLocation());
 
             matrices.push();
-            float widthAndHeight = 26.0f * (2.0f/3.0f);
-            LCEDrawableHelper.drawTexture(matrices, 32 * itemGroup.getIndex() + 3 + ((26.0f - widthAndHeight) / 2.0f), 1 + ((26.0f - widthAndHeight) / 2.0f), widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
+            float widthAndHeight = 26.0f * (3.0f/4.0f);
+            LCEDrawableHelper.drawTexture(matrices, 32 * itemGroup.getIndex() + 3 + ((26.0f - widthAndHeight) / 2.0f), 2 + ((26.0f - widthAndHeight) / 2.0f), widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
             matrices.pop();
         }
     }
@@ -223,7 +220,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         if (button == 0) {
             double d = mouseX - (double)this.x;
             double e = mouseY - (double)this.y;
-            for (CustomItemGroup customItemGroup : CustomItemGroup.LCE_ITEM_GROUPS) {
+            for (CustomItemGroup customItemGroup : CustomItemGroup.ITEM_GROUPS) {
                 if (!this.isClickInTab(customItemGroup, d, e)) continue;
                 return true;
             }
@@ -241,7 +238,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             double d = mouseX - (double)this.x;
             double e = mouseY - (double)this.y;
             this.scrolling = false;
-            for (CustomItemGroup customItemGroup : CustomItemGroup.LCE_ITEM_GROUPS) {
+            for (CustomItemGroup customItemGroup : CustomItemGroup.ITEM_GROUPS) {
                 if (!this.isClickInTab(customItemGroup, d, e)) continue;
                 this.setSelectedTab(customItemGroup);
                 return true;
@@ -279,7 +276,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     @Override
     protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int button) {
         boolean bl = mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.backgroundWidth) || mouseY >= (double)(top + this.backgroundHeight);
-        this.lastClickOutsideBounds = bl && !this.isClickInTab(CustomItemGroup.LCE_ITEM_GROUPS.get(selectedTab), mouseX, mouseY);
+        this.lastClickOutsideBounds = bl && !this.isClickInTab(CustomItemGroup.ITEM_GROUPS.get(selectedTab), mouseX, mouseY);
         return this.lastClickOutsideBounds;
     }
 
@@ -310,7 +307,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         super.render(matrices, mouseX, mouseY, delta);
-        for (CustomItemGroup customItemGroup : CustomItemGroup.LCE_ITEM_GROUPS) {
+        for (CustomItemGroup customItemGroup : CustomItemGroup.ITEM_GROUPS) {
             if (this.renderTabTooltipIfHovered(matrices, customItemGroup, mouseX, mouseY)) break;
         }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -330,8 +327,8 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     }
 
     protected void renderTabs(MatrixStack matrices, int x, int y) {
-        for (int i = 0; i < Math.min(8, CustomItemGroup.LCE_ITEM_GROUPS.size()); i++) {
-            this.drawCreativeInventoryTexture(matrices, 142, 220, 32, 30, 32 * (i % 8) + x, y);
+        for (int i = 0; i < Math.min(8, CustomItemGroup.ITEM_GROUPS.size()); i++) {
+            if (i != selectedTab) this.drawCreativeInventoryTexture(matrices, 142, 220, 32, 30, 32 * (i % 8) + x, y + 1);
         }
     }
 

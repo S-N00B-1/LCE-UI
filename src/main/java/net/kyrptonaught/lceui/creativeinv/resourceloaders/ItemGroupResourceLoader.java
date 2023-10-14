@@ -1,18 +1,13 @@
-package net.kyrptonaught.lceui.whatsThis.resourceloaders;
+package net.kyrptonaught.lceui.creativeinv.resourceloaders;
 
 import com.google.gson.*;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
-import net.kyrptonaught.lceui.whatsThis.ItemDescription;
-import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
-import net.minecraft.data.dev.NbtProvider;
+import net.kyrptonaught.lceui.whatsThis.resourceloaders.TagResourceLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.function.SetNbtLootFunction;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
@@ -20,12 +15,14 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
 public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadListener {
-    public static final Identifier ID = new Identifier(LCEUIMod.MOD_ID, "creative_tabs");
+    public static final Identifier PARENT_ID = new Identifier(LCEUIMod.MOD_ID, "creative_tabs");
+    public static final Identifier ID = new Identifier(PARENT_ID.getNamespace(), PARENT_ID.getPath() + "/tabs");
     private static final Gson GSON = (new GsonBuilder()).create();
 
     @Override
@@ -40,8 +37,25 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
 
     @Override
     public void reload(ResourceManager manager) {
-        CustomItemGroup.LCE_ITEM_GROUPS.clear();
-        Map<Identifier, Resource> resources = manager.findResources(ID.getPath(), (string) -> string.getPath().endsWith(".json"));
+        CustomItemGroup.ITEM_GROUPS.clear();
+
+        try {
+            Identifier orderId = new Identifier(PARENT_ID.getNamespace(), PARENT_ID.getPath() + "/creative_tabs.json");
+            Resource orderResource = manager.getResourceOrThrow(orderId);
+
+            JsonObject jsonObj = (JsonObject) JsonParser.parseReader(new InputStreamReader(orderResource.getInputStream()));
+            JsonArray entries = JsonHelper.getArray(jsonObj, "order");
+            for (JsonElement entry : entries) {
+                final Identifier entryId = new Identifier(entry.getAsString());
+                final Identifier entryIdPath = new Identifier(entryId.getNamespace(), ID.getPath() + "/" + entryId.getPath() + ".json");
+                registerGroups(Map.of(entryIdPath, manager.getResourceOrThrow(entryIdPath)));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void registerGroups(Map<Identifier, Resource> resources) {
         for (Identifier id : resources.keySet()) {
             if (id.getNamespace().equals(ID.getNamespace()))
                 try {
@@ -58,12 +72,8 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
                                 e.printStackTrace();
                             }
                         } else {
-                            try {
-                                Item item = Registry.ITEM.get(new Identifier(entry.getAsString()));
-                                itemStackList.add(new ItemStack(item));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            Item item = Registry.ITEM.get(new Identifier(entry.getAsString()));
+                            itemStackList.add(new ItemStack(item));
                         }
                     }
 
