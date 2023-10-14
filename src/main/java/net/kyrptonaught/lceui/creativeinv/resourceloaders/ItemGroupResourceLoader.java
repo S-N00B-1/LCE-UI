@@ -23,7 +23,6 @@ import java.util.*;
 public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadListener {
     public static final Identifier PARENT_ID = new Identifier(LCEUIMod.MOD_ID, "creative_tabs");
     public static final Identifier ID = new Identifier(PARENT_ID.getNamespace(), PARENT_ID.getPath() + "/tabs");
-    private static final Gson GSON = (new GsonBuilder()).create();
 
     @Override
     public Identifier getFabricId() {

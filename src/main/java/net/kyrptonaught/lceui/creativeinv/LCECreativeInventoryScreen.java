@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
+import net.kyrptonaught.lceui.SizeableSlot;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryListener;
@@ -201,7 +202,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         } else {
             text = Text.translatable("lceui.itemGroup.unknown");
         }
-        LCEDrawableHelper.drawCenteredText(matrices, this.textRenderer, text, 0, this.backgroundWidth, 41, 41, 2.0f/3.0f, 0xFF000000);
+        LCEDrawableHelper.drawCenteredText(matrices, this.textRenderer, text, 0.25f, this.backgroundWidth + 0.25f, 39.25f, 39.25f, 0.75f, 0xFF3b3b3b);
         this.drawCreativeInventoryTexture(matrices, (selectedTab % 8 == 0 ? 31 : (selectedTab % 8 == 7 ? 105 : 68)), 220, 32, 30, 32 * (selectedTab % 8), 0);
         for (CustomItemGroup itemGroup : CustomItemGroup.ITEM_GROUPS) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -210,7 +211,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
             matrices.push();
             float widthAndHeight = 26.0f * (3.0f/4.0f);
-            LCEDrawableHelper.drawTexture(matrices, 32 * itemGroup.getIndex() + 3 + ((26.0f - widthAndHeight) / 2.0f), 2 + ((26.0f - widthAndHeight) / 2.0f), widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
+            LCEDrawableHelper.drawTexture(matrices, 32 * itemGroup.getIndex() + 3 + ((26.0f - widthAndHeight) / 2.0f), 2 + ((26.0f - widthAndHeight) / 2.0f) + (itemGroup.getIndex() % 8 == selectedTab % 8 ? 0 : 1), widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
             matrices.pop();
         }
     }
@@ -387,7 +388,6 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
         @Override
         public ItemStack transferSlot(PlayerEntity player, int index) {
-            System.out.println("transferSlot() called! player: " + player.getEntityName() + ", index: " + index);
             Slot slot = this.slots.get(index);
             if (index >= this.slots.size() - 9 && index < this.slots.size() && slot.hasStack()) {
                 slot.setStack(ItemStack.EMPTY);
