@@ -65,7 +65,11 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
                     for (JsonElement entry : entries) {
                         if (entry.isJsonObject()) {
                             try {
-                                NbtCompound nbtCompound = StringNbtReader.parse(String.valueOf(entry));
+                                JsonObject entryAsJsonObject = entry.getAsJsonObject();
+                                if (!entry.getAsJsonObject().has("Count")) {
+                                    entryAsJsonObject.addProperty("Count", 1);
+                                }
+                                NbtCompound nbtCompound = StringNbtReader.parse(String.valueOf(entryAsJsonObject));
                                 itemStackList.add(ItemStack.fromNbt(nbtCompound));
                             } catch (Exception e) {
                                 e.printStackTrace();

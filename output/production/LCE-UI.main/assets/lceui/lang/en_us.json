@@ -1,0 +1,17 @@
+{
+  "key.categories.lceui": "LCE UI",
+  "key.lceui.whatsthis": "What's This?",
+  "key.lceui.whatsthis.feedback.clearall": "Cleared %s entries",
+  "key.lceui.whatsthis.feedback.cleared": "Cleared '%s'",
+  "key.lceui.whatsthis.feedback.notfound": "No entries were cleared",
+  "lceui.viewedBlock.notFound": "Block or LCE UI tag '%s' is unknown or has not been seen yet",
+  "lceui.itemGroup.building_blocks": "Building Blocks",
+  "lceui.itemGroup.decorations": "Decorations",
+  "lceui.itemGroup.food": "Food",
+  "lceui.itemGroup.materials": "Materials",
+  "lceui.itemGroup.miscellaneous": "Miscellaneous",
+  "lceui.itemGroup.brewing": "Brewing",
+  "lceui.itemGroup.redstone_and_transportation": "Redstone & Transportation",
+  "lceui.itemGroup.tools_weapons_and_armor": "Tools, Weapons & Armor",
+  "lceui.itemGroup.unknown": "Unknown group"
+}

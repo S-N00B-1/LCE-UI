@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "lceui",
+  "version": "0.0.4-1.19",
+  "name": "Legacy Console UI",
+  "description": "Legacy Console UI",
+  "authors": [
+    "kyrptonaught"
+  ],
+  "contact": {
+    "homepage": "https://github.com/kyrptonaught/lceui",
+    "sources": "https://github.com/kyrptonaught/lceui"
+  },
+  "license": "MIT",
+  "icon": "assets/lceui/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "net.kyrptonaught.lceui.LCEUIMod"
+    ],
+    "modmenu": [
+      "net.kyrptonaught.lceui.config.ModMenuIntegration"
+    ]
+  },
+  "accessWidener": "lceui.accesswidener",
+  "mixins": [
+    {
+      "config": "lceui.mixins.json",
+      "environment": "client"
+    }
+  ]
+}

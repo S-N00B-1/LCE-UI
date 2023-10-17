@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryListener;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -38,8 +39,8 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         super(new CreativeScreenHandler(player), player.getInventory(), ScreenTexts.EMPTY);
         player.currentScreenHandler = this.handler;
         this.passEvents = true;
-        this.backgroundHeight = 193;
-        this.backgroundWidth = 256;
+        this.backgroundHeight = 487/3;
+        this.backgroundWidth = 643/3;
     }
 
     @Override
@@ -175,21 +176,21 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.client.keyboard.setRepeatEvents(false);
     }
 
-    private void drawCreativeInventoryTexture(MatrixStack matrices, int u, int v, int width, int height, int x, int y) {
+    private void drawCreativeInventoryTexture(MatrixStack matrices, int u, int v, float width, float height, float x, float y) {
         if (this.client == null) return;
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, new Identifier(LCEUIMod.MOD_ID, "textures/gui/creativeinv/creative_inventory.png"));
 
         matrices.push();
-        this.drawTexture(matrices, x, y, u, v, width, height);
+        LCEDrawableHelper.drawTexture(matrices, x, y, width/3.0f, height/3.0f, u, v, width, height,1024, 1024);
         matrices.pop();
     }
 
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
         this.renderTabs(matrices, this.x, this.y);
-        this.drawCreativeInventoryTexture(matrices, 0, 20, 256, 193, this.x, this.y);
+        this.drawCreativeInventoryTexture(matrices, 0, 0, 643.0f, 487.0f, this.x, this.y);
     }
 
     @Override
@@ -201,16 +202,16 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         } else {
             text = Text.translatable("lceui.itemGroup.unknown");
         }
-        LCEDrawableHelper.drawCenteredText(matrices, this.textRenderer, text, 0.25f, this.backgroundWidth + 0.25f, 39.25f, 39.25f, 0.75f, 0xFF3b3b3b);
-        this.drawCreativeInventoryTexture(matrices, (selectedTab % 8 == 0 ? 31 : (selectedTab % 8 == 7 ? 105 : 68)), 220, 32, 30, 32 * (selectedTab % 8), 0);
+        LCEDrawableHelper.drawCenteredText(matrices, this.textRenderer, text, 0, this.backgroundWidth, 32.0f + 1.0f/3.0f, 32.0f + 1.0f/3.0f, 2.0f/3.0f, 0xFF383838);
+        this.drawCreativeInventoryTexture(matrices, (selectedTab % 8 == 0 ? 86 : (selectedTab % 8 == 7 ? 258 : 172)), 490, 83, 81, (80.0f/3.0f) * (selectedTab % 8), -1);
         for (CustomItemGroup itemGroup : CustomItemGroup.ITEM_GROUPS) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, itemGroup.getResourceLocation());
 
             matrices.push();
-            float widthAndHeight = 26.0f * (3.0f/4.0f);
-            LCEDrawableHelper.drawTexture(matrices, 32 * itemGroup.getIndex() + 3 + ((26.0f - widthAndHeight) / 2.0f), 2 + ((26.0f - widthAndHeight) / 2.0f) + (itemGroup.getIndex() % 8 == selectedTab % 8 ? 0 : 1), widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
+            float widthAndHeight = 26.0f * (2.0f/3.0f);
+            LCEDrawableHelper.drawTexture(matrices, (80.0f/3.0f) * itemGroup.getIndex() + 1 + ((26.0f - widthAndHeight) / 2.0f),  ((26.0f - widthAndHeight) / 2.0f) + (itemGroup.getIndex() % 8 == selectedTab % 8 ? 0 : 1 + (1.0f/3.0f)) - (2.0f * (2.0f/3.0f)) - 1, widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
             matrices.pop();
         }
     }
@@ -315,11 +316,11 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     }
 
     protected boolean isClickInTab(CustomItemGroup group, double mouseX, double mouseY) {
-        return mouseX >= group.getIndex() * 32 && mouseY >= 0 && mouseX < group.getIndex() * 32 + 32 && mouseY < 26;
+        return mouseX >= group.getIndex() * (80.0f/3.0f) && mouseY >= 0 && mouseX < group.getIndex() * (80.0f/3.0f) + (80.0f/3.0f) && mouseY < 22;
     }
 
     protected boolean renderTabTooltipIfHovered(MatrixStack matrices, CustomItemGroup group, int mouseX, int mouseY) {
-        if (this.isPointWithinBounds(group.getIndex() * 32, 0, 32, 26, mouseX, mouseY)) {
+        if (this.isPointWithinBounds((int)(group.getIndex() * (80.0f/3.0f)), group.getIndex() == selectedTab ? 0 : 1, (int)(80.0f/3.0f), 20 + (group.getIndex() == selectedTab ? 1 : 0), mouseX, mouseY)) {
             this.renderTooltip(matrices, group.getName(), mouseX, mouseY);
             return true;
         }
@@ -328,7 +329,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
     protected void renderTabs(MatrixStack matrices, int x, int y) {
         for (int i = 0; i < Math.min(8, CustomItemGroup.ITEM_GROUPS.size()); i++) {
-            if (i != selectedTab) this.drawCreativeInventoryTexture(matrices, 142, 220, 32, 30, 32 * (i % 8) + x, y + 1);
+            if (i != selectedTab) this.drawCreativeInventoryTexture(matrices, 0, 490, 83, 81, (80.0f/3.0f) * (i % 8) + x, y);
         }
     }
 
@@ -351,12 +352,12 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             
             for (int x = 0; x < INVENTORY_WIDTH; x++) {
                 for (int y = 0; y < INVENTORY_HEIGHT; y++) {
-                    this.addSlot(new Slot(INVENTORY, x + y * INVENTORY_WIDTH, x * 18 + 31, y * 18 + 58));
+                    this.addSlot(new Slot(INVENTORY, x + y * INVENTORY_WIDTH, x * 18 + 14, y * 18 + 40));
                 }
             }
 
             for (int x = 0; x < 9; x++) {
-                this.addSlot(new Slot(playerInventory, x, x * 18 + 40, 159));
+                this.addSlot(new Slot(playerInventory, x, x * 18 + 23, 138));
             }
             this.scrollItems(0.0f);
         }
