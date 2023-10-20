@@ -2,6 +2,7 @@ package net.kyrptonaught.lceui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -26,6 +27,35 @@ public class LCEDrawableHelper {
 
     public static void drawTexture(MatrixStack matrices, float x, float y, float u, float v, float width, float height, float textureWidth, float textureHeight) {
         drawTexture(matrices, x, y, width, height, u, v, width, height, textureWidth, textureHeight);
+    }
+
+    public static void fillGradient(MatrixStack matrices, float startX, float startY, float endX, float endY, int colorStart, int colorEnd, int z) {
+        RenderSystem.disableTexture();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+        fillGradient(matrices.peek().getPositionMatrix(), bufferBuilder, startX, startY, endX, endY, z, colorStart, colorEnd);
+        tessellator.draw();
+        RenderSystem.disableBlend();
+        RenderSystem.enableTexture();
+    }
+
+    protected static void fillGradient(Matrix4f matrix, BufferBuilder builder, float startX, float startY, float endX, float endY, int colorStart, int colorEnd, int z) {
+        float f = (float)(colorStart >> 24 & 0xFF) / 255.0f;
+        float g = (float)(colorStart >> 16 & 0xFF) / 255.0f;
+        float h = (float)(colorStart >> 8 & 0xFF) / 255.0f;
+        float i = (float)(colorStart & 0xFF) / 255.0f;
+        float j = (float)(colorEnd >> 24 & 0xFF) / 255.0f;
+        float k = (float)(colorEnd >> 16 & 0xFF) / 255.0f;
+        float l = (float)(colorEnd >> 8 & 0xFF) / 255.0f;
+        float m = (float)(colorEnd & 0xFF) / 255.0f;
+        builder.vertex(matrix, endX, startY, z).color(g, h, i, f).next();
+        builder.vertex(matrix, startX, startY, z).color(g, h, i, f).next();
+        builder.vertex(matrix, startX, endY, z).color(k, l, m, j).next();
+        builder.vertex(matrix, endX, endY, z).color(k, l, m, j).next();
     }
 
     private static void drawTexture(MatrixStack matrices, float x0, float x1, float y0, float y1, float z, float regionWidth, float regionHeight, float u, float v, float textureWidth, float textureHeight) {

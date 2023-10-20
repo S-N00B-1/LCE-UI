@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
+import net.kyrptonaught.lceui.ScalableSlot;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
@@ -14,6 +15,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.EnderChestInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -352,12 +354,12 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             
             for (int x = 0; x < INVENTORY_WIDTH; x++) {
                 for (int y = 0; y < INVENTORY_HEIGHT; y++) {
-                    this.addSlot(new Slot(INVENTORY, x + y * INVENTORY_WIDTH, x * 18 + 14, y * 18 + 40));
+                    this.addSlot(new ScalableSlot(INVENTORY, x + y * INVENTORY_WIDTH, x * 18 + 14 + 1.0f/3.0f, y * 18 + 40 + 1.0f/3.0f, 1.036125f));
                 }
             }
 
             for (int x = 0; x < 9; x++) {
-                this.addSlot(new Slot(playerInventory, x, x * 18 + 23, 138));
+                this.addSlot(new ScalableSlot(playerInventory, x, x * 18 + 23.0f + 1.0f/3.0f, 138 + 1.0f/3.0f, 1.036125f));
             }
             this.scrollItems(0.0f);
         }

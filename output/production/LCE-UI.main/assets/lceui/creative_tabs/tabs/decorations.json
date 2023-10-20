@@ -1,4 +1,5 @@
 {
+  "_comment": "Field Masoned Banner Pattern and Bordure Indented Banner Pattern originally come after the banner patterns present here. However, Java Edition does not have these patterns.",
   "id": "lceui:decorations",
   "entries": [
     "minecraft:skeleton_skull",
@@ -29,6 +30,7 @@
     "minecraft:vine",
     "minecraft:lily_pad",
     "minecraft:torch",
+    "minecraft:lantern",
     "minecraft:grass",
     "minecraft:fern",
     "minecraft:dead_bush",
@@ -134,6 +136,10 @@
     "minecraft:white_glazed_terracotta",
     "minecraft:light_gray_glazed_terracotta",
     "minecraft:gray_glazed_terracotta",
+    "minecraft:creeper_banner_pattern",
+    "minecraft:skull_banner_pattern",
+    "minecraft:flower_banner_pattern",
+    "minecraft:mojang_banner_pattern",
     "minecraft:red_banner",
     "minecraft:orange_banner",
     "minecraft:yellow_banner",

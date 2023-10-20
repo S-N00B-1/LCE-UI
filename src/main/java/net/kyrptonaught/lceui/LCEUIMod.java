@@ -1,5 +1,6 @@
 package net.kyrptonaught.lceui;
 
+import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import net.fabricmc.api.ClientModInitializer;
 import net.kyrptonaught.kyrptconfig.config.ConfigManager;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
@@ -13,6 +14,7 @@ public class LCEUIMod implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        MixinExtrasBootstrap.init();
         configManager.load();
         WhatsThisInit.init();
         CustomItemGroup.init();

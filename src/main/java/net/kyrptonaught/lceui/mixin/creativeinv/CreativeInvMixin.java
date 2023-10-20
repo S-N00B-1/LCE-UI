@@ -23,8 +23,8 @@ public abstract class CreativeInvMixin {
 
     @Inject(method = "init", at = @At("HEAD"), cancellable = true)
     public void hijackInit(CallbackInfo ci) {
-        ((ClientAccessor)((CreativeInventoryScreen)(Object)this)).client().setScreen(new LCECreativeInventoryScreen(((ClientAccessor)((CreativeInventoryScreen)(Object)this)).client().player));
         this.removed();
+        ((ClientAccessor)((CreativeInventoryScreen)(Object)this)).client().setScreen(new LCECreativeInventoryScreen(((ClientAccessor)((CreativeInventoryScreen)(Object)this)).client().player));
         ci.cancel();
     }
 }

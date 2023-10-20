@@ -51,6 +51,7 @@
     "minecraft:diamond_pickaxe",
     "minecraft:diamond_axe",
     "minecraft:diamond_hoe",
+    "minecraft:shield",
     "minecraft:fire_charge",
     "minecraft:clock",
     "minecraft:shears",
@@ -64,6 +65,7 @@
     "minecraft:leather_horse_armor",
     "minecraft:armor_stand",
     "minecraft:turtle_helmet",
-    "minecraft:trident"
+    "minecraft:trident",
+    "minecraft:crossbow"
   ]
 }
