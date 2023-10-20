@@ -12,11 +12,17 @@ public class ScalableSlot extends Slot {
     public final float floatX;
     public final float floatY;
     public final float scale;
+    public final float itemScale;
 
-    public ScalableSlot(Inventory inventory, int index, float x, float y, float scale) {
+    public ScalableSlot(Inventory inventory, int index, float x, float y, float scale, float itemScale) {
         super(inventory, index, (int)x, (int)y);
         this.floatX = x;
         this.floatY = y;
         this.scale = scale;
+        this.itemScale = itemScale;
+    }
+
+    public ScalableSlot(Inventory inventory, int index, float x, float y, float scale) {
+        this(inventory, index, x, y, scale, 7.0f/8.0f);
     }
 }

@@ -3,6 +3,7 @@
   "package": "net.kyrptonaught.lceui.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "ScalableSlotItemRendererMixin",
     "ScalableSlotMixin$HandledScreenAccessor",
     "creativeinv.CreativeInvMixin",
     "creativeinv.CreativeInvMixin$ClientAccessor",

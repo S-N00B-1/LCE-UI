@@ -12,6 +12,8 @@ public class LCEUIMod implements ClientModInitializer {
 
     public static ConfigManager configManager = new ConfigManager.MultiConfigManager(MOD_ID);
 
+    public static ScalableSlot scalableSlotToDraw = null;
+
     @Override
     public void onInitializeClient() {
         MixinExtrasBootstrap.init();

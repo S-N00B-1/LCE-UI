@@ -1,6 +1,7 @@
 package net.kyrptonaught.lceui.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.ScalableSlot;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -11,6 +12,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(HandledScreen.class)
@@ -48,6 +50,18 @@ public class ScalableSlotMixin {
         } else {
             HandledScreen.fill(matrixStack, x, y, maxX, maxY, color);
         }
+    }
+
+    @Inject(method = "drawSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderInGuiWithOverrides(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;III)V"))
+    private void setScalableSlotToDraw(MatrixStack matrices, Slot slot, CallbackInfo ci) {
+        if (slot instanceof ScalableSlot scalableSlot) {
+            LCEUIMod.scalableSlotToDraw = scalableSlot;
+        }
+    }
+
+    @Inject(method = "drawSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", shift = At.Shift.AFTER))
+    private void unsetScalableSlotToDraw(MatrixStack matrices, Slot slot, CallbackInfo ci) {
+        LCEUIMod.scalableSlotToDraw = null;
     }
 
     @Inject(method = "isPointOverSlot", at = @At("RETURN"), cancellable = true)
