@@ -5,6 +5,7 @@
   "client": [
     "ScalableSlotItemRendererMixin",
     "ScalableSlotMixin$HandledScreenAccessor",
+    "TextShadowMixin",
     "creativeinv.CreativeInvMixin",
     "creativeinv.CreativeInvMixin$ClientAccessor",
     "titlescreen.TitleScreenMixin",
