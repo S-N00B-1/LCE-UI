@@ -12,6 +12,7 @@ import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryListener;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.Shader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -33,9 +34,10 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     static final SimpleInventory INVENTORY = new SimpleInventory(50);
     private static int selectedTab = 0;
     private float scrollPosition;
-    private boolean scrolling;
     private CreativeInventoryListener listener;
     private boolean lastClickOutsideBounds;
+    private final CustomItemGroup[] currentItemGroups = new CustomItemGroup[8];
+    private int currentItemGroupGroup = 0;
 
     public LCECreativeInventoryScreen(PlayerEntity player) {
         super(new CreativeScreenHandler(player), player.getInventory(), ScreenTexts.EMPTY);
@@ -43,6 +45,17 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.passEvents = true;
         this.backgroundHeight = 487/3;
         this.backgroundWidth = 643/3;
+    }
+
+    public void setItemGroupGroup(int itemGroupGroup) {
+        this.currentItemGroupGroup = MathHelper.clamp(itemGroupGroup, 0, MathHelper.ceil((float)CustomItemGroup.ITEM_GROUPS.size() / 8) - 1);
+        for (int i = 0; i < 8; i++) {
+            if (this.currentItemGroupGroup * 8 + i < CustomItemGroup.ITEM_GROUPS.size()) {
+                currentItemGroups[i] = CustomItemGroup.ITEM_GROUPS.get(this.currentItemGroupGroup * 8 + i);
+            } else {
+                currentItemGroups[i] = null;
+            }
+        }
     }
 
     @Override
@@ -152,6 +165,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     protected void init() {
         if (this.client.interactionManager.hasCreativeInventory()) {
             super.init();
+            this.setItemGroupGroup(0);
             this.client.keyboard.setRepeatEvents(true);
             int i = selectedTab;
             selectedTab = -1;
@@ -159,6 +173,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             this.client.player.playerScreenHandler.removeListener(this.listener);
             this.listener = new CreativeInventoryListener(this.client);
             this.client.player.playerScreenHandler.addListener(this.listener);
+//            this.setSelectedTab(CustomItemGroup.ITEM_GROUPS.get(CustomItemGroup.ITEM_GROUPS.size() - 1));
         } else {
             this.client.setScreen(new InventoryScreen(this.client.player));
         }
@@ -178,15 +193,25 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.client.keyboard.setRepeatEvents(false);
     }
 
-    private void drawCreativeInventoryTexture(MatrixStack matrices, int u, int v, float width, float height, float x, float y) {
+    private int getAmountOfPages() {
+        return MathHelper.ceil((float)this.handler.itemList.size() / (CreativeScreenHandler.INVENTORY_WIDTH * CreativeScreenHandler.INVENTORY_HEIGHT));
+    }
+
+    private void drawCreativeInventoryTexture(MatrixStack matrices, int u, int v, float width, float height, float x, float y, float r, float g, float b, float a) {
         if (this.client == null) return;
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        matrices.push();
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderColor(r, g, b, a);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, new Identifier(LCEUIMod.MOD_ID, "textures/gui/creativeinv/creative_inventory.png"));
 
-        matrices.push();
         LCEDrawableHelper.drawTexture(matrices, x, y, width/3.0f, height/3.0f, u, v, width, height,1024, 1024);
         matrices.pop();
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+    }
+
+    private void drawCreativeInventoryTexture(MatrixStack matrices, int u, int v, float width, float height, float x, float y) {
+        this.drawCreativeInventoryTexture(matrices, u, v, width, height, x, y, 1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
@@ -199,22 +224,39 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
         if (this.client == null) return;
         Text text;
-        if (selectedTab < CustomItemGroup.ITEM_GROUPS.size()) {
-            text = CustomItemGroup.ITEM_GROUPS.get(selectedTab).getName();
+        if (selectedTab < currentItemGroups.length) {
+            text = currentItemGroups[selectedTab].getName();
         } else {
             text = Text.translatable("lceui.itemGroup.unknown");
         }
         LCEDrawableHelper.drawCenteredText(matrices, this.textRenderer, text, 0, this.backgroundWidth, 32.0f + 1.0f/3.0f, 32.0f + 1.0f/3.0f, 2.0f/3.0f, 0xFF383838);
         this.drawCreativeInventoryTexture(matrices, (selectedTab % 8 == 0 ? 86 : (selectedTab % 8 == 7 ? 258 : 172)), 490, 83, 81, (80.0f/3.0f) * (selectedTab % 8), -1);
-        for (CustomItemGroup itemGroup : CustomItemGroup.ITEM_GROUPS) {
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        for (CustomItemGroup itemGroup : currentItemGroups) {
+            if (itemGroup == null) continue;
             RenderSystem.setShaderTexture(0, itemGroup.getResourceLocation());
-
             matrices.push();
             float widthAndHeight = 26.0f * (2.0f/3.0f);
-            LCEDrawableHelper.drawTexture(matrices, (80.0f/3.0f) * itemGroup.getIndex() + 1 + ((26.0f - widthAndHeight) / 2.0f),  ((26.0f - widthAndHeight) / 2.0f) + (itemGroup.getIndex() % 8 == selectedTab % 8 ? 0 : 1 + (1.0f/3.0f)) - (2.0f * (2.0f/3.0f)) - 1, widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
+            LCEDrawableHelper.drawTexture(matrices, (80.0f/3.0f) * (itemGroup.getIndex() % 8) + 1 + ((26.0f - widthAndHeight) / 2.0f),  ((26.0f - widthAndHeight) / 2.0f) + (itemGroup.getIndex() % 8 == selectedTab % 8 ? 0 : 1 + (1.0f/3.0f)) - (2.0f * (2.0f/3.0f)) - 1, widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
             matrices.pop();
+        }
+        int amountOfPages = this.getAmountOfPages();
+        this.drawCreativeInventoryTexture(matrices, 643, 32, 26, 270, 593.0f / 3.0f, 118.0f / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
+        this.drawCreativeInventoryTexture(matrices, 643, 0, 32, 32, 593.0f / 3.0f - 1.0f, Math.round(116.0f + this.scrollPosition * 241.0f) / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
+        if (this.scrollPosition > 0.0f) {
+            this.drawCreativeInventoryTexture(matrices, 701, 0, 26, 14, 593.0f/3.0f, 97.0f/3.0f);
+        }
+        if (this.scrollPosition < 1.0f && amountOfPages > 1) {
+            this.drawCreativeInventoryTexture(matrices, 675, 0, 26, 14, 593.0f/3.0f, 395.0f/3.0f);
+        }
+
+        if (this.hasLeftTabButton()) {
+            this.drawCreativeInventoryTexture(matrices, 689, 14, 14, 26, -21.0f/3.0f, 24.0f/3.0f);
+        }
+
+        if (this.hasRightTabButton()) {
+            this.drawCreativeInventoryTexture(matrices, 675, 14, 14, 26, this.backgroundWidth + 8.0f/3.0f, 24.0f/3.0f);
         }
     }
 
@@ -223,16 +265,52 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         if (button == 0) {
             double d = mouseX - (double)this.x;
             double e = mouseY - (double)this.y;
-            for (CustomItemGroup customItemGroup : CustomItemGroup.ITEM_GROUPS) {
-                if (!this.isClickInTab(customItemGroup, d, e)) continue;
+            for (CustomItemGroup customItemGroup : currentItemGroups) {
+                if (customItemGroup == null || !this.isClickInTab(customItemGroup, d, e)) continue;
                 return true;
             }
-            if (this.isClickInScrollbar(mouseX, mouseY)) {
-                this.scrolling = this.hasScrollbar();
+            int amountOfPages = this.getAmountOfPages();
+            if (this.isClickInScrollbar(mouseX, mouseY) && amountOfPages != 1) {
+                float position = (float)((mouseY - (this.y + 118.0f/3.0f)) / (270.0f/3.0f));
+                this.scrollPosition = (float)Math.round(position * (amountOfPages - 1)) / (amountOfPages - 1);
+                this.handler.scrollItems(this.scrollPosition);
+                return true;
+            }
+            if (this.isClickInLeftTabButton(mouseX, mouseY)) {
+                this.cycleItemGroupGroup(-1);
+                return true;
+            }
+            if (this.isClickInRightTabButton(mouseX, mouseY)) {
+                this.cycleItemGroupGroup(1);
                 return true;
             }
         }
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    private void cycleItemGroupGroup(int amount) {
+        this.setItemGroupGroup(this.currentItemGroupGroup + amount);
+        if (amount < 0) {
+            this.setSelectedTab(currentItemGroups[7]);
+        } else {
+            this.setSelectedTab(currentItemGroups[0]);
+        }
+    }
+
+    private boolean isClickInLeftTabButton(double mouseX, double mouseY) {
+        float minX = this.x - 21.0f/3.0f;
+        float minY = this.y + 24.0f/3.0f;
+        float maxX = minX + 14.0f;
+        float maxY = minY + 26.0f;
+        return this.hasLeftTabButton() && mouseX >= (double)minX && mouseY >= (double)minY && mouseX < (double)maxX && mouseY < (double)maxY;
+    }
+
+    private boolean isClickInRightTabButton(double mouseX, double mouseY) {
+        float minX = this.x + this.backgroundWidth + 8.0f/3.0f;
+        float minY = this.y + 24.0f/3.0f;
+        float maxX = minX + 14.0f;
+        float maxY = minY + 26.0f;
+        return this.hasRightTabButton() && mouseX >= (double)minX && mouseY >= (double)minY && mouseX < (double)maxX && mouseY < (double)maxY;
     }
 
     @Override
@@ -240,9 +318,8 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         if (button == 0) {
             double d = mouseX - (double)this.x;
             double e = mouseY - (double)this.y;
-            this.scrolling = false;
-            for (CustomItemGroup customItemGroup : CustomItemGroup.ITEM_GROUPS) {
-                if (!this.isClickInTab(customItemGroup, d, e)) continue;
+            for (CustomItemGroup customItemGroup : currentItemGroups) {
+                if (customItemGroup == null || !this.isClickInTab(customItemGroup, d, e)) continue;
                 this.setSelectedTab(customItemGroup);
                 return true;
             }
@@ -254,8 +331,17 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         return this.handler.shouldShowScrollbar();
     }
 
+    private boolean hasLeftTabButton() {
+        return this.currentItemGroupGroup > 0;
+    }
+
+    private boolean hasRightTabButton() {
+        return this.currentItemGroupGroup < MathHelper.floor(((float)CustomItemGroup.ITEM_GROUPS.size() - 1.0f) / 8.0f);
+    }
+
     private void setSelectedTab(CustomItemGroup group) {
-        selectedTab = group.getIndex();
+        selectedTab = group.getIndex() % 8;
+        this.setItemGroupGroup(MathHelper.floor((float)group.getIndex() / 8.0f));
         this.cursorDragSlots.clear();
         this.handler.itemList.clear();
         this.endTouchDrag();
@@ -269,7 +355,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         if (!this.hasScrollbar()) {
             return false;
         }
-        int amountOfPages = MathHelper.ceil((float)this.handler.itemList.size() / (CreativeScreenHandler.INVENTORY_WIDTH * CreativeScreenHandler.INVENTORY_HEIGHT));
+        int amountOfPages = this.getAmountOfPages();
         double scroll = amount / (amountOfPages - 1);
         this.scrollPosition = MathHelper.clamp(this.scrollPosition - (float)scroll, 0.0f, 1.0f);
         this.handler.scrollItems(this.scrollPosition);
@@ -279,17 +365,17 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     @Override
     protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int button) {
         boolean bl = mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.backgroundWidth) || mouseY >= (double)(top + this.backgroundHeight);
-        this.lastClickOutsideBounds = bl && !this.isClickInTab(CustomItemGroup.ITEM_GROUPS.get(selectedTab), mouseX, mouseY);
+        this.lastClickOutsideBounds = bl && !this.isClickInTab(currentItemGroups[selectedTab], mouseX, mouseY);
         return this.lastClickOutsideBounds;
     }
 
     protected boolean isClickInScrollbar(double mouseX, double mouseY) {
-        int i = this.x;
-        int j = this.y - 20;
-        int minX = i + 221;
-        int minY = j + 77;
-        int maxX = i + 232;
-        int maxY = j + 167;
+        float i = this.x;
+        float j = this.y;
+        float minX = i + 593.0f/3.0f;
+        float minY = j + 118.0f/3.0f;
+        float maxX = i + 619.0f/3.0f;
+        float maxY = j + 388.0f/3.0f;
         return mouseX >= (double)minX && mouseY >= (double)minY && mouseX < (double)maxX && mouseY < (double)maxY;
     }
 
@@ -310,15 +396,15 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         super.render(matrices, mouseX, mouseY, delta);
-        for (CustomItemGroup customItemGroup : CustomItemGroup.ITEM_GROUPS) {
-            if (this.renderTabTooltipIfHovered(matrices, customItemGroup, mouseX, mouseY)) break;
-        }
+//        for (CustomItemGroup customItemGroup : CustomItemGroup.ITEM_GROUPS) {
+//            if (this.renderTabTooltipIfHovered(matrices, customItemGroup, mouseX, mouseY)) break;
+//        }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         this.drawMouseoverTooltip(matrices, mouseX, mouseY);
     }
 
     protected boolean isClickInTab(CustomItemGroup group, double mouseX, double mouseY) {
-        return mouseX >= group.getIndex() * (80.0f/3.0f) && mouseY >= 0 && mouseX < group.getIndex() * (80.0f/3.0f) + (80.0f/3.0f) && mouseY < 22;
+        return mouseX >= (group.getIndex() % 8) * (80.0f/3.0f) && mouseY >= 0 && mouseX < (group.getIndex() % 8) * (80.0f/3.0f) + (80.0f/3.0f) && mouseY < 22;
     }
 
     protected boolean renderTabTooltipIfHovered(MatrixStack matrices, CustomItemGroup group, int mouseX, int mouseY) {
@@ -330,8 +416,10 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     }
 
     protected void renderTabs(MatrixStack matrices, int x, int y) {
-        for (int i = 0; i < Math.min(8, CustomItemGroup.ITEM_GROUPS.size()); i++) {
-            if (i != selectedTab) this.drawCreativeInventoryTexture(matrices, 0, 490, 83, 81, (80.0f/3.0f) * (i % 8) + x, y);
+        for (int i = 0; i < 8; i++) {
+            if (currentItemGroups[i] != null && i != selectedTab) {
+                this.drawCreativeInventoryTexture(matrices, 0, 490, 83, 81, (80.0f/3.0f) * (i % 8) + x, y);
+            }
         }
     }
 
