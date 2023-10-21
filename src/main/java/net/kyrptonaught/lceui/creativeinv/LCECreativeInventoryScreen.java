@@ -221,6 +221,10 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     }
 
     @Override
+    public void renderBackground(MatrixStack matrices, int vOffset) {
+    }
+
+    @Override
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
         if (this.client == null) return;
         Text text;

@@ -22,7 +22,7 @@ public class DescriptionInstance {
     private BakedModel displayModel;
 
     private Screen boundToScreen;
-    private int openTicks = 140;
+    private float openTicks = 2000.0f;
 
 
     public static DescriptionInstance ofItem(ItemStack stack) {
@@ -66,8 +66,8 @@ public class DescriptionInstance {
         return this;
     }
 
-    public void tickOpen() {
-        openTicks--;
+    public void tickOpen(float delta) {
+        openTicks -= delta;
     }
 
     public boolean shouldHide(MinecraftClient client) {
@@ -77,10 +77,7 @@ public class DescriptionInstance {
     public boolean shouldClose(MinecraftClient client) {
         if (openTicks <= 0) return true;
 
-        if (boundToScreen == null) {
-            return client.currentScreen instanceof HandledScreen<?>;
-        }
-        return !boundToScreen.equals(client.currentScreen);
+        return boundToScreen != null && !boundToScreen.equals(client.currentScreen);
     }
 
     public String getGroupKey() {

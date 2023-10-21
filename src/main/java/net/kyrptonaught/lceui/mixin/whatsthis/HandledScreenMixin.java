@@ -53,11 +53,11 @@ public class HandledScreenMixin extends Screen {
         if (WhatsThisInit.isKeybindPressed(keycode, InputUtil.Type.KEYSYM)) {
             if (focusedSlot != null && !focusedSlot.getStack().isEmpty()) {
                 DescriptionRenderer.setToRender(DescriptionInstance.ofItem(focusedSlot.getStack()), true);
-                // shiftAmount = x;
-                //shiftAmount = Math.max(25, this.x - 100);
-                //shiftAmount = 250;
-
-                // GLFW.glfwSetCursorPos(MinecraftClient.getInstance().getWindow().getHandle(), this.focusedSlot.x, client.mouse.getY());
+//                shiftAmount = x;
+//                shiftAmount = Math.max(25, this.x - 100);
+//                shiftAmount = 250;
+//
+//                org.lwjgl.glfw.GLFW.glfwSetCursorPos(net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle(), this.focusedSlot.x, client.mouse.getY());
             }
             callbackInfoReturnable.setReturnValue(true);
         }

@@ -58,7 +58,7 @@ public class DescriptionRenderer {
         if (renderingDescription == null) return;
 
         if (!client.isPaused())
-            renderingDescription.tickOpen();
+            renderingDescription.tickOpen(delta);
 
         if (renderingDescription.shouldClose(client)) {
             renderingDescription = null;
