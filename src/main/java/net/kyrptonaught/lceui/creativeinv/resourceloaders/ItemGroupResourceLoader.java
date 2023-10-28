@@ -1,6 +1,7 @@
 package net.kyrptonaught.lceui.creativeinv.resourceloaders;
 
 import com.google.gson.*;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
@@ -66,11 +67,7 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
                         if (entry.isJsonObject()) {
                             try {
                                 JsonObject entryAsJsonObject = entry.getAsJsonObject();
-                                if (!entry.getAsJsonObject().has("Count")) {
-                                    entryAsJsonObject.addProperty("Count", 1);
-                                }
-                                NbtCompound nbtCompound = StringNbtReader.parse(String.valueOf(entryAsJsonObject));
-                                itemStackList.add(ItemStack.fromNbt(nbtCompound));
+                                itemStackList.add(itemFromJson(entryAsJsonObject));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -85,5 +82,27 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
                     e.printStackTrace();
                 }
         }
+    }
+
+    // Literally just AdvancementDisplay.iconFromJson()
+    private static ItemStack itemFromJson(JsonObject json) {
+        if (!json.has("item")) {
+            throw new JsonSyntaxException("Unsupported icon type, currently only items are supported (add 'item' key)");
+        }
+        Item item = JsonHelper.getItem(json, "item");
+        if (json.has("data")) {
+            throw new JsonParseException("Disallowed data tag found");
+        }
+        ItemStack itemStack = new ItemStack(item);
+        if (json.has("nbt")) {
+            try {
+                NbtCompound nbtCompound = StringNbtReader.parse(JsonHelper.asString(json.get("nbt"), "nbt"));
+                itemStack.setNbt(nbtCompound);
+            }
+            catch (CommandSyntaxException commandSyntaxException) {
+                throw new JsonSyntaxException("Invalid nbt tag: " + commandSyntaxException.getMessage());
+            }
+        }
+        return itemStack;
     }
 }

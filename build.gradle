@@ -15,6 +15,18 @@ repositories {
 	maven { url 'https://maven.fabricmc.net' }
 	maven { url "https://maven.kyrptonaught.dev" }
 	maven { url "https://maven.terraformersmc.com/releases" }
+	maven { url 'https://aperlambda.github.io/maven' }
+	maven {
+		url "https://cursemaven.com"
+		content {
+			includeGroup "curse.maven"
+		}
+	}
+	mavenLocal()
+	maven {
+		name 'Gegy'
+		url 'https://maven.gegy.dev'
+	}
 }
 
 dependencies {
@@ -23,11 +35,18 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation ('net.kyrptonaught:kyrptconfig:1.4.7-1.19')
-	include ('net.kyrptonaught:kyrptconfig:1.4.7-1.19')
+	modImplementation ('net.kyrptonaught:kyrptconfig:1.5.0-1.19')
+	include ('net.kyrptonaught:kyrptconfig:1.5.0-1.19')
 
-	modImplementation 'com.github.LlamaLad7.MixinExtras:mixinextras-fabric:0.2.0'
-	implementation 'com.github.LlamaLad7.MixinExtras:mixinextras-fabric:0.2.0'
+	modImplementation "com.github.LlamaLad7.MixinExtras:mixinextras-fabric:${project.mixinextras_version}"
+//	modImplementation "curse.maven:midnightcontrols-621768:4030794"
+//
+//	modImplementation "dev.lambdaurora:spruceui:${project.spruceui_version}"
+//	api('org.aperlambda:lambdajcommon:1.8.1') {
+//		exclude group: 'com.google.code.gson'
+//		exclude group: 'com.google.guava'
+//	}
+//	modImplementation 'org.aperlambda:lambdajcommon:1.8.1'
 }
 
 loom {

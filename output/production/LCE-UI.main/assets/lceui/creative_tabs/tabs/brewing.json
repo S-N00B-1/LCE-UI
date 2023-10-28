@@ -12,10 +12,8 @@
     "minecraft:phantom_membrane",
     "minecraft:glass_bottle",
     {
-      "id": "minecraft:potion",
-      "tag": {
-        "Potion": "minecraft:water"
-      }
+      "item": "minecraft:potion",
+      "nbt": "{\"Potion\": \"minecraft:water\"}"
     }
   ]
 }

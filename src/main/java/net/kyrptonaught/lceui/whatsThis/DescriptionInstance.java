@@ -22,7 +22,7 @@ public class DescriptionInstance {
     private BakedModel displayModel;
 
     private Screen boundToScreen;
-    private float openTicks = 2000.0f;
+    private float openTicks = 150.0f;
 
 
     public static DescriptionInstance ofItem(ItemStack stack) {

@@ -145,6 +145,26 @@
     "minecraft:music_disc_strad",
     "minecraft:music_disc_ward",
     "minecraft:music_disc_11",
-    "minecraft:music_disc_wait"
+    "minecraft:music_disc_wait",
+    {
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:1,Explosions:[{Type:0,Flicker:1,Trail:0,Colors:[I;6719955]}]}}"
+    },
+    {
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:2,Explosions:[{Type:3,Flicker:0,Trail:0,Colors:[I;3887386]}]}}"
+    },
+    {
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:2,Explosions:[{Type:4,Flicker:0,Trail:0,Colors:[I;11743532],FadeColors:[I;15435844]}]}}"
+    },
+    {
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:3,Explosions:[{Type:4,Flicker:1,Trail:0,Colors:[I;12801229],FadeColors:[I;2437522]}]}}"
+    },
+    {
+      "item": "minecraft:firework_rocket",
+      "nbt": "{Fireworks:{Flight:2,Explosions:[{Type:2,Flicker:0,Trail:1,Colors:[I;14602026],FadeColors:[I;15435844]}]}}"
+    }
   ]
 }

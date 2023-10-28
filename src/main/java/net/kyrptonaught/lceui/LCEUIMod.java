@@ -1,10 +1,15 @@
 package net.kyrptonaught.lceui;
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
+import io.netty.buffer.Unpooled;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.kyrptonaught.kyrptconfig.config.ConfigManager;
+import net.kyrptonaught.lceui.config.LCEConfigOptions;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
 
 
 public class LCEUIMod implements ClientModInitializer {
@@ -17,8 +22,19 @@ public class LCEUIMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         MixinExtrasBootstrap.init();
+        configManager.registerFile("config.json5", new LCEConfigOptions());
         configManager.load();
         WhatsThisInit.init();
         CustomItemGroup.init();
+    }
+
+    public static void syncConfig() {
+        PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+        buf.writeBoolean(getConfig().closerTextShadows);
+        ClientPlayNetworking.send(new Identifier(LCEUIMod.MOD_ID, "sync_config_packet"), buf);
+    }
+
+    public static LCEConfigOptions getConfig() {
+        return (LCEConfigOptions) configManager.getConfig("config.json5");
     }
 }
