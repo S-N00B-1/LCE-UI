@@ -31,6 +31,7 @@ public class LCEUIMod implements ClientModInitializer {
     public static void syncConfig() {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(getConfig().closerTextShadows);
+        buf.writeBoolean(getConfig().creativeInventory);
         ClientPlayNetworking.send(new Identifier(LCEUIMod.MOD_ID, "sync_config_packet"), buf);
     }
 

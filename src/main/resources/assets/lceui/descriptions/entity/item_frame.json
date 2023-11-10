@@ -1,0 +1,7 @@
+{
+  "displaysicon": "true",
+  "model": "item/item_frame",
+  "text": {
+    "description": "item.minecraft.item_frame.description"
+  }
+}

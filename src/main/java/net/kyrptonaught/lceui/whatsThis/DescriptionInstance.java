@@ -85,11 +85,11 @@ public class DescriptionInstance {
     }
 
     public MutableText getNameTranslation() {
-        return Text.translatable(displayDescription.text.name);
+        return displayDescription.text.name;
     }
 
     public MutableText getDescTranslation() {
-        return Text.translatable(displayDescription.text.description);
+        return displayDescription.text.description;
     }
 
     public ItemStack getItemStack() {

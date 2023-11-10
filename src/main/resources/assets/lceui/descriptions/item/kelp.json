@@ -1,0 +1,7 @@
+{
+  "model": "item/kelp",
+  "text": {
+    "name": "block.minecraft.kelp",
+    "description": "block.minecraft.kelp.description"
+  }
+}

@@ -3,6 +3,7 @@ package net.kyrptonaught.lceui.whatsThis;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -53,21 +54,26 @@ public class DescriptionManager {
     }
 
     public ItemDescription getDescriptionForItem(ItemStack itemStack) {
-        Identifier id = Registry.ITEM.getId(itemStack.getItem());
+        ItemStack itemStack1 = itemStack.copy();
+        Identifier id = Registry.ITEM.getId(itemStack1.getItem());
         id = new Identifier(id.getNamespace(), "item/" + id.getPath());
-        ItemDescription itemDescription = itemDescriptions.getOrDefault(id, new ItemDescription());
+        ItemDescription itemDescription = itemDescriptions.getOrDefault(id, new ItemDescription()).copy();
 
-        return getDescription(id, itemDescription, itemStack.getTranslationKey(), true);
+        if (itemStack.hasCustomName()) {
+            itemDescription.text.name = itemStack.getName().copy();
+        }
+
+        return getDescription(id, itemDescription, itemStack1.getTranslationKey(), true);
     }
 
     private ItemDescription getDescription(Identifier itemID, ItemDescription itemDescription, String defaultKey, Boolean defaultIconDisplay) {
         tryInherit(itemID, itemDescription, new HashSet<>());
 
         if (itemDescription.isFieldBlank(itemDescription.text.name)) {
-            itemDescription.text.name = defaultKey;
+            itemDescription.text.name = Text.translatable(defaultKey);
         }
         if (itemDescription.isFieldBlank(itemDescription.text.description)) {
-            itemDescription.text.description = defaultKey + ".description";
+            itemDescription.text.description = Text.translatable(defaultKey + ".description");
         }
         if (itemDescription.displaysicon == null)
             itemDescription.displaysicon = defaultIconDisplay;

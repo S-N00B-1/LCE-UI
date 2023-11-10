@@ -1,0 +1,7 @@
+{
+  "model": "item/soul_torch",
+  "text": {
+    "name": "block.minecraft.soul_torch",
+    "description": "block.minecraft.soul_torch.description"
+  }
+}

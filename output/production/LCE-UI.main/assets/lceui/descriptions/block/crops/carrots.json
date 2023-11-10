@@ -1,0 +1,6 @@
+{
+  "model": "lceui:item/carrots_popup",
+  "text": {
+    "description": "item.minecraft.carrot.description"
+  }
+}

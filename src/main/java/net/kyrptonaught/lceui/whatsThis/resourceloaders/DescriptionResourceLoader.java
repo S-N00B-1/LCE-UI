@@ -10,6 +10,7 @@ import net.kyrptonaught.lceui.whatsThis.ItemDescription;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.io.IOException;
@@ -40,7 +41,27 @@ public class DescriptionResourceLoader implements SimpleSynchronousResourceReloa
             if (id.getNamespace().equals(ID.getNamespace()) && id.getPath().contains("/block") || id.getPath().contains("/item") || id.getPath().contains("/entity"))
                 try {
                     JsonObject jsonObj = (JsonObject) JsonParser.parseReader(new InputStreamReader(resources.get(id).getInputStream()));
-                    ItemDescription itemDescription = GSON.fromJson(jsonObj, ItemDescription.class);
+                    ItemDescription itemDescription = new ItemDescription();
+                    if (jsonObj.get("parent") != null) {
+                        itemDescription.parent = jsonObj.get("parent").getAsString();
+                    }
+                    if (jsonObj.get("model") != null) {
+                        itemDescription.model = jsonObj.get("model").getAsString();
+                    }
+                    if (jsonObj.get("group") != null) {
+                        itemDescription.group = jsonObj.get("group").getAsString();
+                    }
+                    if (jsonObj.get("displaysicon") != null) {
+                        itemDescription.displaysicon = jsonObj.get("displaysicon").getAsBoolean();
+                    }
+                    if (jsonObj.getAsJsonObject("text") != null) {
+                        if (jsonObj.getAsJsonObject("text").get("name") != null) {
+                            itemDescription.text.name = Text.translatable(jsonObj.getAsJsonObject("text").get("name").getAsString());
+                        }
+                        if (jsonObj.getAsJsonObject("text").get("description") != null) {
+                            itemDescription.text.description = Text.translatable(jsonObj.getAsJsonObject("text").get("description").getAsString());
+                        }
+                    }
                     String fileName = id.getPath().substring(id.getPath().lastIndexOf("/") + 1).replace(".json", "");
                     if (id.getPath().contains("/block"))
                         fileName = "block/" + fileName;

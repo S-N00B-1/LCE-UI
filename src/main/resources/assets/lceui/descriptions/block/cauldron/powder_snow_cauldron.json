@@ -1,0 +1,7 @@
+{
+  "model": "item/cauldron",
+  "text": {
+    "name": "block.minecraft.cauldron",
+    "description": "block.minecraft.cauldron.description"
+  }
+}

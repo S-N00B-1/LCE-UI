@@ -1,5 +1,6 @@
 package net.kyrptonaught.lceui.mixin.creativeinv;
 
+import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.creativeinv.LCECreativeInventoryScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -23,8 +24,10 @@ public abstract class CreativeInvMixin {
 
     @Inject(method = "init", at = @At("HEAD"), cancellable = true)
     public void hijackInit(CallbackInfo ci) {
-        this.removed();
-        ((ClientAccessor)((CreativeInventoryScreen)(Object)this)).client().setScreen(new LCECreativeInventoryScreen(((ClientAccessor)((CreativeInventoryScreen)(Object)this)).client().player));
-        ci.cancel();
+        if (LCEUIMod.getConfig().creativeInventory) {
+            this.removed();
+            ((ClientAccessor) ((CreativeInventoryScreen) (Object) this)).client().setScreen(new LCECreativeInventoryScreen(((ClientAccessor) ((CreativeInventoryScreen) (Object) this)).client().player));
+            ci.cancel();
+        }
     }
 }
