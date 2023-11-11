@@ -20,7 +20,6 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.resource.ResourceType;
 
-import net.minecraft.server.command.CommandManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -30,7 +29,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class WhatsThisInit {
     public static DescriptionManager descriptionManager;
-    public static KeyBinding invBind;
+    public static KeyBinding showDescription;
 
     public static void init() {
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new TagResourceLoader());
@@ -93,7 +92,7 @@ public class WhatsThisInit {
                                                             return Command.SINGLE_SUCCESS;
                                                         })))))));
 
-        invBind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        showDescription = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.lceui.whatsthis",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_N,
@@ -102,7 +101,7 @@ public class WhatsThisInit {
     }
 
     public static boolean isKeybindPressed(int pressedKeyCode, InputUtil.Type type) {
-        InputUtil.Key key = KeyBindingHelper.getBoundKeyOf(invBind);
+        InputUtil.Key key = KeyBindingHelper.getBoundKeyOf(showDescription);
         if (key.getCategory() != type)
             return false;
 

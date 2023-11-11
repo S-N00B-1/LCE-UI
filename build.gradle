@@ -51,7 +51,7 @@ dependencies {
 
 	modImplementation "com.github.LlamaLad7.MixinExtras:mixinextras-fabric:${project.mixinextras_version}"
 
-	modImplementation "maven.modrinth:midnightcontrols:1.7.4+1.19"
+	modImplementation "curse.maven:midnightcontrols-621768:4303794"
 	modImplementation "maven.modrinth:midnightlib:1.0.0-fabric"
 
 	modImplementation "dev.lambdaurora:spruceui:${project.spruceui_version}"
