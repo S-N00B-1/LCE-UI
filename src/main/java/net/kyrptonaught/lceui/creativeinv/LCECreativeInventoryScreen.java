@@ -1,6 +1,7 @@
 package net.kyrptonaught.lceui.creativeinv;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import eu.midnightdust.midnightcontrols.client.compat.MidnightControlsCompat;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
@@ -292,11 +293,37 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
+    public void incrementItemGroup(int amount) {
+        if (selectedTab + amount > 7) {
+            this.cycleItemGroupGroup(1);
+        } else if (selectedTab + amount < 0) {
+            this.cycleItemGroupGroup(-1);
+        } else {
+            this.setSelectedTab(currentItemGroups[selectedTab + amount]);
+        }
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode == 262) {
+            this.incrementItemGroup(1);
+            return true;
+        }
+        if (keyCode == 263) {
+            this.incrementItemGroup(-1);
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
+
     private void cycleItemGroupGroup(int amount) {
+        if (this.currentItemGroupGroup + amount < 0 || this.currentItemGroupGroup + amount > MathHelper.ceil((float)CustomItemGroup.ITEM_GROUPS.size() / 8) - 1) {
+            return;
+        }
         this.setItemGroupGroup(this.currentItemGroupGroup + amount);
         if (amount < 0) {
             this.setSelectedTab(currentItemGroups[7]);
-        } else {
+        } else if (amount > 0) {
             this.setSelectedTab(currentItemGroups[0]);
         }
     }

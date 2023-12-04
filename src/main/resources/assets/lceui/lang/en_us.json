@@ -19,6 +19,8 @@
   "options.lceui.general.textShadows": "Closer Text Shadows",
   "options.lceui.screens": "Screens",
   "options.lceui.general.creativeInventory": "Creative Inventory",
+  "key.lceui.controller.cycle_left": "Cycle to Left Tab",
+  "key.lceui.controller.cycle_right": "Cycle to Right Tab",
 
   "_comment": "ATTENTION! Strings with <unknown description> mean that we do not know what they look like in Legacy Console Edition. If you have that information, you can suggest changes on GitHub!",
 

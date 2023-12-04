@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.kyrptonaught.kyrptconfig.config.ConfigManager;
 import net.kyrptonaught.lceui.config.LCEConfigOptions;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
+import net.kyrptonaught.lceui.creativeinv.LCEMidnightControlsCompat;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -26,6 +27,7 @@ public class LCEUIMod implements ClientModInitializer {
         configManager.load();
         WhatsThisInit.init();
         CustomItemGroup.init();
+        LCEMidnightControlsCompat.register();
     }
 
     public static void syncConfig() {
