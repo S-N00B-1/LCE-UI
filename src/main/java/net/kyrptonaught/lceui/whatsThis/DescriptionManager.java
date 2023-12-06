@@ -68,12 +68,18 @@ public class DescriptionManager {
 
     private ItemDescription getDescription(Identifier itemID, ItemDescription itemDescription, String defaultKey, Boolean defaultIconDisplay) {
         tryInherit(itemID, itemDescription, new HashSet<>());
-
+        boolean isXof = false;
+        Identifier foxId = EntityType.getId(EntityType.FOX);
+        if (itemID.equals(new Identifier(foxId.getNamespace(), "entity/" + foxId.getPath())) && new Random().nextFloat() < 1f) {
+            isXof = true;
+        }
         if (itemDescription.isFieldBlank(itemDescription.text.name)) {
-            itemDescription.text.name = Text.translatable(defaultKey);
+            String reverse = new StringBuilder(Text.translatable(defaultKey).getString()).reverse().toString();
+            itemDescription.text.name = isXof ? Text.literal(reverse) : Text.translatable(defaultKey);
         }
         if (itemDescription.isFieldBlank(itemDescription.text.description)) {
-            itemDescription.text.description = Text.translatable(defaultKey + ".description");
+            String reverse = new StringBuilder(Text.translatable(defaultKey + ".description").getString()).reverse().toString();
+            itemDescription.text.description = isXof ? Text.literal(reverse) : Text.translatable(defaultKey + ".description");
         }
         if (itemDescription.displaysicon == null)
             itemDescription.displaysicon = defaultIconDisplay;
