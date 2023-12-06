@@ -30,7 +30,7 @@ public class DescriptionResourceLoader implements SimpleSynchronousResourceReloa
 
     @Override
     public Collection<Identifier> getFabricDependencies() {
-        return Collections.singleton(TagResourceLoader.ID);
+        return Collections.singleton(DescriptionTagResourceLoader.ID);
     }
 
     @Override

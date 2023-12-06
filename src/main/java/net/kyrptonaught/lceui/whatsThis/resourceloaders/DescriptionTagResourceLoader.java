@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class TagResourceLoader implements SimpleSynchronousResourceReloadListener {
+public class DescriptionTagResourceLoader implements SimpleSynchronousResourceReloadListener {
     public static final Identifier ID = new Identifier(LCEUIMod.MOD_ID, "tags/descriptions");
 
     private final TagGroupLoader<Identifier> tagLoader = new TagGroupLoader<>(this::get, getFabricId().getPath());

@@ -2,6 +2,7 @@ package net.kyrptonaught.lceui.whatsThis;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -74,7 +75,7 @@ public class DescriptionRenderer {
         render(client, matrixStack, x, 20, renderingDescription.getNameTranslation(), renderingDescription.getDescTranslation(), renderingDescription.getItemStack(), bakedModel, bakedModel != null);
     }
 
-    private static void render(MinecraftClient client, MatrixStack matrixStack, int x, int y, Text titleText, Text descriptionText, ItemStack stack, BakedModel model, boolean displayModel) {
+    private static void render(MinecraftClient client, MatrixStack matrices, int x, int y, Text titleText, Text descriptionText, ItemStack stack, BakedModel model, boolean displayModel) {
         TextRenderer textRenderer = client.textRenderer;
 
         List<OrderedText> description = textRenderer.wrapLines(descriptionText, 200);
@@ -84,27 +85,27 @@ public class DescriptionRenderer {
         int totalHeight = lineHeight + 7;
         if (displayModel) totalHeight = lineHeight + 15 + 20;
 
-        renderBackground(matrixStack, x, y, 200 + 20, totalHeight);
+        renderBackground(matrices, x, y, 200 + 20, totalHeight);
 
-        //DrawableHelper.drawTextWithShadow(matrixStack, textRenderer, titleText, x + 15, 35, 0xFFFFFF);
-        textRenderer.draw(matrixStack, titleText, x + 15.5f, 35.5f, 0x000000);
-        textRenderer.draw(matrixStack, titleText, x + 15, 35, 0xFFFFFF);
+        //DrawableHelper.drawTextWithShadow(matrices, textRenderer, titleText, x + 15, 35, 0xFFFFFF);
+        textRenderer.draw(matrices, titleText, x + 15.5f, 35.5f, 0x000000);
+        textRenderer.draw(matrices, titleText, x + 15, 35, 0xFFFFFF);
         for (int i = 0; i < description.size(); i++)
-            textRenderer.draw(matrixStack, description.get(i), x + 15, 47.5f + (i * 11), 0xFFFFFF);
+            textRenderer.draw(matrices, description.get(i), x + 15, 47.5f + (i * 11), 0xFFFFFF);
 
         if (displayModel) {
             float scale = 1.8f;
             int halfSize = 18 / 2;
             x += 103;
             y = 21 + lineHeight;
-            matrixStack.translate(x + halfSize, y + halfSize, 1);
-            matrixStack.scale(scale, scale, scale);
-            matrixStack.translate(-(x + halfSize), -(y + halfSize), 1);
+            matrices.translate(x + halfSize, y + halfSize, 1);
+            matrices.scale(scale, scale, scale);
+            matrices.translate(-(x + halfSize), -(y + halfSize), 1);
 
             RenderSystem.setShaderTexture(0, slot);
 
-            DrawableHelper.drawTexture(matrixStack, x, y, 0, 0, 18, 18, 18, 18);
-            renderGuiItemModel(client.getTextureManager(), client.getItemRenderer(), stack, x + 1, y + 1, scale, model);
+            LCEDrawableHelper.drawTexture(matrices, x, y, 0, 0, 18, 18, 18, 18);
+            renderGuiItemModel(client.getTextureManager(), client.getItemRenderer(), stack, x + 1, y + 1, scale * 7.0f / 8.0f, model);
         }
     }
 
@@ -126,7 +127,7 @@ public class DescriptionRenderer {
 
     private static void drawTexture(MatrixStack matrices, int x, int y, int width, int height, Identifier texture) {
         RenderSystem.setShaderTexture(0, texture);
-        DrawableHelper.drawTexture(matrices, x, y, 0, 0, width, height, 7, 7);
+        LCEDrawableHelper.drawTexture(matrices, x, y, 0, 0, width, height, 7, 7);
     }
 
     private static void renderGuiItemModel(TextureManager textureManager, ItemRenderer itemRenderer, ItemStack stack, float x, float y, float scale, BakedModel bakedModel) {

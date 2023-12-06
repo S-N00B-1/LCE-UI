@@ -5,22 +5,18 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
-import net.kyrptonaught.lceui.whatsThis.resourceloaders.TagResourceLoader;
+import net.kyrptonaught.lceui.whatsThis.resourceloaders.DescriptionTagResourceLoader;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.tag.ItemTags;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -36,7 +32,7 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
 
     @Override
     public Collection<Identifier> getFabricDependencies() {
-        return Collections.singleton(TagResourceLoader.ID);
+        return Collections.singleton(DescriptionTagResourceLoader.ID);
     }
 
     @Override
@@ -59,7 +55,8 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
         }
         List<ItemStack> itemsWithoutGroup = new ArrayList<>();
         for (Item item : Registry.ITEM) {
-            if (item.equals(Items.AIR)) continue;
+            if (LCEUIMod.clientTags.containsKey(new Identifier(LCEUIMod.MOD_ID, "not_in_creative_inventory")) && LCEUIMod.clientTags.get(new Identifier(LCEUIMod.MOD_ID, "not_in_creative_inventory")).contains(Registry.ITEM.getId(item))) continue;
+            System.out.println(LCEUIMod.clientTags);
             if (!CustomItemGroup.contain(item)) itemsWithoutGroup.add(new ItemStack(item));
         }
         if (!itemsWithoutGroup.isEmpty()) CustomItemGroup.createAndRegister(new Identifier(LCEUIMod.MOD_ID, "items_without_group"), itemsWithoutGroup);

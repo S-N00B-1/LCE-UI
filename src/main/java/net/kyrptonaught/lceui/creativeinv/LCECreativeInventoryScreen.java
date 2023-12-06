@@ -168,13 +168,10 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             super.init();
             this.setItemGroupGroup(0);
             this.client.keyboard.setRepeatEvents(true);
-            int i = selectedTab;
-            selectedTab = -1;
-            this.setSelectedTab(CustomItemGroup.ITEM_GROUPS.get(i));
+            this.setSelectedTab(CustomItemGroup.ITEM_GROUPS.get(0));
             this.client.player.playerScreenHandler.removeListener(this.listener);
             this.listener = new CreativeInventoryListener(this.client);
             this.client.player.playerScreenHandler.addListener(this.listener);
-//            this.setSelectedTab(CustomItemGroup.ITEM_GROUPS.get(CustomItemGroup.ITEM_GROUPS.size() - 1));
         } else {
             this.client.setScreen(new InventoryScreen(this.client.player));
         }

@@ -12,7 +12,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.whatsThis.resourceloaders.DescriptionResourceLoader;
 import net.kyrptonaught.lceui.whatsThis.resourceloaders.ModelResourceLoader;
-import net.kyrptonaught.lceui.whatsThis.resourceloaders.TagResourceLoader;
+import net.kyrptonaught.lceui.whatsThis.resourceloaders.DescriptionTagResourceLoader;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
@@ -32,7 +32,7 @@ public class WhatsThisInit {
     public static KeyBinding showDescription;
 
     public static void init() {
-        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new TagResourceLoader());
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new DescriptionTagResourceLoader());
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new DescriptionResourceLoader());
         ModelLoadingRegistry.INSTANCE.registerModelProvider(ModelResourceLoader::loadModels);
 

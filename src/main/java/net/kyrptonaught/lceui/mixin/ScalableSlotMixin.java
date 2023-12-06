@@ -55,13 +55,13 @@ public class ScalableSlotMixin {
     @Inject(method = "drawSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderInGuiWithOverrides(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;III)V"))
     private void setScalableSlotToDraw(MatrixStack matrices, Slot slot, CallbackInfo ci) {
         if (slot instanceof ScalableSlot scalableSlot) {
-            LCEUIMod.scalableSlotToDraw = scalableSlot;
+            ScalableSlot.scalableSlotToDraw = scalableSlot;
         }
     }
 
     @Inject(method = "drawSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", shift = At.Shift.AFTER))
     private void unsetScalableSlotToDraw(MatrixStack matrices, Slot slot, CallbackInfo ci) {
-        LCEUIMod.scalableSlotToDraw = null;
+        ScalableSlot.scalableSlotToDraw = null;
     }
 
     @Inject(method = "isPointOverSlot", at = @At("RETURN"), cancellable = true)

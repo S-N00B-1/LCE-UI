@@ -9,6 +9,8 @@ import net.minecraft.screen.slot.Slot;
  * A slot that can be scaled and positioned with floating points instead of integers.
  */
 public class ScalableSlot extends Slot {
+    public static ScalableSlot scalableSlotToDraw = null;
+
     public final float floatX;
     public final float floatY;
     public final float scale;
