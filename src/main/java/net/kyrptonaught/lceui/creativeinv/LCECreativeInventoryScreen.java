@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreativeInventoryScreen.CreativeScreenHandler> {
     static final SimpleInventory INVENTORY = new SimpleInventory(50);
     private static int selectedTab = 0;
-    private float scrollPosition;
+    private int scrollPosition;
     private CreativeInventoryListener listener;
     private boolean lastClickOutsideBounds;
     private final CustomItemGroup[] currentItemGroups = new CustomItemGroup[8];
@@ -248,11 +248,11 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         }
         int amountOfPages = this.getAmountOfPages();
         this.drawCreativeInventoryTexture(matrices, 643, 32, 26, 270, 593.0f / 3.0f, 118.0f / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
-        this.drawCreativeInventoryTexture(matrices, 643, 0, 32, 32, 593.0f / 3.0f - 1.0f, Math.round(116.0f + this.scrollPosition * 241.0f) / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
-        if (this.scrollPosition > 0.0f) {
+        this.drawCreativeInventoryTexture(matrices, 643, 0, 32, 32, 593.0f / 3.0f - 1.0f, Math.round(116.0f + (float)this.scrollPosition / Math.max(amountOfPages - 1, 1) * 241.0f) / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
+        if (this.scrollPosition > 0) {
             this.drawCreativeInventoryTexture(matrices, 701, 0, 26, 14, 593.0f/3.0f, 97.0f/3.0f);
         }
-        if (this.scrollPosition < 1.0f && amountOfPages > 1) {
+        if (this.scrollPosition < amountOfPages - 1 && amountOfPages > 1) {
             this.drawCreativeInventoryTexture(matrices, 675, 0, 26, 14, 593.0f/3.0f, 395.0f/3.0f);
         }
 
@@ -277,7 +277,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             int amountOfPages = this.getAmountOfPages();
             if (this.isClickInScrollbar(mouseX, mouseY) && amountOfPages != 1) {
                 float position = (float)((mouseY - (this.y + 118.0f/3.0f)) / (270.0f/3.0f));
-                this.scrollPosition = (float)Math.round(position * (amountOfPages - 1)) / (amountOfPages - 1);
+                this.scrollPosition = Math.round(position);
                 this.handler.scrollItems(this.scrollPosition);
                 return true;
             }
@@ -376,8 +376,8 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.handler.itemList.clear();
         this.endTouchDrag();
         group.appendStacks(this.handler.itemList);
-        this.scrollPosition = 0.0f;
-        this.handler.scrollItems(0.0f);
+        this.scrollPosition = 0;
+        this.handler.scrollItems(0);
     }
 
     @Override
@@ -386,8 +386,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             return false;
         }
         int amountOfPages = this.getAmountOfPages();
-        double scroll = amount / (amountOfPages - 1);
-        this.scrollPosition = MathHelper.clamp(this.scrollPosition - (float)scroll, 0.0f, 1.0f);
+        this.scrollPosition = MathHelper.clamp(this.scrollPosition - (int)Math.round(amount), 0, (amountOfPages - 1));
         this.handler.scrollItems(this.scrollPosition);
         return true;
     }
@@ -479,7 +478,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             for (int x = 0; x < 9; x++) {
                 this.addSlot(new ScalableSlot(playerInventory, x, x * 18 + 23.0f + 1.0f/3.0f, 138 + 1.0f/3.0f, 1.036125f));
             }
-            this.scrollItems(0.0f);
+            this.scrollItems(0);
         }
 
         @Override
@@ -487,9 +486,9 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             return true;
         }
 
-        public void scrollItems(float position) {
+        public void scrollItems(int position) {
             int amountOfPages = MathHelper.ceil((float)this.itemList.size() / (INVENTORY_WIDTH * INVENTORY_HEIGHT));
-            int currentTab = (int)(position * (amountOfPages - 1));
+            int currentTab = (int)(position);
             for (int y = 0; y < INVENTORY_HEIGHT; ++y) {
                 for (int x = 0; x < INVENTORY_WIDTH; ++x) {
                     int m = x + (y + currentTab * INVENTORY_HEIGHT) * INVENTORY_WIDTH;
