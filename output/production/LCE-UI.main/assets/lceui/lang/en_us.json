@@ -13,6 +13,7 @@
   "lceui.itemGroup.brewing": "Brewing",
   "lceui.itemGroup.redstone_and_transportation": "Redstone & Transportation",
   "lceui.itemGroup.tools_weapons_and_armor": "Tools, Weapons & Armor",
+  "lceui.itemGroup.items_without_group": "Items Without a Group",
   "lceui.itemGroup.unknown": "Unknown group",
   "options.lceui": "LCE UI Settings",
   "options.lceui.general": "General",

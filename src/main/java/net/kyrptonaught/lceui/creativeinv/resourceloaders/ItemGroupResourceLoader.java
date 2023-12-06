@@ -8,10 +8,12 @@ import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
 import net.kyrptonaught.lceui.whatsThis.resourceloaders.TagResourceLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
@@ -53,6 +55,12 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
         } catch (IOException e) {
             e.printStackTrace();
         }
+        List<ItemStack> itemsWithoutGroup = new ArrayList<>();
+        for (Item item : Registry.ITEM) {
+            if (item.equals(Items.AIR)) continue;
+            if (!CustomItemGroup.contain(item)) itemsWithoutGroup.add(new ItemStack(item));
+        }
+        if (!itemsWithoutGroup.isEmpty()) CustomItemGroup.createAndRegister(new Identifier(LCEUIMod.MOD_ID, "items_without_group"), itemsWithoutGroup);
     }
 
     private void registerGroups(Map<Identifier, Resource> resources) {

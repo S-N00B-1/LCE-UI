@@ -2,11 +2,14 @@ package net.kyrptonaught.lceui.creativeinv;
 
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.kyrptonaught.lceui.creativeinv.resourceloaders.ItemGroupResourceLoader;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -78,6 +81,15 @@ public class CustomItemGroup {
             }
         }
         return null;
+    }
+
+    public static boolean contain(Item item) {
+        for (CustomItemGroup itemGroup : CustomItemGroup.ITEM_GROUPS) {
+            for (ItemStack itemStack : itemGroup.getItemStackList()) {
+                if (new ItemStack(item).isOf(itemStack.getItem())) return true; // itemStack.isOf(item) doesn't work for some reason???
+            }
+        }
+        return false;
     }
 
     public static void init() {

@@ -283,10 +283,12 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             }
             if (this.isClickInLeftTabButton(mouseX, mouseY)) {
                 this.cycleItemGroupGroup(-1);
+                this.setSelectedTab(currentItemGroups[7]);
                 return true;
             }
             if (this.isClickInRightTabButton(mouseX, mouseY)) {
                 this.cycleItemGroupGroup(1);
+                this.setSelectedTab(currentItemGroups[0]);
                 return true;
             }
         }
@@ -296,8 +298,10 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     public void incrementItemGroup(int amount) {
         if (selectedTab + amount > 7) {
             this.cycleItemGroupGroup(1);
+            this.setSelectedTab(currentItemGroups[0]);
         } else if (selectedTab + amount < 0) {
             this.cycleItemGroupGroup(-1);
+            this.setSelectedTab(currentItemGroups[7]);
         } else {
             this.setSelectedTab(currentItemGroups[selectedTab + amount]);
         }
@@ -321,11 +325,6 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             return;
         }
         this.setItemGroupGroup(this.currentItemGroupGroup + amount);
-        if (amount < 0) {
-            this.setSelectedTab(currentItemGroups[7]);
-        } else if (amount > 0) {
-            this.setSelectedTab(currentItemGroups[0]);
-        }
     }
 
     private boolean isClickInLeftTabButton(double mouseX, double mouseY) {
