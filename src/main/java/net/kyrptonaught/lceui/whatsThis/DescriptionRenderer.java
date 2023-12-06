@@ -40,7 +40,7 @@ public class DescriptionRenderer {
     public static DescriptionInstance renderingDescription;
 
     public static boolean setToRender(DescriptionInstance descriptionInstance, boolean bypassViewedCheck) {
-        if (renderingDescription != null || descriptionInstance == null)
+        if ((renderingDescription != null && !bypassViewedCheck) || descriptionInstance == null)
             return false;
 
         if (!bypassViewedCheck) {
