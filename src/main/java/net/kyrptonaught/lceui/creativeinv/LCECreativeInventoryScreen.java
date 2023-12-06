@@ -277,7 +277,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             int amountOfPages = this.getAmountOfPages();
             if (this.isClickInScrollbar(mouseX, mouseY) && amountOfPages != 1) {
                 float position = (float)((mouseY - (this.y + 118.0f/3.0f)) / (270.0f/3.0f));
-                this.scrollPosition = Math.round(position);
+                this.scrollPosition = Math.round(position * (amountOfPages - 1));
                 this.handler.scrollItems(this.scrollPosition);
                 return true;
             }
