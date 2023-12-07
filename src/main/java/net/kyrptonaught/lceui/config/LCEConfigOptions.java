@@ -10,8 +10,8 @@ public class LCEConfigOptions implements AbstractConfigFile {
     public boolean creativeInventory = true;
     @Comment("Makes the chat's width the whole screen")
     public boolean chatWidth = true;
-//    @Comment("Makes the chat's height the exact same as LCE (35px, in Java it's either 36px or 34px with no in-between")
-//    public boolean chatHeight = true;
+    @Comment("Makes the chat's Y position the same as LCE (almost; it's actually 1 pixel off)")
+    public boolean chatYPos = true;
     @Comment("Recolors the chat to LCE's color")
     public boolean recolorChat = true;
     @Comment("Makes the chat's text 2/3 of its normal size")

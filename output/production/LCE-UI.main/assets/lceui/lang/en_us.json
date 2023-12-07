@@ -22,7 +22,7 @@
   "options.lceui.screens": "Screens",
   "options.lceui.screens.creativeInventory": "Creative Inventory",
   "options.lceui.screens.chatWidth": "Chat Width",
-  "options.lceui.screens.chatHeight": "Chat Height",
+  "options.lceui.screens.chatYPos": "Chat Y Position",
   "options.lceui.screens.recolorChat": "Recolor Chat",
   "options.lceui.screens.rescaleChatText": "Rescale Chat Text",
   "key.lceui.controller.cycle_left": "Cycle to Left Tab",

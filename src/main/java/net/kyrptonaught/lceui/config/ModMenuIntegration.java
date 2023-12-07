@@ -30,7 +30,7 @@ public class ModMenuIntegration implements ModMenuApi {
             ConfigSection screensSection = new ConfigSection(configScreen, Text.translatable("options.lceui.screens"));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.creativeInventory"), configOptions.creativeInventory, true).setSaveConsumer(val -> configOptions.creativeInventory = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatWidth"), configOptions.chatWidth, true).setSaveConsumer(val -> configOptions.chatWidth = val));
-//            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatHeight"), configOptions.chatHeight, true).setSaveConsumer(val -> configOptions.chatHeight = val));
+            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatYPos"), configOptions.chatYPos, true).setSaveConsumer(val -> configOptions.chatYPos = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.recolorChat"), configOptions.recolorChat, true).setSaveConsumer(val -> configOptions.recolorChat = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.rescaleChatText"), configOptions.rescaleChatText, true).setSaveConsumer(val -> configOptions.rescaleChatText = val));
 
