@@ -17,15 +17,6 @@ import java.util.List;
 
 public class CustomItemGroup {
     public static final List<CustomItemGroup> ITEM_GROUPS = new ArrayList<>();
-//
-//    public static final CustomItemGroup BUILDING_BLOCKS = createAndRegister(new Identifier(LCEUIMod.MOD_ID, "building_blocks"), Arrays.asList(new ItemStack(Blocks.STONE), new ItemStack(Blocks.DIRT)));
-//    public static final CustomItemGroup DECORATIONS = createAndRegister(new Identifier(LCEUIMod.MOD_ID, "decorations"), Arrays.asList(new ItemStack(Blocks.DANDELION), new ItemStack(Blocks.POPPY)));
-//    public static final CustomItemGroup REDSTONE_AND_TRANSPORTATION = createAndRegister(new Identifier(LCEUIMod.MOD_ID, "redstone_and_transportation"), Arrays.asList(new ItemStack(Items.MINECART), new ItemStack(Items.CHEST_MINECART)));
-//    public static final CustomItemGroup MATERIALS = createAndRegister(new Identifier(LCEUIMod.MOD_ID, "materials"), Arrays.asList(new ItemStack(Items.DIAMOND), new ItemStack(Items.EMERALD)));
-//    public static final CustomItemGroup FOOD = createAndRegister(new Identifier(LCEUIMod.MOD_ID, "food"), Arrays.asList(new ItemStack(Items.BREAD), new ItemStack(Items.GOLDEN_CARROT)));
-//    public static final CustomItemGroup TOOLS_AND_WEAPONS = createAndRegister(new Identifier(LCEUIMod.MOD_ID, "tools_and_weapons"), Arrays.asList(new ItemStack(Items.DIAMOND_SWORD), new ItemStack(Items.DIAMOND_SHOVEL)));
-//    public static final CustomItemGroup POTIONS = createAndRegister(new Identifier(LCEUIMod.MOD_ID, "potions"), Arrays.asList(PotionUtil.setPotion(new ItemStack(Items.POTION), Potions.FIRE_RESISTANCE), PotionUtil.setPotion(new ItemStack(Items.POTION), Potions.WATER)));
-//    public static final CustomItemGroup MISCELLANEOUS = createAndRegister(new Identifier(LCEUIMod.MOD_ID, "miscellaneous"), Arrays.asList(new ItemStack(Items.WATER_BUCKET), new ItemStack(Items.LAVA_BUCKET)));
 
     private final Identifier id;
     private final Identifier resourceLocation;

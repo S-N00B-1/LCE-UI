@@ -2,6 +2,7 @@ package net.kyrptonaught.lceui.resourceloaders;
 
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.kyrptonaught.lceui.LCEUIMod;
+import net.kyrptonaught.lceui.tags.ClientTagHelper;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.tag.TagGroupLoader;
 import net.minecraft.util.Identifier;
@@ -27,8 +28,7 @@ public class TagResourceLoader implements SimpleSynchronousResourceReloadListene
 
     @Override
     public void reload(ResourceManager manager) {
-        LCEUIMod.clientTags.clear();
         Map<Identifier, List<TagGroupLoader.TrackedEntry>> tags = tagLoader.loadTags(manager);
-        LCEUIMod.clientTags = tagLoader.buildGroup(tags);
+        ClientTagHelper.setClientTags(tagLoader.buildGroup(tags));
     }
 }

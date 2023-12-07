@@ -5,10 +5,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
-import net.kyrptonaught.lceui.whatsThis.resourceloaders.DescriptionTagResourceLoader;
+import net.kyrptonaught.lceui.tags.ClientTagHelper;
+import net.kyrptonaught.lceui.tags.ClientTags;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.resource.Resource;
@@ -31,11 +31,6 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
     }
 
     @Override
-    public Collection<Identifier> getFabricDependencies() {
-        return Collections.singleton(DescriptionTagResourceLoader.ID);
-    }
-
-    @Override
     public void reload(ResourceManager manager) {
         CustomItemGroup.ITEM_GROUPS.clear();
 
@@ -55,9 +50,8 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
         }
         List<ItemStack> itemsWithoutGroup = new ArrayList<>();
         for (Item item : Registry.ITEM) {
-            if (LCEUIMod.clientTags.containsKey(new Identifier(LCEUIMod.MOD_ID, "not_in_creative_inventory")) && LCEUIMod.clientTags.get(new Identifier(LCEUIMod.MOD_ID, "not_in_creative_inventory")).contains(Registry.ITEM.getId(item))) continue;
-            System.out.println(LCEUIMod.clientTags);
-            if (!CustomItemGroup.contain(item)) itemsWithoutGroup.add(new ItemStack(item));
+            if (!ClientTagHelper.isInTag(ClientTags.NOT_IN_CREATIVE_INVENTORY, Registry.ITEM.getId(item)) && !CustomItemGroup.contain(item))
+                itemsWithoutGroup.add(new ItemStack(item));
         }
         if (!itemsWithoutGroup.isEmpty()) CustomItemGroup.createAndRegister(new Identifier(LCEUIMod.MOD_ID, "items_without_group"), itemsWithoutGroup);
     }

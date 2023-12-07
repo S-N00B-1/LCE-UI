@@ -29,11 +29,6 @@ public class DescriptionResourceLoader implements SimpleSynchronousResourceReloa
     }
 
     @Override
-    public Collection<Identifier> getFabricDependencies() {
-        return Collections.singleton(DescriptionTagResourceLoader.ID);
-    }
-
-    @Override
     public void reload(ResourceManager manager) {
         WhatsThisInit.descriptionManager.clearDescriptions();
         Map<Identifier, Resource> resources = manager.findResources(ID.getPath(), (string) -> string.getPath().endsWith(".json"));

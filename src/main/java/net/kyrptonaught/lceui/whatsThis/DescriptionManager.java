@@ -1,5 +1,7 @@
 package net.kyrptonaught.lceui.whatsThis;
 
+import net.kyrptonaught.lceui.LCEUIMod;
+import net.kyrptonaught.lceui.tags.ClientTagHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
@@ -13,22 +15,13 @@ public class DescriptionManager {
     public HashMap<Identifier, ItemDescription> itemDescriptions = new HashMap<>();
     public HashSet<String> viewedDescriptions = new HashSet<>();
 
-    public HashMap<Identifier, Collection<Identifier>> tags = new HashMap<>();
-
     public void clearDescriptions() {
         itemDescriptions.clear();
     }
 
-    public void clearTags() {
-        tags.clear();
-    }
-
-    public void setTags(Map<Identifier, Collection<Identifier>> tags) {
-        this.tags = new HashMap<>(tags);
-    }
-
     public Optional<String> findTagForID(Identifier itemID) {
         itemID = WhatsThisInit.getCleanIdentifier(itemID);
+        Map<Identifier, Collection<Identifier>> tags = ClientTagHelper.getTagsInPath(new Identifier(LCEUIMod.MOD_ID, "descriptions"));
         for (Identifier tagID : tags.keySet()) {
             if (tags.get(tagID).contains(itemID))
                 return Optional.of("#" + tagID.toString());
