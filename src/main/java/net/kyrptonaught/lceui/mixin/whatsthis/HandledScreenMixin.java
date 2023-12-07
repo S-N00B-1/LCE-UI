@@ -40,7 +40,8 @@ public class HandledScreenMixin extends Screen {
             return;
         if (WhatsThisInit.isKeybindPressed(button, InputUtil.Type.MOUSE)) {
             if (focusedSlot != null && !focusedSlot.getStack().isEmpty()) {
-                DescriptionRenderer.setToRender(DescriptionInstance.ofItem(focusedSlot.getStack()), true);
+                DescriptionInstance descriptionInstance = DescriptionInstance.ofItem(focusedSlot.getStack()).bindToScreen(this);
+                DescriptionRenderer.setToRender(descriptionInstance, true);
             }
             callbackInfoReturnable.setReturnValue(true);
         }
@@ -52,7 +53,8 @@ public class HandledScreenMixin extends Screen {
             return;
         if (WhatsThisInit.isKeybindPressed(keycode, InputUtil.Type.KEYSYM)) {
             if (focusedSlot != null && !focusedSlot.getStack().isEmpty()) {
-                DescriptionRenderer.setToRender(DescriptionInstance.ofItem(focusedSlot.getStack()), true);
+                DescriptionInstance descriptionInstance = DescriptionInstance.ofItem(focusedSlot.getStack()).bindToScreen(this);
+                DescriptionRenderer.setToRender(descriptionInstance, true);
 //                shiftAmount = x;
 //                shiftAmount = Math.max(25, this.x - 100);
 //                shiftAmount = 250;

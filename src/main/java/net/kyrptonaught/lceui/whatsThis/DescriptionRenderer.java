@@ -68,7 +68,7 @@ public class DescriptionRenderer {
 
         if (renderingDescription.shouldHide(client)) return;
 
-        int x = client.getWindow().getScaledWidth() - 220 - 20;
+        int x = client.getWindow().getScaledWidth() - (500 / 3) - 20;
 
         BakedModel bakedModel = renderingDescription.getDisplayModel(client);
 
@@ -78,56 +78,50 @@ public class DescriptionRenderer {
     private static void render(MinecraftClient client, MatrixStack matrices, int x, int y, Text titleText, Text descriptionText, ItemStack stack, BakedModel model, boolean displayModel) {
         TextRenderer textRenderer = client.textRenderer;
 
-        List<OrderedText> description = textRenderer.wrapLines(descriptionText, 200);
+        List<OrderedText> description = textRenderer.wrapLines(descriptionText, 223);
 
-        int lineHeight = 33 + (description.size() * 11);
+        float lineHeight = 33 + (description.size() * 8.0f);
 
-        int totalHeight = lineHeight + 7;
-        if (displayModel) totalHeight = lineHeight + 15 + 20;
+        float totalHeight = lineHeight - 31.0f / 3.0f;
+        if (displayModel) totalHeight = lineHeight + 32.0f / 3.0f;
 
-        renderBackground(matrices, x, y, 200 + 20, totalHeight);
+        renderBackground(matrices, x, y, (500.0f / 3.0f), totalHeight);
 
-        //DrawableHelper.drawTextWithShadow(matrices, textRenderer, titleText, x + 15, 35, 0xFFFFFF);
-        textRenderer.draw(matrices, titleText, x + 15.5f, 35.5f, 0x000000);
-        textRenderer.draw(matrices, titleText, x + 15, 35, 0xFFFFFF);
+        LCEDrawableHelper.drawTextWithShadow(matrices, textRenderer, titleText, x + 9, y + 26.0f / 3.0f, 2.0f/3.0f, 0xFFFFFF);
         for (int i = 0; i < description.size(); i++)
-            textRenderer.draw(matrices, description.get(i), x + 15, 47.5f + (i * 11), 0xFFFFFF);
+            LCEDrawableHelper.drawText(matrices, textRenderer, description.get(i), x + 9, y + 52.0f / 3.0f + (i * 8.0f), 2.0f/3.0f, 0xFFFFFF);
 
         if (displayModel) {
-            float scale = 1.8f;
-            int halfSize = 18 / 2;
-            x += 103;
-            y = 21 + lineHeight;
-            matrices.translate(x + halfSize, y + halfSize, 1);
-            matrices.scale(scale, scale, scale);
-            matrices.translate(-(x + halfSize), -(y + halfSize), 1);
+            float scale = 4.0f / 3.0f;
+            float slotX = x + 218.0f / 3.0f;
+            float slotY = 9.0f / 3.0f + lineHeight;
 
             RenderSystem.setShaderTexture(0, slot);
 
-            LCEDrawableHelper.drawTexture(matrices, x, y, 0, 0, 18, 18, 18, 18);
-            renderGuiItemModel(client.getTextureManager(), client.getItemRenderer(), stack, x + 1, y + 1, scale * 7.0f / 8.0f, model);
+            LCEDrawableHelper.drawTexture(matrices, slotX, slotY, 0, 0, 64.0f / 3.0f, 64.0f / 3.0f, 64.0f / 3.0f, 64.0f / 3.0f);
+            renderGuiItemModel(client.getTextureManager(), client.getItemRenderer(), stack, slotX + 8.0f / 3.0f, slotY + 8.0f / 3.0f, scale * 54.0f / 64.0f, model);
         }
     }
 
-    private static void renderBackground(MatrixStack matrices, int x, int y, int width, int height) {
-        drawTexture(matrices, x, y, 7, 7, TOP_LEFT);
-        drawTexture(matrices, x + 7, y, width - 14, 7, TOP_CENTER);
-        drawTexture(matrices, x + width - 7, y, 7, 7, TOP_RIGHT);
+    private static void renderBackground(MatrixStack matrices, float x, float y, float width, float height) {
+        drawTexture(matrices, x, y, 8, 8, TOP_LEFT);
+        drawTexture(matrices, x + 8, y, width - 16, 8, TOP_CENTER);
+        drawTexture(matrices, x + width - 8, y, 8, 8, TOP_RIGHT);
 
-        y = y + 7;
-        drawTexture(matrices, x, y, 7, height - 14, MIDDLE_LEFT);
-        drawTexture(matrices, x + 7, y, width - 14, height - 14, MIDDLE_CENTER);
-        drawTexture(matrices, x + width - 7, y, 7, height - 14, MIDDLE_RIGHT);
+        y = y + 8;
+        drawTexture(matrices, x, y, 8, height - 16, MIDDLE_LEFT);
+        drawTexture(matrices, x + 8, y, width - 16, height - 16, MIDDLE_CENTER);
+        drawTexture(matrices, x + width - 8, y, 8, height - 16, MIDDLE_RIGHT);
 
-        y = y + height - 14;
-        drawTexture(matrices, x, y, 7, 7, BOTTOM_LEFT);
-        drawTexture(matrices, x + 7, y, width - 14, 7, BOTTOM_CENTER);
-        drawTexture(matrices, x + width - 7, y, 7, 7, BOTTOM_RIGHT);
+        y = y + height - 16;
+        drawTexture(matrices, x, y, 8, 8, BOTTOM_LEFT);
+        drawTexture(matrices, x + 8, y, width - 16, 8, BOTTOM_CENTER);
+        drawTexture(matrices, x + width - 8, y, 8, 8, BOTTOM_RIGHT);
     }
 
-    private static void drawTexture(MatrixStack matrices, int x, int y, int width, int height, Identifier texture) {
+    private static void drawTexture(MatrixStack matrices, float x, float y, float width, float height, Identifier texture) {
         RenderSystem.setShaderTexture(0, texture);
-        LCEDrawableHelper.drawTexture(matrices, x, y, 0, 0, width, height, 7, 7);
+        LCEDrawableHelper.drawTexture(matrices, x, y, 0, 0, width, height, 8, 8);
     }
 
     private static void renderGuiItemModel(TextureManager textureManager, ItemRenderer itemRenderer, ItemStack stack, float x, float y, float scale, BakedModel bakedModel) {

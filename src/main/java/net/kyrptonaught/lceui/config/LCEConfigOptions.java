@@ -8,4 +8,6 @@ public class LCEConfigOptions implements AbstractConfigFile {
     public boolean closerTextShadows = true;
     @Comment("Enables the LCE Creative mode inventory")
     public boolean creativeInventory = true;
+    @Comment("Defines the hotbar scale")
+    public int hotbarScale = 2; // TODO: make this actually do something
 }

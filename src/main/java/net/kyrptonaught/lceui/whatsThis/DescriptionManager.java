@@ -5,6 +5,7 @@ import net.kyrptonaught.lceui.tags.ClientTagHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -63,7 +64,7 @@ public class DescriptionManager {
         tryInherit(itemID, itemDescription, new HashSet<>());
         boolean isXof = false;
         Identifier foxId = EntityType.getId(EntityType.FOX);
-        if (itemID.equals(new Identifier(foxId.getNamespace(), "entity/" + foxId.getPath())) && new Random().nextFloat() < 1f) {
+        if (itemID.equals(new Identifier(foxId.getNamespace(), "entity/" + foxId.getPath())) && new Random().nextFloat() < 0.01f) {
             isXof = true;
         }
         if (itemDescription.isFieldBlank(itemDescription.text.name)) {
@@ -71,8 +72,9 @@ public class DescriptionManager {
             itemDescription.text.name = isXof ? Text.literal(reverse) : Text.translatable(defaultKey);
         }
         if (itemDescription.isFieldBlank(itemDescription.text.description)) {
-            String reverse = new StringBuilder(Text.translatable(defaultKey + ".description").getString()).reverse().toString();
-            itemDescription.text.description = isXof ? Text.literal(reverse) : Text.translatable(defaultKey + ".description");
+            Style fontStyle = Style.EMPTY.withFont(new Identifier(LCEUIMod.MOD_ID, "icons"));
+            String reverse = new StringBuilder(Text.translatable(defaultKey + ".description", Text.literal("\u0001").setStyle(fontStyle), Text.literal("\u0002").setStyle(fontStyle), Text.literal("\u0003").setStyle(fontStyle)).getString()).reverse().toString();
+            itemDescription.text.description = isXof ? Text.literal(reverse) : Text.translatable(defaultKey + ".description", Text.literal("\u0001").setStyle(fontStyle), Text.literal("\u0002").setStyle(fontStyle), Text.literal("\u0003").setStyle(fontStyle));
         }
         if (itemDescription.displaysicon == null)
             itemDescription.displaysicon = defaultIconDisplay;

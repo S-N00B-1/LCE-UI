@@ -43,12 +43,14 @@ public class WhatsThisInit {
                 if (hit instanceof BlockHitResult blockHitResult) {
                     BlockState state = world.getBlockState(blockHitResult.getBlockPos());
                     if (!state.isAir()) {
-                        DescriptionRenderer.setToRender(DescriptionInstance.ofBlock(world, blockHitResult.getBlockPos(), state), false);
+                        DescriptionInstance descriptionInstance = DescriptionInstance.ofBlock(world, blockHitResult.getBlockPos(), state).bindToScreen(null);
+                        DescriptionRenderer.setToRender(descriptionInstance, false);
                     }
                 } else if (hit instanceof EntityHitResult entityHitResult) {
                     Entity entity = entityHitResult.getEntity();
                     if (entity.isAlive()) {
-                        DescriptionRenderer.setToRender(DescriptionInstance.ofEntity(entity), false);
+                        DescriptionInstance descriptionInstance = DescriptionInstance.ofEntity(entity).bindToScreen(null);
+                        DescriptionRenderer.setToRender(descriptionInstance, false);
                     }
                 }
             }

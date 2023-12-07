@@ -1,23 +1,19 @@
 package net.kyrptonaught.lceui.creativeinv;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import eu.midnightdust.midnightcontrols.client.compat.MidnightControlsCompat;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.ScalableSlot;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryListener;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.Shader;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.EnderChestInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
@@ -231,7 +227,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         } else {
             text = Text.translatable("lceui.itemGroup.unknown");
         }
-        LCEDrawableHelper.drawCenteredText(matrices, this.textRenderer, text, 0, this.backgroundWidth, 32.0f + 1.0f/3.0f, 32.0f + 1.0f/3.0f, 2.0f/3.0f, 0xFF383838);
+        LCEDrawableHelper.drawCenteredText(matrices, this.textRenderer, text, 0, this.backgroundWidth, 32.0f + 1.0f/3.0f, 32.0f + 1.0f/3.0f, 2.0f/3.0f, 0x373737);
         this.drawCreativeInventoryTexture(matrices, (selectedTab % 8 == 0 ? 86 : (selectedTab % 8 == 7 ? 258 : 172)), 490, 83, 81, (80.0f/3.0f) * (selectedTab % 8), -1);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);

@@ -15,11 +15,13 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
-
+// Hello.
+// Before you look through rendering code,
+// be warned that you may find some things weird.
+// That's because Legacy Console Edition is
+// inconsistent. To match its inconsistency, I
+// have to use weirdly-sized textures and
+// random divisions.
 public class LCEUIMod implements ClientModInitializer {
     public static final String MOD_ID = "lceui";
 
@@ -40,6 +42,7 @@ public class LCEUIMod implements ClientModInitializer {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(getConfig().closerTextShadows);
         buf.writeBoolean(getConfig().creativeInventory);
+        buf.writeInt(getConfig().hotbarScale);
         ClientPlayNetworking.send(new Identifier(LCEUIMod.MOD_ID, "sync_config_packet"), buf);
     }
 

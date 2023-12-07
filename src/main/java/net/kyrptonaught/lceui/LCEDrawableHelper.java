@@ -1,19 +1,47 @@
 package net.kyrptonaught.lceui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
 
 public class LCEDrawableHelper {
     public static void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, Text text, float minX, float maxX, float minY, float maxY, float scale, int color) {
-        float textX = ((minX + maxX) / scale - (textRenderer.getWidth(text))) / 2;
-        float textY = ((minY + maxY) / scale - (textRenderer.fontHeight)) / 2;
-        matrices.scale(scale, scale, scale);
-        textRenderer.draw(matrices, text, textX, textY, color);
-        matrices.scale(1/scale, 1/scale, 1/scale);
+        float textX = ((minX + maxX) / scale - (textRenderer.getWidth(text))) / 3;
+        float textY = ((minY + maxY) / scale - (textRenderer.fontHeight)) / 3;
+        drawText(matrices, textRenderer, text, textX, textY, scale, color);
+    }
+
+    public static void drawTextWithShadow(MatrixStack matrices, TextRenderer textRenderer, OrderedText text, float x, float y, float scale, int color) {
+        matrices.translate(x, y, 0.0f);
+        matrices.scale(scale, scale, 1.0f);
+        matrices.translate(-x, -y, 0.0f);
+        textRenderer.drawWithShadow(matrices, text, x, y, color);
+        matrices.translate(x, y, 0.0f);
+        matrices.scale(1/scale, 1/scale, 1.0f);
+        matrices.translate(-x, -y, 0.0f);
+    }
+
+    public static void drawTextWithShadow(MatrixStack matrices, TextRenderer textRenderer, Text text, float x, float y, float scale, int color) {
+        drawTextWithShadow(matrices, textRenderer, text.asOrderedText(), x, y, scale, color);
+    }
+
+    public static void drawText(MatrixStack matrices, TextRenderer textRenderer, OrderedText text, float x, float y, float scale, int color) {
+        matrices.translate(x, y, 0.0f);
+        matrices.scale(scale, scale, 1.0f);
+        matrices.translate(-x, -y, 0.0f);
+        textRenderer.draw(matrices, text, x, y, color);
+        matrices.translate(x, y, 0.0f);
+        matrices.scale(1/scale, 1/scale, 1.0f);
+        matrices.translate(-x, -y, 0.0f);
+    }
+
+    public static void drawText(MatrixStack matrices, TextRenderer textRenderer, Text text, float x, float y, float scale, int color) {
+        drawText(matrices, textRenderer, text.asOrderedText(), x, y, scale, color);
     }
 
     public static void drawTexture(MatrixStack matrices, float x, float y, float z, float u, float v, float width, float height, float textureWidth, float textureHeight) {

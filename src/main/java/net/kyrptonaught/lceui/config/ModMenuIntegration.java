@@ -5,6 +5,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.kyrptonaught.kyrptconfig.config.screen.ConfigScreen;
 import net.kyrptonaught.kyrptconfig.config.screen.ConfigSection;
 import net.kyrptonaught.kyrptconfig.config.screen.items.BooleanItem;
+import net.kyrptonaught.kyrptconfig.config.screen.items.number.IntegerItem;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
@@ -24,6 +25,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
             ConfigSection displaySection = new ConfigSection(configScreen, Text.translatable("options.lceui.general"));
             displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.textShadows"), configOptions.closerTextShadows, true).setSaveConsumer(val -> configOptions.closerTextShadows = val));
+            displaySection.addConfigItem(new IntegerItem(Text.translatable("options.lceui.general.hotbarScale"), configOptions.hotbarScale, 2).setSaveConsumer(val -> configOptions.hotbarScale = val));
 
             ConfigSection screensSection = new ConfigSection(configScreen, Text.translatable("options.lceui.screens"));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.creativeInventory"), configOptions.creativeInventory, true).setSaveConsumer(val -> configOptions.creativeInventory = val));

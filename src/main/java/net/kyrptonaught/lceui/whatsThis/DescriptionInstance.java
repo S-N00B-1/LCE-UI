@@ -16,6 +16,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Objects;
+
 public class DescriptionInstance {
     private ItemStack displayStack;
     private ItemDescription displayDescription;
@@ -77,7 +79,7 @@ public class DescriptionInstance {
     public boolean shouldClose(MinecraftClient client) {
         if (openTicks <= 0) return true;
 
-        return boundToScreen != null && !boundToScreen.equals(client.currentScreen);
+        return !Objects.equals(boundToScreen, client.currentScreen);
     }
 
     public String getGroupKey() {

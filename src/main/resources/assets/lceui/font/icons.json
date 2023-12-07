@@ -1,0 +1,13 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "lceui:font/icons.png",
+      "ascent": 9,
+      "height": 9,
+      "chars": [
+        "\u0001\u0002\u0003"
+      ]
+    }
+  ]
+}
