@@ -28,7 +28,11 @@ public class ModMenuIntegration implements ModMenuApi {
             displaySection.addConfigItem(new IntegerItem(Text.translatable("options.lceui.general.hotbarScale"), configOptions.hotbarScale, 2).setSaveConsumer(val -> configOptions.hotbarScale = val));
 
             ConfigSection screensSection = new ConfigSection(configScreen, Text.translatable("options.lceui.screens"));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.creativeInventory"), configOptions.creativeInventory, true).setSaveConsumer(val -> configOptions.creativeInventory = val));
+            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.creativeInventory"), configOptions.creativeInventory, true).setSaveConsumer(val -> configOptions.creativeInventory = val));
+            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatWidth"), configOptions.chatWidth, true).setSaveConsumer(val -> configOptions.chatWidth = val));
+//            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatHeight"), configOptions.chatHeight, true).setSaveConsumer(val -> configOptions.chatHeight = val));
+            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.recolorChat"), configOptions.recolorChat, true).setSaveConsumer(val -> configOptions.recolorChat = val));
+            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.rescaleChatText"), configOptions.rescaleChatText, true).setSaveConsumer(val -> configOptions.rescaleChatText = val));
 
             return configScreen;
         };

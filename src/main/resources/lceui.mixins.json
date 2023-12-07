@@ -6,6 +6,7 @@
     "ScalableSlotItemRendererMixin",
     "ScalableSlotMixin$HandledScreenAccessor",
     "TextShadowMixin",
+    "chat.ChatMixin",
     "creativeinv.CreativeInvMixin",
     "creativeinv.CreativeInvMixin$ClientAccessor",
     "titlescreen.TitleScreenMixin",

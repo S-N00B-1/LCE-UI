@@ -42,6 +42,8 @@ public class LCEUIMod implements ClientModInitializer {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(getConfig().closerTextShadows);
         buf.writeBoolean(getConfig().creativeInventory);
+        buf.writeBoolean(getConfig().chatWidth);
+        buf.writeBoolean(getConfig().rescaleChatText);
         buf.writeInt(getConfig().hotbarScale);
         ClientPlayNetworking.send(new Identifier(LCEUIMod.MOD_ID, "sync_config_packet"), buf);
     }
