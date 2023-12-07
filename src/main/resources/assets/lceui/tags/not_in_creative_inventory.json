@@ -16,6 +16,9 @@
     "minecraft:firework_star",
     "minecraft:chipped_anvil",
     "minecraft:damaged_anvil",
-    "minecraft:dragon_egg"
+    "minecraft:dragon_egg",
+    "minecraft:farmland",
+    "minecraft:filled_map",
+    "minecraft:suspicious_stew"
   ]
 }

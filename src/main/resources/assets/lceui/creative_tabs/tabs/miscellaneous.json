@@ -16,12 +16,48 @@
     "minecraft:blast_furnace",
     "minecraft:smoker",
     "minecraft:campfire",
+    "minecraft:soul_campfire",
     "minecraft:composter",
     "minecraft:grindstone",
     "minecraft:stonecutter",
     "minecraft:fletching_table",
     "minecraft:smithing_table",
     "minecraft:bell",
+    "minecraft:lightning_rod",
+    "minecraft:bee_nest",
+    "minecraft:beehive",
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": "{\"instrument\": \"minecraft:ponder_goat_horn\"}"
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": "{\"instrument\": \"minecraft:sing_goat_horn\"}"
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": "{\"instrument\": \"minecraft:seek_goat_horn\"}"
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": "{\"instrument\": \"minecraft:feel_goat_horn\"}"
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": "{\"instrument\": \"minecraft:admire_goat_horn\"}"
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": "{\"instrument\": \"minecraft:call_goat_horn\"}"
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": "{\"instrument\": \"minecraft:yearn_goat_horn\"}"
+    },
+    {
+      "item": "minecraft:goat_horn",
+      "nbt": "{\"instrument\": \"minecraft:dream_goat_horn\"}"
+    },
     "minecraft:shulker_box",
     "minecraft:black_shulker_box",
     "minecraft:blue_shulker_box",
@@ -55,6 +91,8 @@
     "minecraft:white_bed",
     "minecraft:light_gray_bed",
     "minecraft:gray_bed",
+    "minecraft:respawn_anchor",
+    "minecraft:lodestone",
     "minecraft:end_portal_frame",
     "minecraft:end_crystal",
     "minecraft:jukebox",
@@ -63,10 +101,13 @@
     "minecraft:lava_bucket",
     "minecraft:water_bucket",
     "minecraft:milk_bucket",
+    "minecraft:powder_snow_bucket",
     "minecraft:cod_bucket",
     "minecraft:salmon_bucket",
     "minecraft:pufferfish_bucket",
     "minecraft:tropical_fish_bucket",
+    "minecraft:axolotl_bucket",
+    "minecraft:tadpole_bucket",
     "minecraft:cauldron",
     "minecraft:snowball",
     "minecraft:paper",
@@ -77,6 +118,8 @@
     "minecraft:name_tag",
     "minecraft:nether_star",
     "minecraft:spawner",
+    "minecraft:sculk_shrieker",
+    "minecraft:frogspawn",
     "minecraft:turtle_egg",
     "minecraft:creeper_spawn_egg",
     "minecraft:skeleton_spawn_egg",
@@ -134,6 +177,21 @@
     "minecraft:llama_spawn_egg",
     "minecraft:turtle_spawn_egg",
     "minecraft:dolphin_spawn_egg",
+    "minecraft:allay_spawn_egg",
+    "minecraft:axolotl_spawn_egg",
+    "minecraft:bee_spawn_egg",
+    "minecraft:fox_spawn_egg",
+    "minecraft:frog_spawn_egg",
+    "minecraft:glow_squid_spawn_egg",
+    "minecraft:goat_spawn_egg",
+    "minecraft:hoglin_spawn_egg",
+    "minecraft:piglin_spawn_egg",
+    "minecraft:piglin_brute_spawn_egg",
+    "minecraft:strider_spawn_egg",
+    "minecraft:tadpole_spawn_egg",
+    "minecraft:trader_llama_spawn_egg",
+    "minecraft:warden_spawn_egg",
+    "minecraft:zoglin_spawn_egg",
     "minecraft:music_disc_13",
     "minecraft:music_disc_cat",
     "minecraft:music_disc_blocks",
@@ -146,6 +204,9 @@
     "minecraft:music_disc_ward",
     "minecraft:music_disc_11",
     "minecraft:music_disc_wait",
+    "minecraft:music_disc_otherside",
+    "minecraft:music_disc_5",
+    "minecraft:music_disc_pigstep",
     {
       "item": "minecraft:firework_rocket",
       "nbt": "{Fireworks:{Flight:1,Explosions:[{Type:0,Flicker:1,Trail:0,Colors:[I;6719955]}]}}"
