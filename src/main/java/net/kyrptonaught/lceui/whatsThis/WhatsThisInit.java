@@ -10,13 +10,17 @@ import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
+import net.kyrptonaught.lceui.tags.ClientTagHelper;
 import net.kyrptonaught.lceui.whatsThis.resourceloaders.DescriptionResourceLoader;
 import net.kyrptonaught.lceui.whatsThis.resourceloaders.ModelResourceLoader;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
 import net.minecraft.resource.ResourceType;
 
 import net.minecraft.text.Text;
@@ -24,7 +28,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.registry.Registry;
 import org.lwjgl.glfw.GLFW;
+
+import java.util.Collection;
+import java.util.Map;
 
 public class WhatsThisInit {
     public static DescriptionManager descriptionManager;
@@ -71,24 +79,52 @@ public class WhatsThisInit {
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
                 dispatcher.register(ClientCommandManager.literal(LCEUIMod.MOD_ID)
-                        .then(ClientCommandManager.literal("whatsthis")
-                                .then(ClientCommandManager.literal("descriptions")
-                                        .then(ClientCommandManager.literal("clearAll")
+                        .then(ClientCommandManager.literal("descriptions")
+                                .then(ClientCommandManager.literal("clear")
+                                        .executes(context -> {
+                                            int count = descriptionManager.viewedDescriptions.size();
+                                            descriptionManager.viewedDescriptions.clear();
+                                            context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.clearall", count));
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                        .then(ClientCommandManager.argument("description", ViewableDescriptionArgumentType.viewedDescriptionArgumentType())
                                                 .executes(context -> {
-                                                    int count = descriptionManager.viewedDescriptions.size();
-                                                    descriptionManager.viewedDescriptions.clear();
-                                                    context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.clearall", count));
+                                                    ViewableDescription viewableDescription = ViewableDescriptionArgumentType.getViewableDescriptionArgumentType(context, "description");
+                                                    boolean removed = descriptionManager.viewedDescriptions.remove(viewableDescription.toString());
+                                                    if (removed)
+                                                        context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.cleared", viewableDescription));
+                                                    else
+                                                        context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.notfound", viewableDescription));
                                                     return Command.SINGLE_SUCCESS;
+                                                })))
+                                .then(ClientCommandManager.literal("grant")
+                                        .then(ClientCommandManager.literal("all")
+                                                .executes(context -> {
+                                                    Map<Identifier, Collection<Identifier>> descriptionTags = ClientTagHelper.getTagsInPath(new Identifier(LCEUIMod.MOD_ID, "descriptions"));
+                                                    for (Identifier tag : descriptionTags.keySet()) {
+                                                        descriptionManager.viewedDescriptions.add("#" + tag.toString());
+                                                    }
+                                                    for (Block block : Registry.BLOCK) {
+                                                        String description = Registry.BLOCK.getId(block).getNamespace() + ":block/" + Registry.BLOCK.getId(block).getPath();
+                                                        if (DescriptionManager.findTagForID(Registry.BLOCK.getId(block)).isEmpty()) descriptionManager.viewedDescriptions.add(description);
+                                                    }
+                                                    for (Item item : Registry.ITEM) {
+                                                        String description = Registry.ITEM.getId(item).getNamespace() + ":item/" + Registry.ITEM.getId(item).getPath();
+                                                        descriptionManager.viewedDescriptions.add(description);
+                                                    }
+                                                    for (EntityType<?> entityType : Registry.ENTITY_TYPE) {
+                                                        String description = Registry.ENTITY_TYPE.getId(entityType).getNamespace() + ":entity/" + Registry.ENTITY_TYPE.getId(entityType).getPath();
+                                                        descriptionManager.viewedDescriptions.add(description);
+                                                    }
+                                                    if (!Registry.BLOCK.isEmpty() || !Registry.ITEM.isEmpty() || !Registry.ENTITY_TYPE.isEmpty())
+                                                        return Command.SINGLE_SUCCESS;
+                                                    return 0;
                                                 }))
-                                        .then(ClientCommandManager.literal("clear")
-                                                .then(ClientCommandManager.argument("block", ViewedBlockArgumentType.viewedBlockArgumentType())
+                                        .then(ClientCommandManager.literal("only")
+                                                .then(ClientCommandManager.argument("description", ViewableDescriptionArgumentType.viewableDescriptionArgumentType())
                                                         .executes(context -> {
-                                                            ViewedBlock viewedBlock = ViewedBlockArgumentType.getViewedBlockArgumentType(context, "block");
-                                                            boolean removed = descriptionManager.viewedDescriptions.remove(viewedBlock.toString());
-                                                            if (removed)
-                                                                context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.cleared", viewedBlock));
-                                                            else
-                                                                context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.notfound", viewedBlock));
+                                                            ViewableDescription viewableDescription = ViewableDescriptionArgumentType.getViewableDescriptionArgumentType(context, "description");
+                                                            descriptionManager.viewedDescriptions.add(viewableDescription.toString());
                                                             return Command.SINGLE_SUCCESS;
                                                         })))))));
 

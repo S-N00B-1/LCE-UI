@@ -20,13 +20,12 @@ public class DescriptionManager {
         itemDescriptions.clear();
     }
 
-    public Optional<String> findTagForID(Identifier itemID) {
+    public static Optional<String> findTagForID(Identifier itemID) {
         itemID = WhatsThisInit.getCleanIdentifier(itemID);
         Map<Identifier, Collection<Identifier>> tags = ClientTagHelper.getTagsInPath(new Identifier(LCEUIMod.MOD_ID, "descriptions"));
         for (Identifier tagID : tags.keySet()) {
             if (tags.get(tagID).contains(itemID))
                 return Optional.of("#" + tagID.toString());
-
         }
         return Optional.empty();
     }

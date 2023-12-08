@@ -2,11 +2,11 @@ package net.kyrptonaught.lceui.whatsThis;
 
 import net.minecraft.util.Identifier;
 
-public class ViewedBlock {
+public class ViewableDescription {
     Identifier id;
     boolean isTag;
 
-    protected ViewedBlock(Identifier id, boolean isTag) {
+    protected ViewableDescription(Identifier id, boolean isTag) {
         this.id = id;
         this.isTag = isTag;
     }
