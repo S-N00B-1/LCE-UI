@@ -1,0 +1,12 @@
+{
+  "click_stereo": {
+    "sounds": [
+      "lceui:click_stereo"
+    ]
+  },
+  "ui_back": {
+    "sounds": [
+      "lceui:ui_back"
+    ]
+  }
+}

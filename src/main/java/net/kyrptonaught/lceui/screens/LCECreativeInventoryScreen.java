@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
+import net.kyrptonaught.lceui.util.LCESounds;
 import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
@@ -21,6 +22,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
@@ -177,6 +179,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             this.client.player.playerScreenHandler.removeListener(this.listener);
             this.listener = new CreativeInventoryListener(this.client);
             this.client.player.playerScreenHandler.addListener(this.listener);
+            this.client.player.playSound(LCESounds.CLICK_STEREO, SoundCategory.MASTER, 1.0f, 1.0f);
         } else {
             this.client.setScreen(new InventoryScreen(this.client.player));
         }
@@ -194,6 +197,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             this.client.player.playerScreenHandler.removeListener(this.listener);
         }
         this.client.keyboard.setRepeatEvents(false);
+        this.client.player.playSound(LCESounds.UI_BACK, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
     private int getAmountOfPages() {

@@ -13,6 +13,7 @@ import net.kyrptonaught.lceui.screens.LCECreativeInventoryScreen;
 import net.kyrptonaught.lceui.resourceloaders.TagResourceLoader;
 import net.kyrptonaught.lceui.screens.LCESurvivalInventoryScreen;
 import net.kyrptonaught.lceui.util.LCEKeyBindings;
+import net.kyrptonaught.lceui.util.LCESounds;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.network.PacketByteBuf;
@@ -38,6 +39,7 @@ public class LCEUIMod implements ClientModInitializer {
         configManager.registerFile("config.json5", new LCEConfigOptions());
         configManager.load();
         LCEKeyBindings.init();
+        LCESounds.init();
         CustomItemGroup.init();
         WhatsThisInit.init();
         ClientTickEvents.START_CLIENT_TICK.register((client) -> {

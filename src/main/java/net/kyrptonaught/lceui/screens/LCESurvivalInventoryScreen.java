@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.mixin.ScreenHandlerCraftingAccessor;
+import net.kyrptonaught.lceui.util.LCESounds;
 import net.kyrptonaught.lceui.util.ScalableCraftingResultSlot;
 import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.MinecraftClient;
@@ -30,6 +31,7 @@ import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Quaternion;
@@ -55,12 +57,14 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
     protected void init() {
         super.init();
         this.client.keyboard.setRepeatEvents(true);
+        this.client.player.playSound(LCESounds.CLICK_STEREO, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
     @Override
     public void removed() {
         super.removed();
         this.client.keyboard.setRepeatEvents(false);
+        this.client.player.playSound(LCESounds.UI_BACK, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
