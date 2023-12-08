@@ -24,10 +24,10 @@ public class LCEDrawableHelper {
         if (LCEUIMod.getConfig().closerTextShadows) {
             MutableText blackText = Text.literal("");
             text.accept(((index, style, codePoint) -> {
-                blackText.append(Text.literal(String.valueOf((char)codePoint)).setStyle(style.withColor(0xFF000000)));
+                blackText.append(Text.literal(String.valueOf((char)codePoint)).setStyle(style.withColor((color) & 0xFF000000)));
                 return true;
             }));
-            textRenderer.draw(matrices, blackText.asOrderedText(), x + 1.0f / 3.0f, y + 1.0f / 3.0f, 0xFF000000);
+            textRenderer.draw(matrices, blackText.asOrderedText(), x + 1.0f / 3.0f, y + 1.0f / 3.0f, (color) & 0xFF000000);
             width = textRenderer.draw(matrices, text, x, y, color);
         } else {
             width = textRenderer.drawWithShadow(matrices, text, x, y, color);
