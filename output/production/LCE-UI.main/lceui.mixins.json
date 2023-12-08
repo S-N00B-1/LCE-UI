@@ -9,6 +9,7 @@
     "chat.ChatMixin",
     "creativeinv.CreativeInvMixin",
     "creativeinv.CreativeInvMixin$ClientAccessor",
+    "survivalinv.InventoryMixin",
     "titlescreen.TitleScreenMixin",
     "whatsthis.HandledScreenMixin"
   ],

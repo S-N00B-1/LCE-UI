@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.kyrptonaught.lceui.LCEKeyBindings;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.tags.ClientTagHelper;
 import net.kyrptonaught.lceui.whatsThis.resourceloaders.DescriptionResourceLoader;
@@ -29,14 +30,12 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.registry.Registry;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Collection;
 import java.util.Map;
 
 public class WhatsThisInit {
     public static DescriptionManager descriptionManager;
-    public static KeyBinding showDescription;
 
     public static void init() {
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new DescriptionResourceLoader());
@@ -127,17 +126,10 @@ public class WhatsThisInit {
                                                             descriptionManager.viewedDescriptions.add(viewableDescription.toString());
                                                             return Command.SINGLE_SUCCESS;
                                                         })))))));
-
-        showDescription = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.lceui.whatsthis",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_N,
-                "key.categories.lceui"
-        ));
     }
 
     public static boolean isKeybindPressed(int pressedKeyCode, InputUtil.Type type) {
-        InputUtil.Key key = KeyBindingHelper.getBoundKeyOf(showDescription);
+        InputUtil.Key key = KeyBindingHelper.getBoundKeyOf(LCEKeyBindings.showDescription);
         if (key.getCategory() != type)
             return false;
 

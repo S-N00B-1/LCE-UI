@@ -55,11 +55,19 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         }
     }
 
+    int handledScreenTickTracker = 0;
+    int scrollTickTracker = 0;
+
     @Override
     public void handledScreenTick() {
         super.handledScreenTick();
+        handledScreenTickTracker++;
         if (!this.client.interactionManager.hasCreativeInventory()) {
-            this.client.setScreen(new InventoryScreen(this.client.player));
+            this.client.setScreen(null);
+        }
+        if (handledScreenTickTracker > scrollTickTracker) {
+            scrollTickTracker = 0;
+            handledScreenTickTracker = 0;
         }
     }
 
@@ -373,11 +381,21 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.handler.scrollItems(0);
     }
 
+    short lastScrollDirection = 0;
+
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        if (!this.hasScrollbar()) {
+        scrollTickTracker++;
+        if (lastScrollDirection != Math.signum(amount)) {
+            lastScrollDirection = (short)(Math.signum(amount));
+            scrollTickTracker = 1;
+            handledScreenTickTracker = 0;
+        }
+
+        if (!this.hasScrollbar() || scrollTickTracker > 1) {
             return false;
         }
+        System.out.println(scrollTickTracker + ", " + handledScreenTickTracker);
         int amountOfPages = this.getAmountOfPages();
         this.scrollPosition = MathHelper.clamp(this.scrollPosition - (int)Math.round(amount), 0, (amountOfPages - 1));
         this.handler.scrollItems(this.scrollPosition);

@@ -1,4 +1,4 @@
-package net.kyrptonaught.lceui.creativeinv;
+package net.kyrptonaught.lceui.compat;
 
 import eu.midnightdust.midnightcontrols.client.MidnightControlsClient;
 import eu.midnightdust.midnightcontrols.client.compat.CompatHandler;
@@ -6,6 +6,7 @@ import eu.midnightdust.midnightcontrols.client.compat.MidnightControlsCompat;
 import eu.midnightdust.midnightcontrols.client.controller.ButtonBinding;
 import eu.midnightdust.midnightcontrols.client.controller.PressAction;
 import net.kyrptonaught.lceui.LCEUIMod;
+import net.kyrptonaught.lceui.creativeinv.LCECreativeInventoryScreen;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 
@@ -37,9 +38,8 @@ public class LCEMidnightControlsCompat implements CompatHandler {
                 .action(CYCLE_LEFT)
                 .cooldown()
                 .category(ButtonBinding.INVENTORY_CATEGORY)
-                .filter((client, buttonBinding) ->
-                        client.currentScreen instanceof LCECreativeInventoryScreen
-                )
+                .filter((client, buttonBinding) -> client.currentScreen instanceof LCECreativeInventoryScreen)
+                .onlyInGame()
                 .register();
 
         new ButtonBinding.Builder("key." + LCEUIMod.MOD_ID + ".controller.cycle_right")

@@ -3,14 +3,17 @@ package net.kyrptonaught.lceui;
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.kyrptonaught.kyrptconfig.config.ConfigManager;
 import net.kyrptonaught.lceui.config.LCEConfigOptions;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
-import net.kyrptonaught.lceui.creativeinv.LCEMidnightControlsCompat;
+import net.kyrptonaught.lceui.creativeinv.LCECreativeInventoryScreen;
 import net.kyrptonaught.lceui.resourceloaders.TagResourceLoader;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -33,15 +36,22 @@ public class LCEUIMod implements ClientModInitializer {
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new TagResourceLoader());
         configManager.registerFile("config.json5", new LCEConfigOptions());
         configManager.load();
-        WhatsThisInit.init();
+        LCEKeyBindings.init();
         CustomItemGroup.init();
-        LCEMidnightControlsCompat.register();
+        WhatsThisInit.init();
+        ClientTickEvents.START_CLIENT_TICK.register((client) -> {
+            while (LCEKeyBindings.openSecondaryInventory.wasPressed() && client.world != null && client.currentScreen == null) {
+                client.getTutorialManager().onInventoryOpened();
+                client.setScreen(client.interactionManager.hasCreativeInventory() ? new LCECreativeInventoryScreen(client.player) : new InventoryScreen(client.player));
+            }
+        });
     }
 
     public static void syncConfig() {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(getConfig().closerTextShadows);
         buf.writeBoolean(getConfig().creativeInventory);
+        buf.writeBoolean(getConfig().survivalInventory);
         buf.writeBoolean(getConfig().chatWidth);
         buf.writeBoolean(getConfig().rescaleChatText);
         buf.writeInt(getConfig().hotbarScale);
