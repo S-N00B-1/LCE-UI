@@ -1,11 +1,15 @@
 package net.kyrptonaught.lceui.mixin.chat;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,10 +25,13 @@ public abstract class ChatMixin {
     @Shadow
     public abstract double getChatScale();
 
-//    @Shadow public abstract int getHeight();
-
     @Unique
     private static final int left = 37;
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I"))
+    private int renderWithLCEShadow(TextRenderer instance, MatrixStack matrices, OrderedText text, float x, float y, int color) {
+        return LCEDrawableHelper.drawTextWithShadow(matrices, instance, text, x, y, 1.0f, color);
+    }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(Lnet/minecraft/client/util/math/MatrixStack;IIIII)V", ordinal = 0))
     private void fillRedirect(MatrixStack matrixStack, int x1, int y1, int x2, int y2, int color) {
@@ -51,14 +58,14 @@ public abstract class ChatMixin {
     @ModifyReturnValue(method = "toChatLineX", at = @At("RETURN"))
     private double toChatLineX(double original) {
         if (LCEUIMod.getConfig().chatWidth)
-            return original + (4.0 - left) / this.getChatScale();
+            return original - ((left - 4) / 2.0) / this.getChatScale();
         return original;
     }
 
     @ModifyReturnValue(method = "toChatLineY", at = @At("RETURN"))
     private double toChatLineY(double original) {
         if (LCEUIMod.getConfig().chatYPos)
-            return original - 26 / (this.getChatScale() * (this.client.options.getChatLineSpacing().getValue() + 1.0));
+            return original - (29 + (45.0 / 2.0) * this.getChatScale()) / (this.getChatScale() * (this.client.options.getChatLineSpacing().getValue() + 1.0));
         return original;
     }
 

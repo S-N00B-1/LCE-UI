@@ -1,10 +1,10 @@
 package net.kyrptonaught.lceui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
@@ -16,18 +16,30 @@ public class LCEDrawableHelper {
         drawText(matrices, textRenderer, text, textX, textY, scale, color);
     }
 
-    public static void drawTextWithShadow(MatrixStack matrices, TextRenderer textRenderer, OrderedText text, float x, float y, float scale, int color) {
+    public static int drawTextWithShadow(MatrixStack matrices, TextRenderer textRenderer, OrderedText text, float x, float y, float scale, int color) {
         matrices.translate(x, y, 0.0f);
         matrices.scale(scale, scale, 1.0f);
         matrices.translate(-x, -y, 0.0f);
-        textRenderer.drawWithShadow(matrices, text, x, y, color);
+        int width;
+        if (LCEUIMod.getConfig().closerTextShadows) {
+            MutableText blackText = Text.literal("");
+            text.accept(((index, style, codePoint) -> {
+                blackText.append(Text.literal(String.valueOf((char)codePoint)).setStyle(style.withColor(0xFF000000)));
+                return true;
+            }));
+            textRenderer.draw(matrices, blackText.asOrderedText(), x + 1.0f / 3.0f, y + 1.0f / 3.0f, 0xFF000000);
+            width = textRenderer.draw(matrices, text, x, y, color);
+        } else {
+            width = textRenderer.drawWithShadow(matrices, text, x, y, color);
+        }
         matrices.translate(x, y, 0.0f);
         matrices.scale(1/scale, 1/scale, 1.0f);
         matrices.translate(-x, -y, 0.0f);
+        return width;
     }
 
-    public static void drawTextWithShadow(MatrixStack matrices, TextRenderer textRenderer, Text text, float x, float y, float scale, int color) {
-        drawTextWithShadow(matrices, textRenderer, text.asOrderedText(), x, y, scale, color);
+    public static int drawTextWithShadow(MatrixStack matrices, TextRenderer textRenderer, Text text, float x, float y, float scale, int color) {
+        return drawTextWithShadow(matrices, textRenderer, text.asOrderedText(), x, y, scale, color);
     }
 
     public static void drawText(MatrixStack matrices, TextRenderer textRenderer, OrderedText text, float x, float y, float scale, int color) {

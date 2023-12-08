@@ -23,6 +23,7 @@
   "lceui.itemGroup.items_without_group": "Items Without a Group",
   "lceui.itemGroup.unknown": "Unknown group",
   "options.lceui": "LCE UI Settings",
+  "options.lceui.requires": "Requires '%s' to function correctly",
   "options.lceui.general": "General",
   "options.lceui.general.textShadows": "Closer Text Shadows",
   "options.lceui.general.hotbarScale": "Hotbar Scale",

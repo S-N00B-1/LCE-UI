@@ -30,7 +30,7 @@ public class ModMenuIntegration implements ModMenuApi {
             ConfigSection screensSection = new ConfigSection(configScreen, Text.translatable("options.lceui.screens"));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.creativeInventory"), configOptions.creativeInventory, true).setSaveConsumer(val -> configOptions.creativeInventory = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.survivalInventory"), configOptions.survivalInventory, true).setSaveConsumer(val -> configOptions.survivalInventory = val));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.classicCrafting"), configOptions.classicCrafting, true).setSaveConsumer(val -> configOptions.classicCrafting = val));
+            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.classicCrafting"), configOptions.classicCrafting, true).setSaveConsumer(val -> configOptions.classicCrafting = val).setToolTip(Text.translatable("options.lceui.requires", Text.translatable("options.lceui.screens.survivalInventory"))));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatWidth"), configOptions.chatWidth, true).setSaveConsumer(val -> configOptions.chatWidth = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatYPos"), configOptions.chatYPos, true).setSaveConsumer(val -> configOptions.chatYPos = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.recolorChat"), configOptions.recolorChat, true).setSaveConsumer(val -> configOptions.recolorChat = val));

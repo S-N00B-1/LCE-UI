@@ -10,9 +10,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(PlayerScreenHandler.class)
 public interface ScreenHandlerCraftingAccessor {
-    @Accessor("craftingInput")
-    CraftingInventory craftingInput();
-
     @Accessor("craftingResult")
     CraftingResultInventory craftingResult();
 }
