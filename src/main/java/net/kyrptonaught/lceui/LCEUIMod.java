@@ -11,9 +11,9 @@ import net.kyrptonaught.lceui.config.LCEConfigOptions;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
 import net.kyrptonaught.lceui.creativeinv.LCECreativeInventoryScreen;
 import net.kyrptonaught.lceui.resourceloaders.TagResourceLoader;
+import net.kyrptonaught.lceui.survivalinv.LCESurvivalInventoryScreen;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -40,9 +40,9 @@ public class LCEUIMod implements ClientModInitializer {
         CustomItemGroup.init();
         WhatsThisInit.init();
         ClientTickEvents.START_CLIENT_TICK.register((client) -> {
-            while (LCEKeyBindings.openSecondaryInventory.wasPressed() && client.world != null && client.currentScreen == null) {
+            while (LCEKeyBindings.openSecondaryInventory.wasPressed() && client.world != null && client.player != null && client.interactionManager != null && client.currentScreen == null) {
                 client.getTutorialManager().onInventoryOpened();
-                client.setScreen(client.interactionManager.hasCreativeInventory() ? new LCECreativeInventoryScreen(client.player) : new InventoryScreen(client.player));
+                client.setScreen(client.interactionManager.hasCreativeInventory() && getConfig().creativeInventory ? new LCECreativeInventoryScreen(client.player) : (getConfig().survivalInventory ? new LCESurvivalInventoryScreen(client.player) : new InventoryScreen(client.player)));
             }
         });
     }

@@ -22,8 +22,8 @@ public abstract class InventoryMixin {
 
     @Inject(method = "init", at = @At("HEAD"), cancellable = true)
     private void hijackInit(CallbackInfo ci) {
-        if (LCEUIMod.getConfig().survivalInventory) {
-            MinecraftClient client = ((ScreenClientAccessor) ((InventoryScreen) (Object) this)).client();
+        MinecraftClient client = ((ScreenClientAccessor) ((InventoryScreen) (Object) this)).client();
+        if (LCEUIMod.getConfig().survivalInventory && (LCEUIMod.getConfig().creativeInventory || !client.interactionManager.hasCreativeInventory())) {
             this.removed();
             client.setScreen(new LCESurvivalInventoryScreen(client.player));
             ci.cancel();
