@@ -395,7 +395,6 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         if (!this.hasScrollbar() || scrollTickTracker > 1) {
             return false;
         }
-        System.out.println(scrollTickTracker + ", " + handledScreenTickTracker);
         int amountOfPages = this.getAmountOfPages();
         this.scrollPosition = MathHelper.clamp(this.scrollPosition - (int)Math.round(amount), 0, (amountOfPages - 1));
         this.handler.scrollItems(this.scrollPosition);
