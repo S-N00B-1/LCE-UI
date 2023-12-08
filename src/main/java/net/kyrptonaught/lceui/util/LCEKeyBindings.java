@@ -1,4 +1,4 @@
-package net.kyrptonaught.lceui;
+package net.kyrptonaught.lceui.util;
 
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;

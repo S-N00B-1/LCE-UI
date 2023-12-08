@@ -1,10 +1,11 @@
-package net.kyrptonaught.lceui.creativeinv;
+package net.kyrptonaught.lceui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
+import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
 import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;

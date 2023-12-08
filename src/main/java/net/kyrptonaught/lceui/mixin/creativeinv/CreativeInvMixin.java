@@ -1,9 +1,8 @@
 package net.kyrptonaught.lceui.mixin.creativeinv;
 
 import net.kyrptonaught.lceui.LCEUIMod;
-import net.kyrptonaught.lceui.creativeinv.LCECreativeInventoryScreen;
+import net.kyrptonaught.lceui.screens.LCECreativeInventoryScreen;
 import net.kyrptonaught.lceui.mixin.ScreenClientAccessor;
-import net.kyrptonaught.lceui.survivalinv.LCESurvivalInventoryScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import org.spongepowered.asm.mixin.Mixin;

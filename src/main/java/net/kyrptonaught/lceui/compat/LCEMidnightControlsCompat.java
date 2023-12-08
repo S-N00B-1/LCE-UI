@@ -6,7 +6,7 @@ import eu.midnightdust.midnightcontrols.client.compat.MidnightControlsCompat;
 import eu.midnightdust.midnightcontrols.client.controller.ButtonBinding;
 import eu.midnightdust.midnightcontrols.client.controller.PressAction;
 import net.kyrptonaught.lceui.LCEUIMod;
-import net.kyrptonaught.lceui.creativeinv.LCECreativeInventoryScreen;
+import net.kyrptonaught.lceui.screens.LCECreativeInventoryScreen;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.glfw.GLFW;
 

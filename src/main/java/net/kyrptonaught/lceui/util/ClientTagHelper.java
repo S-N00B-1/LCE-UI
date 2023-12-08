@@ -1,4 +1,4 @@
-package net.kyrptonaught.lceui.tags;
+package net.kyrptonaught.lceui.util;
 
 import net.minecraft.util.Identifier;
 

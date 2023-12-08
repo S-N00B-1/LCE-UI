@@ -1,7 +1,7 @@
 package net.kyrptonaught.lceui.whatsThis;
 
 import net.kyrptonaught.lceui.LCEUIMod;
-import net.kyrptonaught.lceui.tags.ClientTagHelper;
+import net.kyrptonaught.lceui.util.ClientTagHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
