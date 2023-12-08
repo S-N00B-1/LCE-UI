@@ -5,7 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
-import net.kyrptonaught.lceui.ScalableSlot;
+import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryListener;
@@ -419,25 +419,9 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-//        if (this.scrolling) {
-//            int i = this.y + 18;
-//            int j = i + 112;
-//            this.scrollPosition = ((float)mouseY - (float)i - 7.5f) / ((float)(j - i) - 15.0f);
-//            this.scrollPosition = MathHelper.clamp(this.scrollPosition, 0.0f, 1.0f);
-//            this.handler.scrollItems(this.scrollPosition);
-//            return true;
-//        }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
-    }
-
-    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
         super.render(matrices, mouseX, mouseY, delta);
-//        for (CustomItemGroup customItemGroup : CustomItemGroup.ITEM_GROUPS) {
-//            if (this.renderTabTooltipIfHovered(matrices, customItemGroup, mouseX, mouseY)) break;
-//        }
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         this.drawMouseoverTooltip(matrices, mouseX, mouseY);
     }

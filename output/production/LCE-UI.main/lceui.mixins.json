@@ -5,19 +5,19 @@
   "client": [
     "ScalableSlotItemRendererMixin",
     "ScalableSlotMixin$HandledScreenAccessor",
+    "ScreenClientAccessor",
     "TextShadowMixin",
     "chat.ChatMixin",
     "creativeinv.CreativeInvMixin",
-    "creativeinv.CreativeInvMixin$ClientAccessor",
     "survivalinv.InventoryMixin",
     "titlescreen.TitleScreenMixin",
     "whatsthis.HandledScreenMixin"
   ],
   "injectors": {
-    "maxShiftBy": 2,
     "defaultRequire": 1
   },
   "mixins": [
-    "ScalableSlotMixin"
+    "ScalableSlotMixin",
+    "ScreenHandlerCraftingAccessor"
   ]
 }

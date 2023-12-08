@@ -1,4 +1,4 @@
-package net.kyrptonaught.lceui;
+package net.kyrptonaught.lceui.util;
 
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.slot.Slot;

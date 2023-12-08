@@ -1,8 +1,7 @@
 package net.kyrptonaught.lceui.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.kyrptonaught.lceui.LCEUIMod;
-import net.kyrptonaught.lceui.ScalableSlot;
+import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.slot.Slot;

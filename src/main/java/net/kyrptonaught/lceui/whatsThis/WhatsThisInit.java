@@ -83,40 +83,55 @@ public class WhatsThisInit {
                                         .executes(context -> {
                                             int count = descriptionManager.viewedDescriptions.size();
                                             descriptionManager.viewedDescriptions.clear();
-                                            context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.clearall", count));
-                                            return Command.SINGLE_SUCCESS;
+                                            if (count > 0) {
+                                                context.getSource().sendFeedback(Text.translatable("command.lceui.descriptions.clear.all." + (count == 1 ? "single" : (count == 2 ? "dual" : "plural")), count));
+                                                return Command.SINGLE_SUCCESS;
+                                            }
+                                            context.getSource().sendFeedback(Text.translatable("command.lceui.descriptions.notfound"));
+                                            return 0;
                                         })
                                         .then(ClientCommandManager.argument("description", ViewableDescriptionArgumentType.viewedDescriptionArgumentType())
                                                 .executes(context -> {
                                                     ViewableDescription viewableDescription = ViewableDescriptionArgumentType.getViewableDescriptionArgumentType(context, "description");
                                                     boolean removed = descriptionManager.viewedDescriptions.remove(viewableDescription.toString());
-                                                    if (removed)
-                                                        context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.cleared", viewableDescription));
-                                                    else
-                                                        context.getSource().sendFeedback(Text.translatable("key.lceui.whatsthis.feedback.notfound", viewableDescription));
-                                                    return Command.SINGLE_SUCCESS;
+                                                    if (removed) {
+                                                        context.getSource().sendFeedback(Text.translatable("command.lceui.descriptions.cleared", viewableDescription));
+                                                        return Command.SINGLE_SUCCESS;
+                                                    }
+                                                    context.getSource().sendFeedback(Text.translatable("command.lceui.descriptions.notfound"));
+                                                    return 0;
                                                 })))
                                 .then(ClientCommandManager.literal("grant")
                                         .then(ClientCommandManager.literal("all")
                                                 .executes(context -> {
+                                                    int entryCount = 0;
                                                     Map<Identifier, Collection<Identifier>> descriptionTags = ClientTagHelper.getTagsInPath(new Identifier(LCEUIMod.MOD_ID, "descriptions"));
                                                     for (Identifier tag : descriptionTags.keySet()) {
-                                                        descriptionManager.viewedDescriptions.add("#" + tag.toString());
+                                                        if (descriptionManager.viewedDescriptions.add("#" + tag.toString()))
+                                                            ++entryCount;
                                                     }
                                                     for (Block block : Registry.BLOCK) {
                                                         String description = Registry.BLOCK.getId(block).getNamespace() + ":block/" + Registry.BLOCK.getId(block).getPath();
-                                                        if (DescriptionManager.findTagForID(Registry.BLOCK.getId(block)).isEmpty()) descriptionManager.viewedDescriptions.add(description);
+                                                        if (DescriptionManager.findTagForID(Registry.BLOCK.getId(block)).isEmpty()) {
+                                                            if (descriptionManager.viewedDescriptions.add(description))
+                                                                ++entryCount;
+                                                        }
                                                     }
                                                     for (Item item : Registry.ITEM) {
                                                         String description = Registry.ITEM.getId(item).getNamespace() + ":item/" + Registry.ITEM.getId(item).getPath();
-                                                        descriptionManager.viewedDescriptions.add(description);
+                                                        if (descriptionManager.viewedDescriptions.add(description))
+                                                            ++entryCount;
                                                     }
                                                     for (EntityType<?> entityType : Registry.ENTITY_TYPE) {
                                                         String description = Registry.ENTITY_TYPE.getId(entityType).getNamespace() + ":entity/" + Registry.ENTITY_TYPE.getId(entityType).getPath();
-                                                        descriptionManager.viewedDescriptions.add(description);
+                                                        if (descriptionManager.viewedDescriptions.add(description))
+                                                            ++entryCount;
                                                     }
-                                                    if (!Registry.BLOCK.isEmpty() || !Registry.ITEM.isEmpty() || !Registry.ENTITY_TYPE.isEmpty())
+                                                    if (entryCount > 0) {
+                                                        context.getSource().sendFeedback(Text.translatable("command.lceui.descriptions.grant.all." + (entryCount == 1 ? "single" : (entryCount == 2 ? "dual" : "plural")), entryCount));
                                                         return Command.SINGLE_SUCCESS;
+                                                    }
+                                                    context.getSource().sendFeedback(Text.translatable("command.lceui.descriptions.notfound"));
                                                     return 0;
                                                 }))
                                         .then(ClientCommandManager.literal("only")
@@ -124,6 +139,7 @@ public class WhatsThisInit {
                                                         .executes(context -> {
                                                             ViewableDescription viewableDescription = ViewableDescriptionArgumentType.getViewableDescriptionArgumentType(context, "description");
                                                             descriptionManager.viewedDescriptions.add(viewableDescription.toString());
+                                                            context.getSource().sendFeedback(Text.translatable("command.lceui.descriptions.grant.only", viewableDescription.toString()));
                                                             return Command.SINGLE_SUCCESS;
                                                         })))))));
     }

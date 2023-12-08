@@ -10,6 +10,8 @@ public class LCEConfigOptions implements AbstractConfigFile {
     public boolean creativeInventory = true;
     @Comment("Enables the LCE Survival mode inventory")
     public boolean survivalInventory = true;
+    @Comment("Enables classic crafting (normal Java crafting)")
+    public boolean classicCrafting = false;
     @Comment("Makes the chat's width the whole screen")
     public boolean chatWidth = true;
     @Comment("Makes the chat's Y position the same as LCE (almost; it's actually 1 pixel off)")

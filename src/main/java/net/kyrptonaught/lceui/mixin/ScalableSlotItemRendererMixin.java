@@ -2,7 +2,7 @@ package net.kyrptonaught.lceui.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.kyrptonaught.lceui.ScalableSlot;
+import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -17,8 +17,10 @@ public abstract class ScalableSlotItemRendererMixin {
     @ModifyArg(method = "renderGuiItemModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemRenderer;renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V"), index = 3)
     private MatrixStack scaleMatrixBasedOnSlot(MatrixStack matrixStack, @Local(name = "x") int x, @Local(name = "y") int y) {
         if (ScalableSlot.scalableSlotToDraw != null) {
-            matrixStack.translate(ScalableSlot.scalableSlotToDraw.scale - 1, 1 - ScalableSlot.scalableSlotToDraw.scale, 0);
+            var variable = ScalableSlot.scalableSlotToDraw.scale >= 1 ? 2.0f/3.0f : (ScalableSlot.scalableSlotToDraw.itemScale * ScalableSlot.scalableSlotToDraw.scale) * 3.0f/2.0f + 1.0f/15.0f;
+            matrixStack.translate((ScalableSlot.scalableSlotToDraw.itemScale * ScalableSlot.scalableSlotToDraw.scale) - variable, variable - (ScalableSlot.scalableSlotToDraw.itemScale * ScalableSlot.scalableSlotToDraw.scale), 0);
             matrixStack.scale(ScalableSlot.scalableSlotToDraw.itemScale, ScalableSlot.scalableSlotToDraw.itemScale, 1.0f);
+            matrixStack.translate(variable - (ScalableSlot.scalableSlotToDraw.itemScale * ScalableSlot.scalableSlotToDraw.scale), (ScalableSlot.scalableSlotToDraw.itemScale * ScalableSlot.scalableSlotToDraw.scale) - variable, 0);
         }
         return matrixStack;
     }
