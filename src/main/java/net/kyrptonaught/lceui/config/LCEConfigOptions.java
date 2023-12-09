@@ -6,6 +6,10 @@ import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
 public class LCEConfigOptions implements AbstractConfigFile {
     @Comment("Makes the text shadow render 1/3 of a pixel down and to the right rather than a full pixel")
     public boolean closerTextShadows = true;
+    @Comment("Makes renamed items gold instead of italic")
+    public boolean renamedItemsHaveGoldName = true;
+    @Comment("Defines the hotbar scale")
+    public int hotbarScale = 2; // TODO: make this actually do something
     @Comment("Enables the LCE Creative mode inventory")
     public boolean creativeInventory = true;
     @Comment("Enables the LCE Survival mode inventory")
@@ -20,6 +24,6 @@ public class LCEConfigOptions implements AbstractConfigFile {
     public boolean recolorChat = true;
     @Comment("Makes the chat's text 2/3 of its normal size")
     public boolean rescaleChatText = true;
-    @Comment("Defines the hotbar scale")
-    public int hotbarScale = 2; // TODO: make this actually do something
+    @Comment("Turns the sign UI into LCE's sign UI")
+    public boolean sign = true;
 }

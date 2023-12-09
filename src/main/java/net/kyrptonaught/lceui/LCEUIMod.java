@@ -53,11 +53,14 @@ public class LCEUIMod implements ClientModInitializer {
     public static void syncConfig() {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(getConfig().closerTextShadows);
+        buf.writeBoolean(getConfig().renamedItemsHaveGoldName);
+        buf.writeInt(getConfig().hotbarScale);
+
         buf.writeBoolean(getConfig().creativeInventory);
         buf.writeBoolean(getConfig().survivalInventory);
         buf.writeBoolean(getConfig().chatWidth);
         buf.writeBoolean(getConfig().rescaleChatText);
-        buf.writeInt(getConfig().hotbarScale);
+        buf.writeBoolean(getConfig().sign);
         ClientPlayNetworking.send(new Identifier(LCEUIMod.MOD_ID, "sync_config_packet"), buf);
     }
 

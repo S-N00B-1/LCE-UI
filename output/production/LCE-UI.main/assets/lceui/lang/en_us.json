@@ -26,6 +26,7 @@
   "options.lceui.requires": "Requires '%s' to function correctly",
   "options.lceui.general": "General",
   "options.lceui.general.textShadows": "Closer Text Shadows",
+  "options.lceui.general.renamedItemsHaveGoldName": "Renamed Items Have Gold Name",
   "options.lceui.general.hotbarScale": "Hotbar Scale",
   "options.lceui.screens": "Screens",
   "options.lceui.screens.creativeInventory": "Creative Inventory",
@@ -35,6 +36,7 @@
   "options.lceui.screens.chatYPos": "Chat Y Position",
   "options.lceui.screens.recolorChat": "Recolor Chat",
   "options.lceui.screens.rescaleChatText": "Rescale Chat Text",
+  "options.lceui.screens.sign": "Sign Screen",
   "key.lceui.controller.cycle_left": "Cycle to Left Tab",
   "key.lceui.controller.cycle_right": "Cycle to Right Tab",
 

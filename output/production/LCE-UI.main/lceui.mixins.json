@@ -3,20 +3,21 @@
   "package": "net.kyrptonaught.lceui.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "RenamedItemHasGoldNameMixin",
     "ScalableSlotItemRendererMixin",
     "ScalableSlotMixin$HandledScreenAccessor",
     "ScreenClientAccessor",
     "chat.ChatMixin",
     "creativeinv.CreativeInvMixin",
+    "sign.SignScreenMixin",
     "survivalinv.InventoryMixin",
     "titlescreen.TitleScreenMixin",
-    "whatsthis.HandledScreenMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  },
-  "mixins": [
+    "whatsthis.HandledScreenMixin",
     "ScalableSlotMixin",
     "ScreenHandlerCraftingAccessor"
-  ]
+  ],
+  "injectors": {
+    "maxShiftBy": 5,
+    "defaultRequire": 1
+  }
 }

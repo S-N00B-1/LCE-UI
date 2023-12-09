@@ -25,6 +25,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
             ConfigSection displaySection = new ConfigSection(configScreen, Text.translatable("options.lceui.general"));
             displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.textShadows"), configOptions.closerTextShadows, true).setSaveConsumer(val -> configOptions.closerTextShadows = val));
+            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.renamedItemsHaveGoldName"), configOptions.renamedItemsHaveGoldName, true).setSaveConsumer(val -> configOptions.renamedItemsHaveGoldName = val));
             displaySection.addConfigItem(new IntegerItem(Text.translatable("options.lceui.general.hotbarScale"), configOptions.hotbarScale, 2).setSaveConsumer(val -> configOptions.hotbarScale = val));
 
             ConfigSection screensSection = new ConfigSection(configScreen, Text.translatable("options.lceui.screens"));
@@ -35,6 +36,7 @@ public class ModMenuIntegration implements ModMenuApi {
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatYPos"), configOptions.chatYPos, true).setSaveConsumer(val -> configOptions.chatYPos = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.recolorChat"), configOptions.recolorChat, true).setSaveConsumer(val -> configOptions.recolorChat = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.rescaleChatText"), configOptions.rescaleChatText, true).setSaveConsumer(val -> configOptions.rescaleChatText = val));
+            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.sign"), configOptions.sign, true).setSaveConsumer(val -> configOptions.sign = val));
 
             return configScreen;
         };

@@ -1,6 +1,8 @@
 package net.kyrptonaught.lceui.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -14,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@Environment(EnvType.CLIENT)
 @Mixin(HandledScreen.class)
 public class ScalableSlotMixin {
     @Mixin(HandledScreen.class)

@@ -248,8 +248,8 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             if (itemGroup == null) continue;
             RenderSystem.setShaderTexture(0, itemGroup.getResourceLocation());
             matrices.push();
-            float widthAndHeight = 26.0f * (2.0f/3.0f);
-            LCEDrawableHelper.drawTexture(matrices, (80.0f/3.0f) * (itemGroup.getIndex() % 8) + 1 + ((26.0f - widthAndHeight) / 2.0f),  ((26.0f - widthAndHeight) / 2.0f) + (itemGroup.getIndex() % 8 == selectedTab % 8 ? 0 : 1 + (1.0f/3.0f)) - (2.0f * (2.0f/3.0f)) - 1, widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
+            float widthAndHeight = 24.0f * (2.0f/3.0f);
+            LCEDrawableHelper.drawTexture(matrices, (80.0f/3.0f) * (itemGroup.getIndex() % 8) + 1 + ((26.0f - widthAndHeight) / 2.0f),  ((26.0f - widthAndHeight) / 2.0f) + (itemGroup.getIndex() % 8 == selectedTab % 8 ? 0 : 1 + (1.0f/3.0f)) - (2.0f * (2.0f/3.0f)) - 1.0f/3.0f, widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
             matrices.pop();
         }
         int amountOfPages = this.getAmountOfPages();

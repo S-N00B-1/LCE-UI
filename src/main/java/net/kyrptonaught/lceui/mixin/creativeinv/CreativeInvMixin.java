@@ -19,9 +19,11 @@ public abstract class CreativeInvMixin {
     public void hijackInit(CallbackInfo ci) {
         if (LCEUIMod.getConfig().creativeInventory) {
             MinecraftClient client = ((ScreenClientAccessor) ((CreativeInventoryScreen) (Object) this)).client();
-            this.removed();
-            client.setScreen(new LCECreativeInventoryScreen(client.player));
-            ci.cancel();
+            if (client != null) {
+                this.removed();
+                client.setScreen(new LCECreativeInventoryScreen(client.player));
+                ci.cancel();
+            }
         }
     }
 }
