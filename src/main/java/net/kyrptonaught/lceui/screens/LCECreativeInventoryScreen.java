@@ -29,15 +29,18 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Environment(value=EnvType.CLIENT)
 public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreativeInventoryScreen.CreativeScreenHandler> {
     static final SimpleInventory INVENTORY = new SimpleInventory(50);
     private static int selectedTab = 0;
-    private int scrollPosition;
     private CreativeInventoryListener listener;
     private boolean lastClickOutsideBounds;
     private final CustomItemGroup[] currentItemGroups = new CustomItemGroup[8];
     private int currentItemGroupGroup = 0;
+    private final Map<CustomItemGroup, Integer> scrolls = new HashMap<>();
 
     public LCECreativeInventoryScreen(PlayerEntity player) {
         super(new CreativeScreenHandler(player), player.getInventory(), ScreenTexts.EMPTY);
@@ -47,19 +50,38 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.backgroundWidth = 643/3;
     }
 
-    public void setItemGroupGroup(int itemGroupGroup) {
-        this.currentItemGroupGroup = MathHelper.clamp(itemGroupGroup, 0, MathHelper.ceil((float)CustomItemGroup.ITEM_GROUPS.size() / 8) - 1);
-        for (int i = 0; i < 8; i++) {
-            if (this.currentItemGroupGroup * 8 + i < CustomItemGroup.ITEM_GROUPS.size()) {
-                currentItemGroups[i] = CustomItemGroup.ITEM_GROUPS.get(this.currentItemGroupGroup * 8 + i);
-            } else {
-                currentItemGroups[i] = null;
+    @Override
+    protected void init() {
+        if (this.client.interactionManager.hasCreativeInventory()) {
+            super.init();
+            for (CustomItemGroup customItemGroup : CustomItemGroup.ITEM_GROUPS) {
+                this.scrolls.put(customItemGroup, 0);
             }
+            this.setItemGroupGroup(0);
+            this.client.keyboard.setRepeatEvents(true);
+            this.setSelectedTab(CustomItemGroup.ITEM_GROUPS.get(0));
+            this.client.player.playerScreenHandler.removeListener(this.listener);
+            this.listener = new CreativeInventoryListener(this.client);
+            this.client.player.playerScreenHandler.addListener(this.listener);
+            this.client.player.playSound(LCESounds.CLICK_STEREO, SoundCategory.MASTER, 1.0f, 1.0f);
+        } else {
+            this.client.setScreen(new InventoryScreen(this.client.player));
         }
+    }
+
+    @Override
+    public void removed() {
+        super.removed();
+        if (this.client.player != null && this.client.player.getInventory() != null) {
+            this.client.player.playerScreenHandler.removeListener(this.listener);
+        }
+        this.client.keyboard.setRepeatEvents(false);
+        this.client.player.playSound(LCESounds.UI_BACK, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
     int handledScreenTickTracker = 0;
     int scrollTickTracker = 0;
+    byte lastScrollDirection = 0;
 
     @Override
     public void handledScreenTick() {
@@ -71,6 +93,35 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         if (handledScreenTickTracker > scrollTickTracker) {
             scrollTickTracker = 0;
             handledScreenTickTracker = 0;
+        }
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        scrollTickTracker++;
+        if (lastScrollDirection != Math.signum(amount)) {
+            lastScrollDirection = (byte)(Math.signum(amount));
+            scrollTickTracker = 1;
+            handledScreenTickTracker = 0;
+        }
+
+        if (!this.hasScrollbar() || scrollTickTracker > 1) {
+            return false;
+        }
+        int amountOfPages = this.getAmountOfPages();
+        this.scrolls.put(currentItemGroups[selectedTab], MathHelper.clamp(this.scrolls.get(currentItemGroups[selectedTab]) - (int)Math.round(amount), 0, (amountOfPages - 1)));
+        this.handler.scrollItems(this.scrolls.get(currentItemGroups[selectedTab]));
+        return true;
+    }
+
+    public void setItemGroupGroup(int itemGroupGroup) {
+        this.currentItemGroupGroup = MathHelper.clamp(itemGroupGroup, 0, MathHelper.ceil((float)CustomItemGroup.ITEM_GROUPS.size() / 8) - 1);
+        for (int i = 0; i < 8; i++) {
+            if (this.currentItemGroupGroup * 8 + i < CustomItemGroup.ITEM_GROUPS.size()) {
+                currentItemGroups[i] = CustomItemGroup.ITEM_GROUPS.get(this.currentItemGroupGroup * 8 + i);
+            } else {
+                currentItemGroups[i] = null;
+            }
         }
     }
 
@@ -170,34 +221,8 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     }
 
     @Override
-    protected void init() {
-        if (this.client.interactionManager.hasCreativeInventory()) {
-            super.init();
-            this.setItemGroupGroup(0);
-            this.client.keyboard.setRepeatEvents(true);
-            this.setSelectedTab(CustomItemGroup.ITEM_GROUPS.get(0));
-            this.client.player.playerScreenHandler.removeListener(this.listener);
-            this.listener = new CreativeInventoryListener(this.client);
-            this.client.player.playerScreenHandler.addListener(this.listener);
-            this.client.player.playSound(LCESounds.CLICK_STEREO, SoundCategory.MASTER, 1.0f, 1.0f);
-        } else {
-            this.client.setScreen(new InventoryScreen(this.client.player));
-        }
-    }
-
-    @Override
     public void resize(MinecraftClient client, int width, int height) {
         this.init(client, width, height);
-    }
-
-    @Override
-    public void removed() {
-        super.removed();
-        if (this.client.player != null && this.client.player.getInventory() != null) {
-            this.client.player.playerScreenHandler.removeListener(this.listener);
-        }
-        this.client.keyboard.setRepeatEvents(false);
-        this.client.player.playSound(LCESounds.UI_BACK, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
     private int getAmountOfPages() {
@@ -254,11 +279,11 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         }
         int amountOfPages = this.getAmountOfPages();
         this.drawCreativeInventoryTexture(matrices, 643, 32, 26, 270, 593.0f / 3.0f, 118.0f / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
-        this.drawCreativeInventoryTexture(matrices, 643, 0, 32, 32, 593.0f / 3.0f - 1.0f, Math.round(116.0f + (float)this.scrollPosition / Math.max(amountOfPages - 1, 1) * 241.0f) / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
-        if (this.scrollPosition > 0) {
+        this.drawCreativeInventoryTexture(matrices, 643, 0, 32, 32, 593.0f / 3.0f - 1.0f, Math.round(116.0f + (float)this.scrolls.get(currentItemGroups[selectedTab]) / Math.max(amountOfPages - 1, 1) * 241.0f) / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
+        if (this.scrolls.get(currentItemGroups[selectedTab]) > 0) {
             this.drawCreativeInventoryTexture(matrices, 701, 0, 26, 14, 593.0f/3.0f, 97.0f/3.0f);
         }
-        if (this.scrollPosition < amountOfPages - 1 && amountOfPages > 1) {
+        if (this.scrolls.get(currentItemGroups[selectedTab]) < amountOfPages - 1 && amountOfPages > 1) {
             this.drawCreativeInventoryTexture(matrices, 675, 0, 26, 14, 593.0f/3.0f, 395.0f/3.0f);
         }
 
@@ -283,8 +308,8 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             int amountOfPages = this.getAmountOfPages();
             if (this.isClickInScrollbar(mouseX, mouseY) && amountOfPages != 1) {
                 float position = (float)((mouseY - (this.y + 118.0f/3.0f)) / (270.0f/3.0f));
-                this.scrollPosition = Math.round(position * (amountOfPages - 1));
-                this.handler.scrollItems(this.scrollPosition);
+                this.scrolls.put(currentItemGroups[selectedTab], Math.round(position * (amountOfPages - 1)));
+                this.handler.scrollItems(this.scrolls.get(currentItemGroups[selectedTab]));
                 return true;
             }
             if (this.isClickInLeftTabButton(mouseX, mouseY)) {
@@ -382,28 +407,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.handler.itemList.clear();
         this.endTouchDrag();
         group.appendStacks(this.handler.itemList);
-        this.scrollPosition = 0;
         this.handler.scrollItems(0);
-    }
-
-    short lastScrollDirection = 0;
-
-    @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
-        scrollTickTracker++;
-        if (lastScrollDirection != Math.signum(amount)) {
-            lastScrollDirection = (short)(Math.signum(amount));
-            scrollTickTracker = 1;
-            handledScreenTickTracker = 0;
-        }
-
-        if (!this.hasScrollbar() || scrollTickTracker > 1) {
-            return false;
-        }
-        int amountOfPages = this.getAmountOfPages();
-        this.scrollPosition = MathHelper.clamp(this.scrollPosition - (int)Math.round(amount), 0, (amountOfPages - 1));
-        this.handler.scrollItems(this.scrollPosition);
-        return true;
     }
 
     @Override
