@@ -105,13 +105,17 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             handledScreenTickTracker = 0;
         }
 
-        if (!this.hasScrollbar() || scrollTickTracker > 1) {
+        if (!this.hasScrollbar() || scrollTickTracker > 1 || !this.doesItemGroupExist(selectedTab)) {
             return false;
         }
         int amountOfPages = this.getAmountOfPages();
         this.scrolls.put(currentItemGroups[selectedTab], MathHelper.clamp(this.scrolls.get(currentItemGroups[selectedTab]) - (int)Math.round(amount), 0, (amountOfPages - 1)));
         this.handler.scrollItems(this.scrolls.get(currentItemGroups[selectedTab]));
         return true;
+    }
+
+    public boolean doesItemGroupExist(int tab) {
+        return currentItemGroups.length > tab && currentItemGroups[tab] != null;
     }
 
     public void setItemGroupGroup(int itemGroupGroup) {
@@ -260,7 +264,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
         if (this.client == null) return;
         Text text;
-        if (selectedTab < currentItemGroups.length) {
+        if (this.doesItemGroupExist(selectedTab)) {
             text = currentItemGroups[selectedTab].getName();
         } else {
             text = Text.translatable("lceui.itemGroup.unknown");
@@ -279,12 +283,16 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         }
         int amountOfPages = this.getAmountOfPages();
         this.drawCreativeInventoryTexture(matrices, 643, 32, 26, 270, 593.0f / 3.0f, 118.0f / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
-        this.drawCreativeInventoryTexture(matrices, 643, 0, 32, 32, 593.0f / 3.0f - 1.0f, Math.round(116.0f + (float)this.scrolls.get(currentItemGroups[selectedTab]) / Math.max(amountOfPages - 1, 1) * 241.0f) / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
-        if (this.scrolls.get(currentItemGroups[selectedTab]) > 0) {
-            this.drawCreativeInventoryTexture(matrices, 701, 0, 26, 14, 593.0f/3.0f, 97.0f/3.0f);
-        }
-        if (this.scrolls.get(currentItemGroups[selectedTab]) < amountOfPages - 1 && amountOfPages > 1) {
-            this.drawCreativeInventoryTexture(matrices, 675, 0, 26, 14, 593.0f/3.0f, 395.0f/3.0f);
+        if (this.doesItemGroupExist(selectedTab)) {
+            this.drawCreativeInventoryTexture(matrices, 643, 0, 32, 32, 593.0f / 3.0f - 1.0f, Math.round(116.0f + (float) this.scrolls.get(currentItemGroups[selectedTab]) / Math.max(amountOfPages - 1, 1) * 241.0f) / 3.0f, 1.0f, 1.0f, 1.0f, amountOfPages == 1 ? 0.5f : 1.0f);
+            if (this.scrolls.get(currentItemGroups[selectedTab]) > 0) {
+                this.drawCreativeInventoryTexture(matrices, 701, 0, 26, 14, 593.0f / 3.0f, 97.0f / 3.0f);
+            }
+            if (this.scrolls.get(currentItemGroups[selectedTab]) < amountOfPages - 1 && amountOfPages > 1) {
+                this.drawCreativeInventoryTexture(matrices, 675, 0, 26, 14, 593.0f / 3.0f, 395.0f / 3.0f);
+            }
+        } else {
+            this.drawCreativeInventoryTexture(matrices, 643, 0, 32, 32, 593.0f / 3.0f - 1.0f, Math.round(116.0f) / 3.0f, 1.0f, 1.0f, 1.0f, 0.5f);
         }
 
         if (this.hasLeftTabButton()) {
@@ -306,7 +314,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
                 return true;
             }
             int amountOfPages = this.getAmountOfPages();
-            if (this.isClickInScrollbar(mouseX, mouseY) && amountOfPages != 1) {
+            if (this.isClickInScrollbar(mouseX, mouseY) && amountOfPages != 1 && doesItemGroupExist(selectedTab)) {
                 float position = (float)((mouseY - (this.y + 118.0f/3.0f)) / (270.0f/3.0f));
                 this.scrolls.put(currentItemGroups[selectedTab], Math.round(position * (amountOfPages - 1)));
                 this.handler.scrollItems(this.scrolls.get(currentItemGroups[selectedTab]));
@@ -407,13 +415,13 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.handler.itemList.clear();
         this.endTouchDrag();
         group.appendStacks(this.handler.itemList);
-        this.handler.scrollItems(this.scrolls.get(currentItemGroups[selectedTab]));
+        this.handler.scrollItems(this.scrolls.get(group));
     }
 
     @Override
     protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int button) {
         boolean bl = mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.backgroundWidth) || mouseY >= (double)(top + this.backgroundHeight);
-        this.lastClickOutsideBounds = bl && !this.isClickInTab(currentItemGroups[selectedTab], mouseX, mouseY);
+        this.lastClickOutsideBounds = bl && this.doesItemGroupExist(selectedTab) && !this.isClickInTab(currentItemGroups[selectedTab], mouseX, mouseY);
         return this.lastClickOutsideBounds;
     }
 

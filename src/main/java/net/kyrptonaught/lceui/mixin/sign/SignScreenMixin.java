@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
-import net.kyrptonaught.lceui.mixin.ScreenClientAccessor;
+import net.kyrptonaught.lceui.mixin.ScreenAccessor;
 import net.kyrptonaught.lceui.util.LCESounds;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -30,12 +30,12 @@ public abstract class SignScreenMixin {
 
     @Inject(method = "init", at = @At("HEAD"))
     private void playSoundOnInit(CallbackInfo ci) {
-        if (LCEUIMod.getConfig().sign) ((ScreenClientAccessor)this).client().getSoundManager().play(PositionedSoundInstance.master(LCESounds.CLICK_STEREO, 1.0f, 5.0f));
+        if (LCEUIMod.getConfig().sign) ((ScreenAccessor)this).client().getSoundManager().play(PositionedSoundInstance.master(LCESounds.CLICK_STEREO, 1.0f, 5.0f));
     }
 
     @Inject(method = "removed", at = @At("HEAD"))
     private void playSoundOnRemoval(CallbackInfo ci) {
-        if (LCEUIMod.getConfig().sign) ((ScreenClientAccessor)this).client().getSoundManager().play(PositionedSoundInstance.master(LCESounds.UI_BACK, 1.0f, 5.0f));
+        if (LCEUIMod.getConfig().sign) ((ScreenAccessor)this).client().getSoundManager().play(PositionedSoundInstance.master(LCESounds.UI_BACK, 1.0f, 5.0f));
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/SignEditScreen;drawCenteredText(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)V", ordinal = 0))
@@ -79,8 +79,8 @@ public abstract class SignScreenMixin {
         if (LCEUIMod.getConfig().sign) {
             matrices.scale(1.0f / 0.010416667F, 1.0f / -0.010416667F, 1.0f / 0.010416667F);
             matrices.scale(1.0f / 93.75f, 1.0f / -93.75F, 1.0f / 93.75F);
-            LCEDrawableHelper.drawText(matrices, ((ScreenClientAccessor) this).client().textRenderer, Text.literal(">"), -43, this.currentRow * 10 - 17 + 2.0f / 3.0f, 2.0f / 3.0f, 0);
-            LCEDrawableHelper.drawText(matrices, ((ScreenClientAccessor) this).client().textRenderer, Text.literal("<"), 41 + 2.0f/3.0f, this.currentRow * 10 - 17 + 2.0f / 3.0f, 2.0f / 3.0f, 0);
+            LCEDrawableHelper.drawText(matrices, ((ScreenAccessor) this).client().textRenderer, Text.literal(">"), -43, this.currentRow * 10 - 17 + 2.0f / 3.0f, 2.0f / 3.0f, 0);
+            LCEDrawableHelper.drawText(matrices, ((ScreenAccessor) this).client().textRenderer, Text.literal("<"), 41 + 2.0f/3.0f, this.currentRow * 10 - 17 + 2.0f / 3.0f, 2.0f / 3.0f, 0);
             matrices.scale(93.75f, -93.75F, 93.75F);
             matrices.scale(0.010416667F, -0.010416667F, 0.010416667F);
         }

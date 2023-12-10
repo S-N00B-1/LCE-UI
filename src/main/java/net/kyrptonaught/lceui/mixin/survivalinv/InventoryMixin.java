@@ -1,7 +1,7 @@
 package net.kyrptonaught.lceui.mixin.survivalinv;
 
 import net.kyrptonaught.lceui.LCEUIMod;
-import net.kyrptonaught.lceui.mixin.ScreenClientAccessor;
+import net.kyrptonaught.lceui.mixin.ScreenAccessor;
 import net.kyrptonaught.lceui.screens.LCESurvivalInventoryScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -19,7 +19,7 @@ public abstract class InventoryMixin {
 
     @Inject(method = "init", at = @At("HEAD"), cancellable = true)
     private void hijackInit(CallbackInfo ci) {
-        MinecraftClient client = ((ScreenClientAccessor) ((InventoryScreen) (Object) this)).client();
+        MinecraftClient client = ((ScreenAccessor) ((InventoryScreen) (Object) this)).client();
         if (client != null && LCEUIMod.getConfig().survivalInventory && (LCEUIMod.getConfig().creativeInventory || (client.interactionManager != null && !client.interactionManager.hasCreativeInventory()))) {
             this.removed();
             client.setScreen(new LCESurvivalInventoryScreen(client.player));

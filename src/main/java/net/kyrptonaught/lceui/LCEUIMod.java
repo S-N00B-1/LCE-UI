@@ -58,7 +58,10 @@ public class LCEUIMod implements ClientModInitializer {
 
         buf.writeBoolean(getConfig().creativeInventory);
         buf.writeBoolean(getConfig().survivalInventory);
+        buf.writeBoolean(getConfig().classicCrafting);
+        buf.writeBoolean(getConfig().containerInventory);
         buf.writeBoolean(getConfig().chatWidth);
+        buf.writeBoolean(getConfig().recolorChat);
         buf.writeBoolean(getConfig().rescaleChatText);
         buf.writeBoolean(getConfig().sign);
         ClientPlayNetworking.send(new Identifier(LCEUIMod.MOD_ID, "sync_config_packet"), buf);

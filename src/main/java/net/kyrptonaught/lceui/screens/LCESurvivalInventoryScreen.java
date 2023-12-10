@@ -29,6 +29,7 @@ import net.minecraft.recipe.RecipeMatcher;
 import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.sound.SoundCategory;
@@ -68,9 +69,9 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
     }
 
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
-        LCEDrawableHelper.drawText(matrices, this.textRenderer, this.title, 8 + 1.0f/3.0f, 69 - 1.0f/3.0f, 2.0f/3.0f, 4210752);
+        LCEDrawableHelper.drawText(matrices, this.textRenderer, this.title, 9 + 1.0f/3.0f, 69 - 1.0f/3.0f, 2.0f/3.0f, 0x373737);
         if (LCEUIMod.getConfig().classicCrafting) {
-            LCEDrawableHelper.drawText(matrices, this.textRenderer, Text.translatable("container.crafting"), 74, 10 + 2.0f/3.0f, 2.0f/3.0f, 4210752);
+            LCEDrawableHelper.drawText(matrices, this.textRenderer, Text.translatable("container.crafting"), 74, 10 + 2.0f/3.0f, 2.0f/3.0f, 0x373737);
         }
     }
 
@@ -170,18 +171,13 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
 
     @Environment(EnvType.CLIENT)
     public static class SurvivalScreenHandler
-            extends AbstractRecipeScreenHandler<CraftingInventory> {
+            extends ScreenHandler {
         private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER;
-        private final CraftingInventory craftingInput;
-        private final CraftingResultInventory craftingResult = new CraftingResultInventory();
         private final PlayerScreenHandler parent;
-        private final PlayerEntity player;
 
         public SurvivalScreenHandler(PlayerEntity player) {
-            super(null, 0);
-            this.player = player;
+            super(null, player.playerScreenHandler.syncId);
             this.parent = player.playerScreenHandler;
-            this.craftingInput = new CraftingInventory(this.parent, 2, 2);
             
             float slotScale = 19.0f/24.0f;
             float itemScale = 7.0f/8.0f;
@@ -235,76 +231,18 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
 
         public void close(PlayerEntity player) {
             super.close(player);
-            this.craftingResult.clear();
         }
 
         public boolean canUse(PlayerEntity player) {
-            return true;
+            return this.parent.canUse(player);
         }
 
         public ItemStack transferSlot(PlayerEntity player, int index) {
-            ItemStack itemStack = ItemStack.EMPTY;
-            Slot slot = this.slots.get(index);
-            if (slot.hasStack()) {
-                ItemStack itemStack2 = slot.getStack();
-                itemStack = itemStack2.copy();
-                EquipmentSlot equipmentSlot = MobEntity.getPreferredEquipmentSlot(itemStack);
-                if (index == 0) {
-                    if (!this.insertItem(itemStack2, 9, 45, true)) {
-                        return ItemStack.EMPTY;
-                    }
-
-                    slot.onQuickTransfer(itemStack2, itemStack);
-                } else if (index >= 1 && index < 5) {
-                    if (!this.insertItem(itemStack2, 9, 45, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index >= 5 && index < 9) {
-                    if (!this.insertItem(itemStack2, 9, 45, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (equipmentSlot.getType() == EquipmentSlot.Type.ARMOR && !this.slots.get(8 - equipmentSlot.getEntitySlotId()).hasStack()) {
-                    int i = 8 - equipmentSlot.getEntitySlotId();
-                    if (!this.insertItem(itemStack2, i, i + 1, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (equipmentSlot == EquipmentSlot.OFFHAND && !this.slots.get(45).hasStack()) {
-                    if (!this.insertItem(itemStack2, 45, 46, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index >= 9 && index < 36) {
-                    if (!this.insertItem(itemStack2, 36, 45, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (index >= 36 && index < 45) {
-                    if (!this.insertItem(itemStack2, 9, 36, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (!this.insertItem(itemStack2, 9, 45, false)) {
-                    return ItemStack.EMPTY;
-                }
-
-                if (itemStack2.isEmpty()) {
-                    slot.setStack(ItemStack.EMPTY);
-                } else {
-                    slot.markDirty();
-                }
-
-                if (itemStack2.getCount() == itemStack.getCount()) {
-                    return ItemStack.EMPTY;
-                }
-
-                slot.onTakeItem(player, itemStack2);
-                if (index == 0) {
-                    player.dropItem(itemStack2, false);
-                }
-            }
-
-            return itemStack;
+            return this.parent.transferSlot(player, index);
         }
 
         public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
-            return false;
+            return this.parent.canInsertIntoSlot(stack, slot);
         }
 
         static {
@@ -319,52 +257,6 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
         @Override
         public void setCursorStack(ItemStack stack) {
             this.parent.setCursorStack(stack);
-        }
-
-        @Override
-        public void populateRecipeFinder(RecipeMatcher finder) {
-            this.craftingInput.provideRecipeInputs(finder);
-        }
-
-        @Override
-        public void clearCraftingSlots() {
-            this.craftingResult.clear();
-            this.craftingInput.clear();
-        }
-
-        @Override
-        public boolean matches(Recipe<? super CraftingInventory> recipe) {
-            return recipe.matches(this.craftingInput, this.player.world);
-        }
-
-        @Override
-        public int getCraftingResultSlotIndex() {
-            return 0;
-        }
-
-        @Override
-        public int getCraftingWidth() {
-            return this.craftingInput.getWidth();
-        }
-
-        @Override
-        public int getCraftingHeight() {
-            return this.craftingInput.getHeight();
-        }
-
-        @Override
-        public int getCraftingSlotCount() {
-            return 5;
-        }
-
-        @Override
-        public RecipeBookCategory getCategory() {
-            return RecipeBookCategory.CRAFTING;
-        }
-
-        @Override
-        public boolean canInsertIntoSlot(int index) {
-            return index != this.getCraftingResultSlotIndex();
         }
     }
 }

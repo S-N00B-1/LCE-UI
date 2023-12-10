@@ -2,7 +2,7 @@ package net.kyrptonaught.lceui.mixin.creativeinv;
 
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.screens.LCECreativeInventoryScreen;
-import net.kyrptonaught.lceui.mixin.ScreenClientAccessor;
+import net.kyrptonaught.lceui.mixin.ScreenAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +18,7 @@ public abstract class CreativeInvMixin {
     @Inject(method = "init", at = @At("HEAD"), cancellable = true)
     public void hijackInit(CallbackInfo ci) {
         if (LCEUIMod.getConfig().creativeInventory) {
-            MinecraftClient client = ((ScreenClientAccessor) ((CreativeInventoryScreen) (Object) this)).client();
+            MinecraftClient client = ((ScreenAccessor) ((CreativeInventoryScreen) (Object) this)).client();
             if (client != null) {
                 this.removed();
                 client.setScreen(new LCECreativeInventoryScreen(client.player));
