@@ -20,6 +20,8 @@ public class LCEConfigOptions implements AbstractConfigFile {
     public boolean containerInventory = true;
     @Comment("Enables the LCE 3x3 generic container inventory")
     public boolean container3x3Inventory = true;
+    @Comment("Enables the LCE 3x3 generic container inventory")
+    public boolean hopperInventory = true;
     @Comment("Makes the chat's width the whole screen")
     public boolean chatWidth = true;
     @Comment("Makes the chat's Y position the same as LCE (almost; it's actually 1 pixel off)")

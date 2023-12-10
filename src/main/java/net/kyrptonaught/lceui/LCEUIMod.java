@@ -60,6 +60,8 @@ public class LCEUIMod implements ClientModInitializer {
         buf.writeBoolean(getConfig().survivalInventory);
         buf.writeBoolean(getConfig().classicCrafting);
         buf.writeBoolean(getConfig().containerInventory);
+        buf.writeBoolean(getConfig().container3x3Inventory);
+        buf.writeBoolean(getConfig().hopperInventory);
         buf.writeBoolean(getConfig().chatWidth);
         buf.writeBoolean(getConfig().recolorChat);
         buf.writeBoolean(getConfig().rescaleChatText);

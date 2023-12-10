@@ -6,6 +6,7 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.mixin.container.Generic3x3ContainerInventoryAccessor;
+import net.kyrptonaught.lceui.mixin.container.HopperInventoryAccessor;
 import net.kyrptonaught.lceui.util.LCESounds;
 import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -17,16 +18,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.Generic3x3ContainerScreenHandler;
+import net.minecraft.screen.HopperScreenHandler;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class LCE3x3ContainerScreen extends HandledScreen<LCE3x3ContainerScreen.LCE3x3GenericContainerScreenHandler> implements ScreenHandlerProvider<LCE3x3ContainerScreen.LCE3x3GenericContainerScreenHandler> {
-    public LCE3x3ContainerScreen(Generic3x3ContainerScreenHandler handler, PlayerEntity player, Text title) {
-        super(new LCE3x3GenericContainerScreenHandler(player, handler), player.getInventory(), title);
+public class LCEHopperScreen extends HandledScreen<LCEHopperScreen.LCEHopperScreenHandler> implements ScreenHandlerProvider<LCEHopperScreen.LCEHopperScreenHandler> {
+    public LCEHopperScreen(HopperScreenHandler handler, PlayerEntity player, Text title) {
+        super(new LCEHopperScreenHandler(player, handler), player.getInventory(), title);
         this.passEvents = false;
         this.backgroundWidth = 430/3;
-        this.backgroundHeight = 405/3;
+        this.backgroundHeight = 321/3;
         this.playerInventoryTitleY = this.backgroundHeight - 76;
     }
 
@@ -58,20 +61,20 @@ public class LCE3x3ContainerScreen extends HandledScreen<LCE3x3ContainerScreen.L
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/generic_3x3.png"));
+        RenderSystem.setShaderTexture(0, new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/hopper.png"));
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
-        LCEDrawableHelper.drawTexture(matrices, i, j, 0, 0, 430.0f/3.0f, 405.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
+        LCEDrawableHelper.drawTexture(matrices, i, j, 0, 0, 430.0f/3.0f, 321.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
     }
 
     @Environment(EnvType.CLIENT)
-    public static class LCE3x3GenericContainerScreenHandler extends ScreenHandler {
-        private final Generic3x3ContainerScreenHandler parent;
+    public static class LCEHopperScreenHandler extends ScreenHandler {
+        private final HopperScreenHandler parent;
 
-        public LCE3x3GenericContainerScreenHandler(PlayerEntity player, Generic3x3ContainerScreenHandler parent) {
+        public LCEHopperScreenHandler(PlayerEntity player, HopperScreenHandler parent) {
             super(parent.getType(), parent.syncId);
             this.parent = parent;
-            Inventory inventory = ((Generic3x3ContainerInventoryAccessor)parent).inventory();
+            Inventory inventory = ((HopperInventoryAccessor)parent).inventory();
 
             float slotScale = 19.0f/24.0f;
             float itemScale = 7.0f/8.0f;
@@ -81,20 +84,18 @@ public class LCE3x3ContainerScreen extends HandledScreen<LCE3x3ContainerScreen.L
 
             int j;
             int k;
-            for(j = 0; j < 3; ++j) {
-                for(k = 0; k < 3; ++k) {
-                    this.addSlot(new ScalableSlot(inventory, k + j * 3, 51 + k * (18 * slotScale - 1.0f/4.0f), 16 + j * (18 * slotScale - 1.0f/4.0f), slotScale, slotScale * itemScale));
-                }
+            for(j = 0; j < 5; ++j) {
+                this.addSlot(new ScalableSlot(inventory, j, 37 + 1.0f/3.0f + j * (18 * slotScale - 1.0f/4.0f), 16, slotScale, slotScale * itemScale));
             }
 
             for(j = 0; j < 3; ++j) {
                 for(k = 0; k < 9; ++k) {
-                    this.addSlot(new ScalableSlot(player.getInventory(), k + j * 9 + 9, 9 + k * (18 * slotScale - 1.0f/4.0f), 84 + j * (18 * slotScale - 1.0f/4.0f) + i, slotScale, slotScale * itemScale));
+                    this.addSlot(new ScalableSlot(player.getInventory(), k + j * 9 + 9, 9 + k * (18 * slotScale - 1.0f/4.0f), 56 + j * (18 * slotScale - 1.0f/4.0f) + i, slotScale, slotScale * itemScale));
                 }
             }
 
             for(j = 0; j < 9; ++j) {
-                this.addSlot(new ScalableSlot(player.getInventory(), j, 9 + j * (18 * slotScale - 1.0f/4.0f), 130 + i, slotScale, slotScale * itemScale));
+                this.addSlot(new ScalableSlot(player.getInventory(), j, 9 + j * (18 * slotScale - 1.0f/4.0f), 102 + i, slotScale, slotScale * itemScale));
             }
         }
 
