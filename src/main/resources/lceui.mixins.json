@@ -15,6 +15,7 @@
     "container.Generic3x3ContainerMixin",
     "container.GenericContainerMixin",
     "creativeinv.CreativeInvMixin",
+    "hotbar.HotbarMixin",
     "sign.SignScreenMixin",
     "survivalinv.InventoryMixin",
     "titlescreen.TitleScreenMixin",
