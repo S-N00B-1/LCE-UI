@@ -6,10 +6,12 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.mixin.Generic3x3ContainerInventoryAccessor;
+import net.kyrptonaught.lceui.util.LCESounds;
 import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -21,14 +23,24 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class LCE3x3ContainerScreen extends HandledScreen<LCE3x3ContainerScreen.LCE3x3GenericContainerScreenHandler> implements ScreenHandlerProvider<LCE3x3ContainerScreen.LCE3x3GenericContainerScreenHandler> {
-    private static final Identifier TEXTURE = new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/generic_54.png");
-
     public LCE3x3ContainerScreen(Generic3x3ContainerScreenHandler handler, PlayerEntity player, Text title) {
         super(new LCE3x3GenericContainerScreenHandler(player, handler), player.getInventory(), title);
         this.passEvents = false;
         this.backgroundWidth = 430/3;
         this.backgroundHeight = 405/3;
         this.playerInventoryTitleY = this.backgroundHeight - 76;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        this.client.getSoundManager().play(PositionedSoundInstance.master(LCESounds.CLICK_STEREO, 1.0f, 3.0f));
+    }
+
+    @Override
+    public void removed() {
+        super.removed();
+        this.client.getSoundManager().play(PositionedSoundInstance.master(LCESounds.UI_BACK, 1.0f, 3.0f));
     }
 
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {

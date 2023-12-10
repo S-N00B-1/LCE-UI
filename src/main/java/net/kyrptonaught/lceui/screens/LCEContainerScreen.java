@@ -19,6 +19,7 @@ import net.minecraft.client.render.DiffuseLighting;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
@@ -56,6 +57,18 @@ public class LCEContainerScreen extends HandledScreen<LCEContainerScreen.LCEGene
         this.backgroundWidth = 430/3;
         this.backgroundHeight = (289 + this.rows * 42)/3;
         this.playerInventoryTitleY = this.backgroundHeight - 76;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        this.client.getSoundManager().play(PositionedSoundInstance.master(LCESounds.CLICK_STEREO, 1.0f, 3.0f));
+    }
+
+    @Override
+    public void removed() {
+        super.removed();
+        this.client.getSoundManager().play(PositionedSoundInstance.master(LCESounds.UI_BACK, 1.0f, 3.0f));
     }
 
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
