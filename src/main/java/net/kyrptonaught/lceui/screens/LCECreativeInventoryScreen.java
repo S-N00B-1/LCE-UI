@@ -407,7 +407,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         this.handler.itemList.clear();
         this.endTouchDrag();
         group.appendStacks(this.handler.itemList);
-        this.handler.scrollItems(0);
+        this.handler.scrollItems(this.scrolls.get(currentItemGroups[selectedTab]));
     }
 
     @Override
@@ -490,11 +490,9 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         }
 
         public void scrollItems(int position) {
-            int amountOfPages = MathHelper.ceil((float)this.itemList.size() / (INVENTORY_WIDTH * INVENTORY_HEIGHT));
-            int currentTab = (int)(position);
             for (int y = 0; y < INVENTORY_HEIGHT; ++y) {
                 for (int x = 0; x < INVENTORY_WIDTH; ++x) {
-                    int m = x + (y + currentTab * INVENTORY_HEIGHT) * INVENTORY_WIDTH;
+                    int m = x + (y + position * INVENTORY_HEIGHT) * INVENTORY_WIDTH;
                     if (m >= 0 && m < this.itemList.size()) {
                         INVENTORY.setStack(x + y * INVENTORY_WIDTH, this.itemList.get(m));
                         continue;
