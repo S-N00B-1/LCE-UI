@@ -8,8 +8,8 @@ public class LCEConfigOptions implements AbstractConfigFile {
     public boolean closerTextShadows = true;
     @Comment("Makes renamed items gold instead of italic")
     public boolean renamedItemsHaveGoldName = true;
-    @Comment("Defines the hotbar scale")
-    public int hotbarScale = 2; // TODO: make this actually do something
+    @Comment("Makes items smaller even outside of scalable slots")
+    public boolean smallerItemsOutsideOfScalableSlots = true;
     @Comment("Enables the LCE Creative mode inventory")
     public boolean creativeInventory = true;
     @Comment("Enables the LCE Survival mode inventory")

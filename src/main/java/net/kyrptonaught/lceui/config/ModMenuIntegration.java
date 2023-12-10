@@ -26,7 +26,7 @@ public class ModMenuIntegration implements ModMenuApi {
             ConfigSection displaySection = new ConfigSection(configScreen, Text.translatable("options.lceui.general"));
             displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.textShadows"), configOptions.closerTextShadows, true).setSaveConsumer(val -> configOptions.closerTextShadows = val));
             displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.renamedItemsHaveGoldName"), configOptions.renamedItemsHaveGoldName, true).setSaveConsumer(val -> configOptions.renamedItemsHaveGoldName = val));
-            displaySection.addConfigItem(new IntegerItem(Text.translatable("options.lceui.general.hotbarScale"), configOptions.hotbarScale, 2).setSaveConsumer(val -> configOptions.hotbarScale = val));
+            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.smallerItemsOutsideOfScalableSlots"), configOptions.smallerItemsOutsideOfScalableSlots, true).setSaveConsumer(val -> configOptions.smallerItemsOutsideOfScalableSlots = val));
 
             ConfigSection screensSection = new ConfigSection(configScreen, Text.translatable("options.lceui.screens"));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.creativeInventory"), configOptions.creativeInventory, true).setSaveConsumer(val -> configOptions.creativeInventory = val));

@@ -54,7 +54,7 @@ public class LCEUIMod implements ClientModInitializer {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
         buf.writeBoolean(getConfig().closerTextShadows);
         buf.writeBoolean(getConfig().renamedItemsHaveGoldName);
-        buf.writeInt(getConfig().hotbarScale);
+        buf.writeBoolean(getConfig().smallerItemsOutsideOfScalableSlots);
 
         buf.writeBoolean(getConfig().creativeInventory);
         buf.writeBoolean(getConfig().survivalInventory);
