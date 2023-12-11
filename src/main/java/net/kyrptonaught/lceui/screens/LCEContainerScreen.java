@@ -47,7 +47,6 @@ import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
 
 public class LCEContainerScreen extends HandledScreen<LCEContainerScreen.LCEGenericContainerScreenHandler> implements ScreenHandlerProvider<LCEContainerScreen.LCEGenericContainerScreenHandler> {
-    private static final Identifier TEXTURE = new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/generic_54.png");
     private final int rows;
 
     public LCEContainerScreen(GenericContainerScreenHandler handler, PlayerEntity player, Text title) {

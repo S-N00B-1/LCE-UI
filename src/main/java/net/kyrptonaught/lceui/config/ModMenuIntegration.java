@@ -35,6 +35,7 @@ public class ModMenuIntegration implements ModMenuApi {
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.containerInventory"), configOptions.containerInventory, true).setSaveConsumer(val -> configOptions.containerInventory = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.container3x3Inventory"), configOptions.container3x3Inventory, true).setSaveConsumer(val -> configOptions.container3x3Inventory = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.hopperInventory"), configOptions.hopperInventory, true).setSaveConsumer(val -> configOptions.hopperInventory = val));
+            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.shulkerBoxInventory"), configOptions.shulkerBoxInventory, true).setSaveConsumer(val -> configOptions.shulkerBoxInventory = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatWidth"), configOptions.chatWidth, true).setSaveConsumer(val -> configOptions.chatWidth = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatYPos"), configOptions.chatYPos, true).setSaveConsumer(val -> configOptions.chatYPos = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.recolorChat"), configOptions.recolorChat, true).setSaveConsumer(val -> configOptions.recolorChat = val));

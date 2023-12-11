@@ -5,8 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
-import net.kyrptonaught.lceui.mixin.container.Generic3x3ContainerInventoryAccessor;
-import net.kyrptonaught.lceui.mixin.container.HopperInventoryAccessor;
+import net.kyrptonaught.lceui.mixin.container.ContainerInventoryAccessor;
 import net.kyrptonaught.lceui.util.LCESounds;
 import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -17,10 +16,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.Generic3x3ContainerScreenHandler;
 import net.minecraft.screen.HopperScreenHandler;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -74,7 +71,7 @@ public class LCEHopperScreen extends HandledScreen<LCEHopperScreen.LCEHopperScre
         public LCEHopperScreenHandler(PlayerEntity player, HopperScreenHandler parent) {
             super(parent.getType(), parent.syncId);
             this.parent = parent;
-            Inventory inventory = ((HopperInventoryAccessor)parent).inventory();
+            Inventory inventory = ((ContainerInventoryAccessor)parent).inventory();
 
             float slotScale = 19.0f/24.0f;
             float itemScale = 7.0f/8.0f;

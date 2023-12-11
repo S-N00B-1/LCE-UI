@@ -16,17 +16,17 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.Generic3x3ContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ShulkerBoxScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class LCE3x3ContainerScreen extends HandledScreen<LCE3x3ContainerScreen.LCE3x3GenericContainerScreenHandler> implements ScreenHandlerProvider<LCE3x3ContainerScreen.LCE3x3GenericContainerScreenHandler> {
-    public LCE3x3ContainerScreen(Generic3x3ContainerScreenHandler handler, PlayerEntity player, Text title) {
-        super(new LCE3x3GenericContainerScreenHandler(player, handler), player.getInventory(), title);
+public class LCEShulkerBoxScreen extends HandledScreen<LCEShulkerBoxScreen.LCEShulkerBoxScreenHandler> implements ScreenHandlerProvider<LCEShulkerBoxScreen.LCEShulkerBoxScreenHandler> {
+    public LCEShulkerBoxScreen(ShulkerBoxScreenHandler handler, PlayerEntity player, Text title) {
+        super(new LCEShulkerBoxScreenHandler(player, handler), player.getInventory(), title);
         this.passEvents = false;
         this.backgroundWidth = 430/3;
-        this.backgroundHeight = 405/3;
+        this.backgroundHeight = 415/3;
         this.playerInventoryTitleY = this.backgroundHeight - 76;
     }
 
@@ -43,9 +43,8 @@ public class LCE3x3ContainerScreen extends HandledScreen<LCE3x3ContainerScreen.L
     }
 
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
-        LCEDrawableHelper.drawCenteredText(matrices, this.textRenderer, this.title, this.backgroundWidth / 2, this.backgroundWidth / 2, 10 + 1.0f/3.0f, 10 + 1.0f/3.0f, 2.0f/3.0f, 0x373737);
-        LCEDrawableHelper.drawText(matrices, this.textRenderer, Text.translatable("container.inventory"), 9 + 1.0f/3.0f, this.playerInventoryTitleY + 2 + 1.0f/3.0f, 2.0f/3.0f, 0x373737);
-    }
+        LCEDrawableHelper.drawText(matrices, this.textRenderer, this.title, 9 + 1.0f/3.0f, 7 + 2.0f/3.0f, 2.0f/3.0f, 0x373737);
+        LCEDrawableHelper.drawText(matrices, this.textRenderer, Text.translatable("container.inventory"), 9 + 1.0f/3.0f, this.playerInventoryTitleY + 2.0f/3.0f, 2.0f/3.0f, 0x373737);    }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
@@ -58,17 +57,17 @@ public class LCE3x3ContainerScreen extends HandledScreen<LCE3x3ContainerScreen.L
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/generic_3x3.png"));
+        RenderSystem.setShaderTexture(0, new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/shulker_box.png"));
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
-        LCEDrawableHelper.drawTexture(matrices, i, j, 0, 0, 430.0f/3.0f, 405.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
+        LCEDrawableHelper.drawTexture(matrices, i, j, 0, 0, 430.0f/3.0f, 415.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
     }
 
     @Environment(EnvType.CLIENT)
-    public static class LCE3x3GenericContainerScreenHandler extends ScreenHandler {
-        private final Generic3x3ContainerScreenHandler parent;
+    public static class LCEShulkerBoxScreenHandler extends ScreenHandler {
+        private final ShulkerBoxScreenHandler parent;
 
-        public LCE3x3GenericContainerScreenHandler(PlayerEntity player, Generic3x3ContainerScreenHandler parent) {
+        public LCEShulkerBoxScreenHandler(PlayerEntity player, ShulkerBoxScreenHandler parent) {
             super(parent.getType(), parent.syncId);
             this.parent = parent;
             Inventory inventory = ((ContainerInventoryAccessor)parent).inventory();
@@ -82,19 +81,19 @@ public class LCE3x3ContainerScreen extends HandledScreen<LCE3x3ContainerScreen.L
             int j;
             int k;
             for(j = 0; j < 3; ++j) {
-                for(k = 0; k < 3; ++k) {
-                    this.addSlot(new ScalableSlot(inventory, k + j * 3, 51 + k * (18 * slotScale - 1.0f/4.0f), 16 + j * (18 * slotScale - 1.0f/4.0f), slotScale, slotScale * itemScale));
+                for(k = 0; k < 9; ++k) {
+                    this.addSlot(new ScalableSlot(inventory, k + j * 9, 9 + k * (18 * slotScale - 1.0f/4.0f), 17 + 1.0f/3.0f + j * (18 * slotScale - 1.0f/4.0f), slotScale, slotScale * itemScale));
                 }
             }
 
             for(j = 0; j < 3; ++j) {
                 for(k = 0; k < 9; ++k) {
-                    this.addSlot(new ScalableSlot(player.getInventory(), k + j * 9 + 9, 9 + k * (18 * slotScale - 1.0f/4.0f), 84 + j * (18 * slotScale - 1.0f/4.0f) + i, slotScale, slotScale * itemScale));
+                    this.addSlot(new ScalableSlot(player.getInventory(), k + j * 9 + 9, 9 + 1.0f/3.0f + k * (18 * slotScale - 1.0f/4.0f), 85 + 1.0f/3.0f + j * (18 * slotScale - 1.0f/4.0f) + i, slotScale, slotScale * itemScale));
                 }
             }
 
             for(j = 0; j < 9; ++j) {
-                this.addSlot(new ScalableSlot(player.getInventory(), j, 9 + j * (18 * slotScale - 1.0f/4.0f), 130 + i, slotScale, slotScale * itemScale));
+                this.addSlot(new ScalableSlot(player.getInventory(), j, 9 + j * (18 * slotScale - 1.0f/4.0f), 132 + i, slotScale, slotScale * itemScale));
             }
         }
 
