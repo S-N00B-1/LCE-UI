@@ -1,7 +1,0 @@
-{
-  "displaysicon": "true",
-  "model": "item/glow_item_frame",
-  "text": {
-    "description": "item.minecraft.glow_item_frame.description"
-  }
-}

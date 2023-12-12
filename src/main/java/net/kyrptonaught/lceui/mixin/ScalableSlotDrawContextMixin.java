@@ -62,25 +62,4 @@ public abstract class ScalableSlotDrawContextMixin {
             matrices.translate(-x, -y, 0.0f);
         }
     }
-
-    // TODO: fix item cooldown rendering
-//    @Inject(method = "drawItemInSlot(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isItemBarVisible()Z"))
-//    private void scaleDrawItemInSlot(TextRenderer textRenderer, ItemStack stack, int x, int y, String countOverride, CallbackInfo ci) {
-//        if (ScalableSlot.scalableSlotToDraw != null) {
-//            this.renderGuiQuad(buffer, x - width * (ScalableSlot.scalableSlotToDraw.scale - 1) + (ScalableSlot.scalableSlotToDraw.scale - 1) * 16 + (1.0/3.0), y - height * (ScalableSlot.scalableSlotToDraw.scale - 1) + (ScalableSlot.scalableSlotToDraw.scale - 1) * 16 + (1.0/3.0), width * ScalableSlot.scalableSlotToDraw.scale, height * ScalableSlot.scalableSlotToDraw.scale, red, green, blue, alpha); // I don't know why this works, but it seems to work
-//        } else {
-//            this.renderGuiQuad(buffer, x, y, width, height, red, green, blue, alpha);
-//        }
-//    }
-//
-//    @Unique
-//    private void renderGuiQuad(BufferBuilder buffer, double x, double y, double width, double height, int red, int green, int blue, int alpha) {
-//        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-//        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-//        buffer.vertex((x + 0), y + 0, 0.0).color(red, green, blue, alpha).next();
-//        buffer.vertex((x + 0), y + height, 0.0).color(red, green, blue, alpha).next();
-//        buffer.vertex((x + width), y + height, 0.0).color(red, green, blue, alpha).next();
-//        buffer.vertex(x + width, y + 0, 0.0).color(red, green, blue, alpha).next();
-//        BufferRenderer.drawWithShader(buffer.end());
-//    }
 }

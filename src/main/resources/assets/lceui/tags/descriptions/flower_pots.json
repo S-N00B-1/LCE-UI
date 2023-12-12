@@ -17,6 +17,8 @@
     "minecraft:potted_jungle_sapling",
     "minecraft:potted_acacia_sapling",
     "minecraft:potted_dark_oak_sapling",
+    "minecraft:potted_cherry_sapling",
+    "minecraft:potted_mangrove_propagule",
     "minecraft:potted_red_mushroom",
     "minecraft:potted_brown_mushroom",
     "minecraft:potted_dead_bush",
@@ -31,7 +33,6 @@
     "minecraft:potted_crimson_roots",
     "minecraft:potted_warped_roots",
     "minecraft:potted_azalea_bush",
-    "minecraft:potted_flowering_azalea_bush",
-    "minecraft:potted_mangrove_propagule"
+    "minecraft:potted_flowering_azalea_bush"
   ]
 }

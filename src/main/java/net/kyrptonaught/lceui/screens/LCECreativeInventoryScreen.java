@@ -430,7 +430,6 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         this.drawMouseoverTooltip(context, mouseX, mouseY);

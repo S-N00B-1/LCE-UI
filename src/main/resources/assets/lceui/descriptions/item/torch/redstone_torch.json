@@ -1,7 +1,0 @@
-{
-  "model": "item/redstone_torch",
-  "text": {
-    "name": "block.minecraft.redstone_torch",
-    "description": "block.minecraft.redstone_torch.description"
-  }
-}

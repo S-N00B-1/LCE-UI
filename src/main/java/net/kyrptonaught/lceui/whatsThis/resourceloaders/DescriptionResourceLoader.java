@@ -12,6 +12,7 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,9 +32,9 @@ public class DescriptionResourceLoader implements SimpleSynchronousResourceReloa
     @Override
     public void reload(ResourceManager manager) {
         WhatsThisInit.descriptionManager.clearDescriptions();
-        Map<Identifier, Resource> resources = manager.findResources(ID.getPath(), (string) -> string.getPath().endsWith(".json"));
+        Map<Identifier, Resource> resources = manager.findResources("descriptions", (string) -> string.getPath().endsWith(".json"));
         for (Identifier id : resources.keySet()) {
-            if (id.getNamespace().equals(ID.getNamespace()) && id.getPath().contains("/block") || id.getPath().contains("/item") || id.getPath().contains("/entity"))
+            if (id.getPath().contains("/block") || id.getPath().contains("/item") || id.getPath().contains("/entity"))
                 try {
                     JsonObject jsonObj = (JsonObject) JsonParser.parseReader(new InputStreamReader(resources.get(id).getInputStream()));
                     ItemDescription itemDescription = new ItemDescription();
@@ -57,19 +58,24 @@ public class DescriptionResourceLoader implements SimpleSynchronousResourceReloa
                             itemDescription.text.description = Text.translatable(jsonObj.getAsJsonObject("text").get("description").getAsString());
                         }
                     }
-                    String fileName = id.getPath().substring(id.getPath().lastIndexOf("/") + 1).replace(".json", "");
-                    if (id.getPath().contains("/block"))
-                        fileName = "block/" + fileName;
-                    else if (id.getPath().contains("/item"))
-                        fileName = "item/" + fileName;
-                    else if (id.getPath().contains("/entity"))
-                        fileName = "entity/" + fileName;
-
-                    Identifier name = new Identifier(fileName);
+                    Identifier name = getIdentifier(id);
                     WhatsThisInit.descriptionManager.itemDescriptions.put(name, itemDescription);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
         }
+    }
+
+    @NotNull
+    private static Identifier getIdentifier(Identifier id) {
+        String fileName = id.getPath().substring(id.getPath().lastIndexOf("/") + 1).replace(".json", "");
+        if (id.getPath().contains("/block"))
+            fileName = "block/" + fileName;
+        else if (id.getPath().contains("/item"))
+            fileName = "item/" + fileName;
+        else if (id.getPath().contains("/entity"))
+            fileName = "entity/" + fileName;
+
+        return new Identifier(id.getNamespace(), fileName);
     }
 }

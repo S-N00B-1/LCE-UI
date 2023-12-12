@@ -1,6 +1,7 @@
 package net.kyrptonaught.lceui.whatsThis;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
@@ -66,7 +67,7 @@ public class DescriptionRenderer {
 
         if (renderingDescription.shouldHide(client)) return;
 
-        int x = client.getWindow().getScaledWidth() - (500 / 3) - 20;
+        int x = FabricLoader.getInstance().isModLoaded("jei") && client.currentScreen != null ? 20 : client.getWindow().getScaledWidth() - (500 / 3) - 20;
 
         BakedModel bakedModel = renderingDescription.getDisplayModel(client);
 
