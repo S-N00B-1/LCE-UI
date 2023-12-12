@@ -22,8 +22,8 @@ public class LegacyTitleScreen extends TitleScreen {
         backgroundRenderer = new RotatingCubeMapRenderer(PANORAMA_CUBE_MAP);
         int y = this.height / 4 + 48;
         int spacingY = 24;
-        this.addDrawableChild(new LegacyButton(this.width / 2 - 100, y, 200, 20, Text.literal("Play Game"), button -> this.client.setScreen(new SelectWorldScreen(this))));
-        this.addDrawableChild(new LegacyButton(this.width / 2 - 100, y + spacingY * 1, 200, 20, Text.literal("Mini Games"), button -> this.client.setScreen(new SelectWorldScreen(this))));
+//        this.addDrawableChild(new LegacyButton(this.width / 2 - 100, y, 200, 20, Text.literal("Play Game"), button -> this.client.setScreen(new SelectWorldScreen(this))));
+//        this.addDrawableChild(new LegacyButton(this.width / 2 - 100, y + spacingY * 1, 200, 20, Text.literal("Mini Games"), button -> this.client.setScreen(new SelectWorldScreen(this))));
     }
 
     @Override
@@ -35,9 +35,9 @@ public class LegacyTitleScreen extends TitleScreen {
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    @Override
+//    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         PANORAMA_CUBE_MAP.render(matrices, delta);
-        super.render(matrices, mouseX, mouseY, delta);
+//        super.render(matrices, mouseX, mouseY, delta);
     }
 }

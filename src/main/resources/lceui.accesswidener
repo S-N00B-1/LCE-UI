@@ -5,6 +5,5 @@ mutable field net/minecraft/client/gui/screen/TitleScreen backgroundRenderer Lne
 accessible field net/minecraft/client/gui/screen/TitleScreen backgroundRenderer Lnet/minecraft/client/gui/RotatingCubeMapRenderer;
 
 accessible method net/minecraft/client/gui/screen/ingame/HandledScreen isPointWithinBounds (IIIIDD)Z
-accessible method net/minecraft/client/gui/DrawableHelper fillGradient (Lnet/minecraft/client/util/math/MatrixStack;IIIIIII)V
 
 accessible class net/minecraft/client/font/TextRenderer$Drawer

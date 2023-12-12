@@ -8,11 +8,11 @@ import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.mixin.container.ContainerInventoryAccessor;
 import net.kyrptonaught.lceui.util.LCESounds;
 import net.kyrptonaught.lceui.util.ScalableSlot;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -24,7 +24,6 @@ import net.minecraft.util.Identifier;
 public class LCEShulkerBoxScreen extends HandledScreen<LCEShulkerBoxScreen.LCEShulkerBoxScreenHandler> implements ScreenHandlerProvider<LCEShulkerBoxScreen.LCEShulkerBoxScreenHandler> {
     public LCEShulkerBoxScreen(ShulkerBoxScreenHandler handler, PlayerEntity player, Text title) {
         super(new LCEShulkerBoxScreenHandler(player, handler), player.getInventory(), title);
-        this.passEvents = false;
         this.backgroundWidth = 430/3;
         this.backgroundHeight = 415/3;
         this.playerInventoryTitleY = this.backgroundHeight - 76;
@@ -42,25 +41,23 @@ public class LCEShulkerBoxScreen extends HandledScreen<LCEShulkerBoxScreen.LCESh
         this.client.getSoundManager().play(PositionedSoundInstance.master(LCESounds.UI_BACK, 1.0f, 3.0f));
     }
 
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
-        LCEDrawableHelper.drawText(matrices, this.textRenderer, this.title, 9 + 1.0f/3.0f, 7 + 2.0f/3.0f, 2.0f/3.0f, 0x373737);
-        LCEDrawableHelper.drawText(matrices, this.textRenderer, Text.translatable("container.inventory"), 9 + 1.0f/3.0f, this.playerInventoryTitleY + 2.0f/3.0f, 2.0f/3.0f, 0x373737);    }
+    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+        LCEDrawableHelper.drawText(context, this.textRenderer, this.title, 9 + 1.0f/3.0f, 7 + 2.0f/3.0f, 2.0f/3.0f, 0x373737);
+        LCEDrawableHelper.drawText(context, this.textRenderer, Text.translatable("container.inventory"), 9 + 1.0f/3.0f, this.playerInventoryTitleY + 2.0f/3.0f, 2.0f/3.0f, 0x373737);    }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(matrices, mouseX, mouseY);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
+        this.drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/shulker_box.png"));
+    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
-        LCEDrawableHelper.drawTexture(matrices, i, j, 0, 0, 430.0f/3.0f, 415.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        LCEDrawableHelper.drawTexture(new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/shulker_box.png"), context, i, j, 0, 0, 430.0f/3.0f, 415.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
     }
 
     @Environment(EnvType.CLIENT)
@@ -98,8 +95,8 @@ public class LCEShulkerBoxScreen extends HandledScreen<LCEShulkerBoxScreen.LCESh
         }
 
         @Override
-        public ItemStack transferSlot(PlayerEntity player, int index) {
-            return this.parent.transferSlot(player, index);
+        public ItemStack quickMove(PlayerEntity player, int index) {
+            return this.parent.quickMove(player, index);
         }
 
         @Override

@@ -40,12 +40,11 @@ public class LegacyPanoramaRenderer extends CubeMapRenderer {
         matrices.scale(deltaH, deltaH, 1);
 
         RenderSystem.setShaderTexture(0, texture);
-        TitleScreen.drawTexture(matrices, 0, 0, 0, 0, width, height, width, height);
-        TitleScreen.drawTexture(matrices, width, 0, 0, 0, width, height, width, height);
-        TitleScreen.drawTexture(matrices, width * 2, 0, 0, 0, width, height, width, height);
-        TitleScreen.drawTexture(matrices, width * 3, 0, 0, 0, width, height, width, height);
+//        TitleScreen.drawTexture(matrices, 0, 0, 0, 0, width, height, width, height);
+//        TitleScreen.drawTexture(matrices, width, 0, 0, 0, width, height, width, height);
+//        TitleScreen.drawTexture(matrices, width * 2, 0, 0, 0, width, height, width, height);
+//        TitleScreen.drawTexture(matrices, width * 3, 0, 0, 0, width, height, width, height);
         matrices.pop();
-        //System.out.println(time);
     }
 
     public CompletableFuture<Void> loadTexturesAsync(TextureManager textureManager, Executor executor) {

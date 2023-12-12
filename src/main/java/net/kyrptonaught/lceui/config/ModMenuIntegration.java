@@ -5,7 +5,6 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.kyrptonaught.kyrptconfig.config.screen.ConfigScreen;
 import net.kyrptonaught.kyrptconfig.config.screen.ConfigSection;
 import net.kyrptonaught.kyrptconfig.config.screen.items.BooleanItem;
-import net.kyrptonaught.kyrptconfig.config.screen.items.number.IntegerItem;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;

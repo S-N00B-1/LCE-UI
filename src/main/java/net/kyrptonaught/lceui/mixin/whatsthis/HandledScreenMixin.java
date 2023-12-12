@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.whatsThis.DescriptionInstance;
 import net.kyrptonaught.lceui.whatsThis.DescriptionRenderer;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.InputUtil;
@@ -66,12 +67,12 @@ public class HandledScreenMixin extends Screen {
     }
 
     @Inject(method = "render", at = @At(value = "HEAD"))
-    public void fixRender(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        matrices.translate(-shiftAmount, 0, 0);
+    public void fixRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        context.getMatrices().translate(-shiftAmount, 0, 0);
     }
 
     @Inject(method = "render", at = @At(value = "TAIL"))
-    public void fixRender2(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        matrices.translate(shiftAmount, 0, 0);
+    public void fixRender2(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        context.getMatrices().translate(shiftAmount, 0, 0);
     }
 }

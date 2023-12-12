@@ -10,24 +10,16 @@ import net.kyrptonaught.lceui.util.LCESounds;
 import net.kyrptonaught.lceui.util.ScalableCraftingResultSlot;
 import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
-import net.minecraft.client.render.DiffuseLighting;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.CraftingResultInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeMatcher;
-import net.minecraft.recipe.book.RecipeBookCategory;
-import net.minecraft.screen.AbstractRecipeScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
@@ -35,8 +27,6 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
 
 public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvivalInventoryScreen.SurvivalScreenHandler> {
     private float mouseX;
@@ -45,103 +35,50 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
 
     public LCESurvivalInventoryScreen(PlayerEntity player) {
         super(new SurvivalScreenHandler(player), player.getInventory(), Text.translatable("container.inventory"));
-        this.passEvents = true;
         this.backgroundHeight = 435/3;
         this.backgroundWidth = 431/3;
-    }
-
-    public void handledScreenTick() {
-
     }
 
     @Override
     protected void init() {
         super.init();
-        this.client.keyboard.setRepeatEvents(true);
         this.client.player.playSound(LCESounds.CLICK_STEREO, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
     @Override
     public void removed() {
         super.removed();
-        this.client.keyboard.setRepeatEvents(false);
         this.client.player.playSound(LCESounds.UI_BACK, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY) {
-        LCEDrawableHelper.drawText(matrices, this.textRenderer, this.title, 9 + 1.0f/3.0f, 69 - 1.0f/3.0f, 2.0f/3.0f, 0x373737);
+    protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
+        LCEDrawableHelper.drawText(context, this.textRenderer, this.title, 9 + 1.0f/3.0f, 69 - 1.0f/3.0f, 2.0f/3.0f, 0x373737);
         if (LCEUIMod.getConfig().classicCrafting) {
-            LCEDrawableHelper.drawText(matrices, this.textRenderer, Text.translatable("container.crafting"), 74, 10 + 2.0f/3.0f, 2.0f/3.0f, 0x373737);
+            LCEDrawableHelper.drawText(context, this.textRenderer, Text.translatable("container.crafting"), 74, 10 + 2.0f/3.0f, 2.0f/3.0f, 0x373737);
         }
     }
 
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        super.render(matrices, mouseX, mouseY, delta);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
 
-        this.drawMouseoverTooltip(matrices, mouseX, mouseY);
+        this.drawMouseoverTooltip(context, mouseX, mouseY);
         this.mouseX = (float)mouseX;
         this.mouseY = (float)mouseY;
     }
 
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, new Identifier(LCEUIMod.MOD_ID, "textures/gui/survival_inventory.png"));
+    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         int i = this.x;
         int j = this.y;
+        MatrixStack matrices = context.getMatrices();
         matrices.push();
         matrices.translate(this.x, this.y, 0);
         matrices.scale(1.0f/3.0f, 1.0f/3.0f, 1.0f);
         matrices.translate(-this.x, -this.y, 0);
-        drawTexture(matrices, i, j, LCEUIMod.getConfig().classicCrafting ? 431 : 0, 0, 431, 435, 1024, 1024);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        LCEDrawableHelper.drawTexture(new Identifier(LCEUIMod.MOD_ID, "textures/gui/survival_inventory.png"), context, i, j, LCEUIMod.getConfig().classicCrafting ? 431 : 0, 0, 431, 435, 1024, 1024);
         matrices.pop();
-        drawEntity(i + (LCEUIMod.getConfig().classicCrafting ? 48 : 81), j + 57, 22, (float)(i + (LCEUIMod.getConfig().classicCrafting ? 48 : 81)) - this.mouseX, (float)(j + 22) - this.mouseY, this.client.player);
-    }
-
-    public static void drawEntity(int x, int y, int size, float mouseX, float mouseY, LivingEntity entity) {
-        float f = (float)Math.atan((double)(mouseX / 40.0F));
-        float g = (float)Math.atan((double)(mouseY / 40.0F));
-        MatrixStack matrixStack = RenderSystem.getModelViewStack();
-        matrixStack.push();
-        matrixStack.translate((double)x, (double)y, 1050.0);
-        matrixStack.scale(1.0F, 1.0F, -1.0F);
-        RenderSystem.applyModelViewMatrix();
-        MatrixStack matrixStack2 = new MatrixStack();
-        matrixStack2.translate(0.0, 0.0, 1000.0);
-        matrixStack2.scale((float)size, (float)size, (float)size);
-        Quaternion quaternion = Vec3f.POSITIVE_Z.getDegreesQuaternion(180.0F);
-        Quaternion quaternion2 = Vec3f.POSITIVE_X.getDegreesQuaternion(g * 20.0F);
-        quaternion.hamiltonProduct(quaternion2);
-        matrixStack2.multiply(quaternion);
-        float h = entity.bodyYaw;
-        float i = entity.getYaw();
-        float j = entity.getPitch();
-        float k = entity.prevHeadYaw;
-        float l = entity.headYaw;
-        entity.bodyYaw = 180.0F + f * 20.0F;
-        entity.setYaw(180.0F + f * 40.0F);
-        entity.setPitch(-g * 20.0F);
-        entity.headYaw = entity.getYaw();
-        entity.prevHeadYaw = entity.getYaw();
-        DiffuseLighting.method_34742();
-        EntityRenderDispatcher entityRenderDispatcher = MinecraftClient.getInstance().getEntityRenderDispatcher();
-        quaternion2.conjugate();
-        entityRenderDispatcher.setRotation(quaternion2);
-        entityRenderDispatcher.setRenderShadows(false);
-        VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-        RenderSystem.runAsFancy(() -> {
-            entityRenderDispatcher.render(entity, 0.0, 0.0, 0.0, 0.0F, 1.0F, matrixStack2, immediate, 15728880);
-        });
-        immediate.draw();
-        entityRenderDispatcher.setRenderShadows(true);
-        entity.bodyYaw = h;
-        entity.setYaw(i);
-        entity.setPitch(j);
-        entity.prevHeadYaw = k;
-        entity.headYaw = l;
-        matrixStack.pop();
-        RenderSystem.applyModelViewMatrix();
-        DiffuseLighting.enableGuiDepthLighting();
+        InventoryScreen.drawEntity(context, i + (LCEUIMod.getConfig().classicCrafting ? 48 : 81), j + 57, 22, (float)(i + (LCEUIMod.getConfig().classicCrafting ? 48 : 81)) - this.mouseX, (float)(j + 22) - this.mouseY, this.client.player);
     }
 
     public boolean isPointWithinBounds(int x, int y, int width, int height, double pointX, double pointY) {
@@ -161,17 +98,12 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
         }
     }
 
-    protected boolean isClickOutsideBounds(double mouseX, double mouseY, int left, int top, int button) {
-        return mouseX < (double)left || mouseY < (double)top || mouseX >= (double)(left + this.backgroundWidth) || mouseY >= (double)(top + this.backgroundHeight);
-    }
-
     protected void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType) {
         super.onMouseClick(slot, slotId, button, actionType);
     }
 
     @Environment(EnvType.CLIENT)
-    public static class SurvivalScreenHandler
-            extends ScreenHandler {
+    public static class SurvivalScreenHandler extends ScreenHandler {
         private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER;
         private final PlayerScreenHandler parent;
 
@@ -229,16 +161,12 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
             this.addSlot(new ScalableSlot(player.getInventory(), 40, LCEUIMod.getConfig().classicCrafting ? 74 : 107, 51 + 1.0f/3.0f, slotScale, slotScale * itemScale));
         }
 
-        public void close(PlayerEntity player) {
-            super.close(player);
-        }
-
         public boolean canUse(PlayerEntity player) {
             return this.parent.canUse(player);
         }
 
-        public ItemStack transferSlot(PlayerEntity player, int index) {
-            return this.parent.transferSlot(player, index);
+        public ItemStack quickMove(PlayerEntity player, int index) {
+            return this.parent.quickMove(player, index);
         }
 
         public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {

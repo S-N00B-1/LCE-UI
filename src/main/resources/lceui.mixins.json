@@ -5,9 +5,8 @@
   "client": [
     "HandledScreenAccessor",
     "RenamedItemHasGoldNameMixin",
-    "ScalableSlotItemRendererMixin",
+    "ScalableSlotDrawContextMixin",
     "ScalableSlotMixin",
-    "ScalableSlotMixin$HandledScreenAccessor",
     "ScreenAccessor",
     "ScreenHandlerCraftingAccessor",
     "chat.ChatMixin",
@@ -18,7 +17,7 @@
     "container.ShulkerBoxScreenMixin",
     "creativeinv.CreativeInvMixin",
     "hotbar.HotbarMixin",
-    "sign.SignScreenMixin",
+    "sign.AbstractSignScreenMixin",
     "survivalinv.InventoryMixin",
     "titlescreen.TitleScreenMixin",
     "whatsthis.HandledScreenMixin"

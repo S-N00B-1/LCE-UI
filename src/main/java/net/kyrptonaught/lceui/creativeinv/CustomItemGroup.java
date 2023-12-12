@@ -4,12 +4,10 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.kyrptonaught.lceui.creativeinv.resourceloaders.ItemGroupResourceLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

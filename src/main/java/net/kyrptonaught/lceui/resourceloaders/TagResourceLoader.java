@@ -3,8 +3,8 @@ package net.kyrptonaught.lceui.resourceloaders;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.util.ClientTagHelper;
+import net.minecraft.registry.tag.TagGroupLoader;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.tag.TagGroupLoader;
 import net.minecraft.util.Identifier;
 
 import java.util.List;

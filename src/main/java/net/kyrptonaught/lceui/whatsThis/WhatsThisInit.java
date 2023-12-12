@@ -21,6 +21,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.ResourceType;
 
 import net.minecraft.text.Text;
@@ -28,7 +29,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.registry.Registry;
 
 import java.util.Collection;
 import java.util.Map;
@@ -62,17 +62,17 @@ public class WhatsThisInit {
             }
         });
 
-        HudRenderCallback.EVENT.register((matrixStack, tickDelta) -> {
+        HudRenderCallback.EVENT.register((context, tickDelta) -> {
             MinecraftClient client = MinecraftClient.getInstance();
 
-            matrixStack.push();
+            context.getMatrices().push();
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
 
-            DescriptionRenderer.renderDescription(client, matrixStack, tickDelta);
+            DescriptionRenderer.renderDescription(client, context, tickDelta);
 
             RenderSystem.disableBlend();
-            matrixStack.pop();
+            context.getMatrices().pop();
         });
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
@@ -109,20 +109,20 @@ public class WhatsThisInit {
                                                         if (descriptionManager.viewedDescriptions.add("#" + tag.toString()))
                                                             ++entryCount;
                                                     }
-                                                    for (Block block : Registry.BLOCK) {
-                                                        String description = Registry.BLOCK.getId(block).getNamespace() + ":block/" + Registry.BLOCK.getId(block).getPath();
-                                                        if (DescriptionManager.findTagForID(Registry.BLOCK.getId(block)).isEmpty()) {
+                                                    for (Block block : Registries.BLOCK) {
+                                                        String description = Registries.BLOCK.getId(block).getNamespace() + ":block/" + Registries.BLOCK.getId(block).getPath();
+                                                        if (DescriptionManager.findTagForID(Registries.BLOCK.getId(block)).isEmpty()) {
                                                             if (descriptionManager.viewedDescriptions.add(description))
                                                                 ++entryCount;
                                                         }
                                                     }
-                                                    for (Item item : Registry.ITEM) {
-                                                        String description = Registry.ITEM.getId(item).getNamespace() + ":item/" + Registry.ITEM.getId(item).getPath();
+                                                    for (Item item : Registries.ITEM) {
+                                                        String description = Registries.ITEM.getId(item).getNamespace() + ":item/" + Registries.ITEM.getId(item).getPath();
                                                         if (descriptionManager.viewedDescriptions.add(description))
                                                             ++entryCount;
                                                     }
-                                                    for (EntityType<?> entityType : Registry.ENTITY_TYPE) {
-                                                        String description = Registry.ENTITY_TYPE.getId(entityType).getNamespace() + ":entity/" + Registry.ENTITY_TYPE.getId(entityType).getPath();
+                                                    for (EntityType<?> entityType : Registries.ENTITY_TYPE) {
+                                                        String description = Registries.ENTITY_TYPE.getId(entityType).getNamespace() + ":entity/" + Registries.ENTITY_TYPE.getId(entityType).getPath();
                                                         if (descriptionManager.viewedDescriptions.add(description))
                                                             ++entryCount;
                                                     }

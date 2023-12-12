@@ -46,13 +46,13 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation ('net.kyrptonaught:kyrptconfig:1.5.0-1.19')
-	include ('net.kyrptonaught:kyrptconfig:1.5.0-1.19')
+	modImplementation ('net.kyrptonaught:kyrptconfig:1.5.8-1.20')
+	include ('net.kyrptonaught:kyrptconfig:1.5.8-1.20')
 
 	modImplementation "com.github.LlamaLad7.MixinExtras:mixinextras-fabric:${project.mixinextras_version}"
 
-	modImplementation "curse.maven:midnightcontrols-621768:4303794"
-	modImplementation "maven.modrinth:midnightlib:1.0.0-fabric"
+	modImplementation "maven.modrinth:midnightcontrols:Ek4mkpRw"
+	modImplementation "maven.modrinth:midnightlib:YXz8kIQl"
 
 	modImplementation "dev.lambdaurora:spruceui:${project.spruceui_version}"
 	api('org.aperlambda:lambdajcommon:1.8.1') {

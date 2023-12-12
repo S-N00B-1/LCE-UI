@@ -5,9 +5,10 @@ import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.ChatHud;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.hud.ChatHudLine;
+import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
@@ -28,24 +29,24 @@ public abstract class ChatMixin {
     @Unique
     private static final int left = 37;
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I"))
-    private int renderWithLCEShadow(TextRenderer instance, MatrixStack matrices, OrderedText text, float x, float y, int color) {
-        return LCEDrawableHelper.drawTextWithShadow(matrices, instance, text, x, y, 1.0f, color);
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
+    private int renderWithLCEShadow1(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color) {
+        return (int)LCEDrawableHelper.drawTextWithShadow(instance, textRenderer, text, x, y, 1.0f, color);
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(Lnet/minecraft/client/util/math/MatrixStack;IIIII)V", ordinal = 0))
-    private void fillRedirect(MatrixStack matrixStack, int x1, int y1, int x2, int y2, int color) {
-        DrawableHelper.fill(matrixStack, x1, y1, x2 + (LCEUIMod.getConfig().chatWidth ? left + 18 : 0), y2, LCEUIMod.getConfig().recolorChat ? (int)(this.client.options.getChatOpacity().getValue() * 95) << 24 : color);
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I"))
+    private int renderWithLCEShadow2(DrawContext instance, TextRenderer textRenderer, OrderedText text, int x, int y, int color) {
+        return (int)LCEDrawableHelper.drawTextWithShadow(instance, textRenderer, text, x, y, 1.0f, color);
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(Lnet/minecraft/client/util/math/MatrixStack;IIIII)V"), index = 2)
-    private int fillHigher1(int original) {
-        return LCEUIMod.getConfig().chatYPos ? original - 26 : original;
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V", ordinal = 0))
+    private void fillRedirect1(DrawContext instance, int x1, int y1, int x2, int y2, int color) {
+        instance.fill(x1, LCEUIMod.getConfig().chatYPos ? y1 - 26 : y1, x2 + (LCEUIMod.getConfig().chatWidth ? left + 18 : 0), LCEUIMod.getConfig().chatYPos ? y2 - 26 : y2, LCEUIMod.getConfig().recolorChat ? (int)(this.client.options.getChatOpacity().getValue() * 95) << 24 : color);
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;fill(Lnet/minecraft/client/util/math/MatrixStack;IIIII)V"), index = 4)
-    private int fillHigher2(int original) {
-        return LCEUIMod.getConfig().chatYPos ? original - 26 : original;
+    @Redirect(method = "render", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/message/MessageHandler;getUnprocessedMessageCount()J", ordinal = 0)), at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"))
+    private void fillRedirect2(DrawContext instance, int x1, int y1, int x2, int y2, int color) {
+        instance.fill(x1, y1, x2, y2, color);
     }
 
     @Inject(method = "getWidth()I", at = @At("RETURN"), cancellable = true)
@@ -58,40 +59,40 @@ public abstract class ChatMixin {
     @ModifyReturnValue(method = "toChatLineX", at = @At("RETURN"))
     private double toChatLineX(double original) {
         if (LCEUIMod.getConfig().chatWidth)
-            return original - ((left - 4) / 2.0) / this.getChatScale();
+            return original - ((left / 2.0) / this.getChatScale());
         return original;
     }
 
     @ModifyReturnValue(method = "toChatLineY", at = @At("RETURN"))
     private double toChatLineY(double original) {
         if (LCEUIMod.getConfig().chatYPos)
-            return original - (29 + (45.0 / 2.0) * this.getChatScale()) / (this.getChatScale() * (this.client.options.getChatLineSpacing().getValue() + 1.0));
+            return original - (2.0f/3.0f + 4.9f * this.getChatScale()) / (this.getChatScale() * (this.client.options.getChatLineSpacing().getValue() + 1.0));
         return original;
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V", ordinal = 0), index = 0)
-    private double translateModifyX1(double original) {
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V", ordinal = 0), index = 0)
+    private float translateModifyX1(float original) {
         if (LCEUIMod.getConfig().chatWidth)
-            return original - 4.0;
+            return original - 4.0f;
         return original;
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V", ordinal = 2), index = 0)
-    private double translateModifyX2(double original) {
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V", ordinal = 2), index = 0)
+    private float translateModifyX2(float original) {
         if (LCEUIMod.getConfig().chatWidth)
-            return original + left - 4.0;
+            return original + left - 4.0f;
         return original;
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V", ordinal = 0), index = 1)
-    private double translateModifyY1(double original) {
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V", ordinal = 0), index = 1)
+    private float translateModifyY1(float original) {
         if (LCEUIMod.getConfig().chatYPos)
             return original - 26;
         return original;
     }
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(DDD)V", ordinal = 2), index = 1)
-    private double translateModifyY2(double original) {
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V", ordinal = 2), index = 1)
+    private float translateModifyY2(float original) {
         if (LCEUIMod.getConfig().chatYPos)
             return original - 26;
         return original;
@@ -102,6 +103,11 @@ public abstract class ChatMixin {
         if (LCEUIMod.getConfig().rescaleChatText)
             return original * 2.0 / 3.0;
         return original;
+    }
+
+    @Inject(method = "isXInsideIndicatorIcon", at = @At("RETURN"), cancellable = true)
+    private void getIndicatorX(double x, ChatHudLine.Visible line, MessageIndicator indicator, CallbackInfoReturnable<Boolean> cir) {
+        if (LCEUIMod.getConfig().chatWidth) cir.setReturnValue(false);
     }
 
 //    @ModifyReturnValue(method = "getVisibleLineCount", at = @At("RETURN"))

@@ -5,10 +5,10 @@ import net.kyrptonaught.lceui.util.ClientTagHelper;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.*;
 
@@ -31,7 +31,7 @@ public class DescriptionManager {
     }
 
     public ItemDescription getDescriptionForEntity(EntityType<?> entity) {
-        Identifier id = Registry.ENTITY_TYPE.getId(entity);
+        Identifier id = Registries.ENTITY_TYPE.getId(entity);
         id = new Identifier(id.getNamespace(), "entity/" + id.getPath());
         ItemDescription blockDescription = itemDescriptions.getOrDefault(id, new ItemDescription());
 
@@ -39,7 +39,7 @@ public class DescriptionManager {
     }
 
     public ItemDescription getDescriptionForBlock(BlockState blockState) {
-        Identifier id = Registry.BLOCK.getId(blockState.getBlock());
+        Identifier id = Registries.BLOCK.getId(blockState.getBlock());
         id = new Identifier(id.getNamespace(), "block/" + id.getPath());
         ItemDescription blockDescription = itemDescriptions.getOrDefault(id, new ItemDescription());
 
@@ -48,7 +48,7 @@ public class DescriptionManager {
 
     public ItemDescription getDescriptionForItem(ItemStack itemStack) {
         ItemStack itemStack1 = itemStack.copy();
-        Identifier id = Registry.ITEM.getId(itemStack1.getItem());
+        Identifier id = Registries.ITEM.getId(itemStack1.getItem());
         id = new Identifier(id.getNamespace(), "item/" + id.getPath());
         ItemDescription itemDescription = itemDescriptions.getOrDefault(id, new ItemDescription()).copy();
 
@@ -95,11 +95,11 @@ public class DescriptionManager {
             ItemDescription parent = itemDescriptions.get(parentID);
             if (parent == null) {
                 if (id.getPath().contains("block"))
-                    parent = getDescriptionForBlock(Registry.BLOCK.get(WhatsThisInit.getCleanIdentifier(parentID)).getDefaultState());
+                    parent = getDescriptionForBlock(Registries.BLOCK.get(WhatsThisInit.getCleanIdentifier(parentID)).getDefaultState());
                 else if (id.getPath().contains("item"))
-                    parent = getDescriptionForItem(Registry.ITEM.get(WhatsThisInit.getCleanIdentifier(parentID)).getDefaultStack());
+                    parent = getDescriptionForItem(Registries.ITEM.get(WhatsThisInit.getCleanIdentifier(parentID)).getDefaultStack());
                 else if (id.getPath().contains("entity"))
-                    parent = getDescriptionForEntity(Registry.ENTITY_TYPE.get(WhatsThisInit.getCleanIdentifier(id)));
+                    parent = getDescriptionForEntity(Registries.ENTITY_TYPE.get(WhatsThisInit.getCleanIdentifier(id)));
             }
             if (parent != null) {
                 tryInherit(parentID, parent, trace);

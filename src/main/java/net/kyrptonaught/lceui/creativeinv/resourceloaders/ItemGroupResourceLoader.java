@@ -11,11 +11,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -49,8 +49,8 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
             e.printStackTrace();
         }
         List<ItemStack> itemsWithoutGroup = new ArrayList<>();
-        for (Item item : Registry.ITEM) {
-            if (!ClientTagHelper.isInTag(ClientTags.NOT_IN_CREATIVE_INVENTORY, Registry.ITEM.getId(item)) && !CustomItemGroup.contain(item))
+        for (Item item : Registries.ITEM) {
+            if (!ClientTagHelper.isInTag(ClientTags.NOT_IN_CREATIVE_INVENTORY, Registries.ITEM.getId(item)) && !CustomItemGroup.contain(item))
                 itemsWithoutGroup.add(new ItemStack(item));
         }
         if (!itemsWithoutGroup.isEmpty()) CustomItemGroup.createAndRegister(new Identifier(LCEUIMod.MOD_ID, "items_without_group"), itemsWithoutGroup);
@@ -73,7 +73,7 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
                                 e.printStackTrace();
                             }
                         } else {
-                            Item item = Registry.ITEM.get(new Identifier(entry.getAsString()));
+                            Item item = Registries.ITEM.get(new Identifier(entry.getAsString()));
                             itemStackList.add(new ItemStack(item));
                         }
                     }

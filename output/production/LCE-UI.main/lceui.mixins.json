@@ -5,9 +5,8 @@
   "client": [
     "HandledScreenAccessor",
     "RenamedItemHasGoldNameMixin",
-    "ScalableSlotItemRendererMixin",
+    "ScalableSlotDrawContextMixin",
     "ScalableSlotMixin",
-    "ScalableSlotMixin$HandledScreenAccessor",
     "ScreenAccessor",
     "ScreenHandlerCraftingAccessor",
     "chat.ChatMixin",

@@ -15,13 +15,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InventoryScreen.class)
 public abstract class InventoryMixin {
-    @Shadow public abstract void removed();
-
     @Inject(method = "init", at = @At("HEAD"), cancellable = true)
     private void hijackInit(CallbackInfo ci) {
         MinecraftClient client = ((ScreenAccessor) ((InventoryScreen) (Object) this)).client();
         if (client != null && LCEUIMod.getConfig().survivalInventory && (LCEUIMod.getConfig().creativeInventory || (client.interactionManager != null && !client.interactionManager.hasCreativeInventory()))) {
-            this.removed();
+//            this.removed();
             client.setScreen(new LCESurvivalInventoryScreen(client.player));
             ci.cancel();
         }

@@ -2,113 +2,91 @@ package net.kyrptonaught.lceui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.Identifier;
+import org.joml.Matrix4f;
 
 public class LCEDrawableHelper {
-    public static void drawCenteredText(MatrixStack matrices, TextRenderer textRenderer, Text text, float minX, float maxX, float minY, float maxY, float scale, int color) {
+    public static float drawCenteredText(DrawContext context, TextRenderer textRenderer, Text text, float minX, float maxX, float minY, float maxY, float scale, int color) {
         float textX = ((minX + maxX) / scale - (textRenderer.getWidth(text))) / 3;
         float textY = ((minY + maxY) / scale - (textRenderer.fontHeight)) / 3;
-        drawText(matrices, textRenderer, text, textX, textY, scale, color);
+        return drawText(context, textRenderer, text, textX, textY, scale, color);
     }
 
-    public static int drawTextWithShadow(MatrixStack matrices, TextRenderer textRenderer, OrderedText text, float x, float y, float scale, int color) {
+    public static float drawTextWithShadow(DrawContext context, TextRenderer textRenderer, OrderedText text, float x, float y, float scale, int color) {
+        MatrixStack matrices = context.getMatrices();
         matrices.translate(x, y, 0.0f);
         matrices.scale(scale, scale, 1.0f);
         matrices.translate(-x, -y, 0.0f);
-        int width;
+        float width;
         if (LCEUIMod.getConfig().closerTextShadows) {
             MutableText blackText = Text.literal("");
             text.accept(((index, style, codePoint) -> {
                 blackText.append(Text.literal(String.valueOf((char)codePoint)).setStyle(style.withColor((color) & 0xFF000000)));
                 return true;
             }));
-            textRenderer.draw(matrices, blackText.asOrderedText(), x + 1.0f / 3.0f, y + 1.0f / 3.0f, (color) & 0xFF000000);
-            width = textRenderer.draw(matrices, text, x, y, color);
+            textRenderer.draw(blackText.asOrderedText(), x + 1.0f / 3.0f, y + 1.0f / 3.0f, (color) & 0xFF000000, false, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880);
+            width = 1.0f/3.0f + textRenderer.draw(text, x, y, color, false, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880);
         } else {
-            width = textRenderer.drawWithShadow(matrices, text, x, y, color);
+            width = textRenderer.draw(text, x, y, color, true, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880);
         }
         matrices.translate(x, y, 0.0f);
         matrices.scale(1/scale, 1/scale, 1.0f);
         matrices.translate(-x, -y, 0.0f);
-        return width;
+        return width * scale;
     }
 
-    public static int drawTextWithShadow(MatrixStack matrices, TextRenderer textRenderer, Text text, float x, float y, float scale, int color) {
-        return drawTextWithShadow(matrices, textRenderer, text.asOrderedText(), x, y, scale, color);
+    public static float drawTextWithShadow(DrawContext context, TextRenderer textRenderer, Text text, float x, float y, float scale, int color) {
+        return drawTextWithShadow(context, textRenderer, text.asOrderedText(), x, y, scale, color);
     }
 
-    public static void drawText(MatrixStack matrices, TextRenderer textRenderer, OrderedText text, float x, float y, float scale, int color) {
+    public static float drawText(DrawContext context, TextRenderer textRenderer, OrderedText text, float x, float y, float scale, int color) {
+        MatrixStack matrices = context.getMatrices();
         matrices.translate(x, y, 0.0f);
         matrices.scale(scale, scale, 1.0f);
         matrices.translate(-x, -y, 0.0f);
-        textRenderer.draw(matrices, text, x, y, color);
+        int width = textRenderer.draw(text, x, y, color, false, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880);
         matrices.translate(x, y, 0.0f);
         matrices.scale(1/scale, 1/scale, 1.0f);
         matrices.translate(-x, -y, 0.0f);
+        return width * scale;
     }
 
-    public static void drawText(MatrixStack matrices, TextRenderer textRenderer, Text text, float x, float y, float scale, int color) {
-        drawText(matrices, textRenderer, text.asOrderedText(), x, y, scale, color);
+    public static float drawText(DrawContext context, TextRenderer textRenderer, Text text, float x, float y, float scale, int color) {
+        return drawText(context, textRenderer, text.asOrderedText(), x, y, scale, color);
     }
 
-    public static void drawTexture(MatrixStack matrices, float x, float y, float z, float u, float v, float width, float height, float textureWidth, float textureHeight) {
-        drawTexture(matrices, x, x + width, y, y + height, z, width, height, u, v, textureWidth, textureHeight);
+    public static void drawTexture(Identifier texture, DrawContext context, float x, float y, float z, float u, float v, float width, float height, float textureWidth, float textureHeight) {
+        drawTexture(texture, context, x, x + width, y, y + height, z, width, height, u, v, textureWidth, textureHeight);
     }
 
-    public static void drawTexture(MatrixStack matrices, float x, float y, float width, float height, float u, float v, float regionWidth, float regionHeight, float textureWidth, float textureHeight) {
-        drawTexture(matrices, x, x + width, y, y + height, 0, regionWidth, regionHeight, u, v, textureWidth, textureHeight);
+    public static void drawTexture(Identifier texture, DrawContext context, float x, float y, float width, float height, float u, float v, float regionWidth, float regionHeight, float textureWidth, float textureHeight) {
+        drawTexture(texture, context, x, x + width, y, y + height, 0, regionWidth, regionHeight, u, v, textureWidth, textureHeight);
     }
 
-    public static void drawTexture(MatrixStack matrices, float x, float y, float u, float v, float width, float height, float textureWidth, float textureHeight) {
-        drawTexture(matrices, x, y, width, height, u, v, width, height, textureWidth, textureHeight);
+    public static void drawTexture(Identifier texture, DrawContext context, float x, float y, float u, float v, float width, float height, float textureWidth, float textureHeight) {
+        drawTexture(texture, context, x, y, width, height, u, v, width, height, textureWidth, textureHeight);
     }
 
-    public static void fillGradient(MatrixStack matrices, float startX, float startY, float endX, float endY, int colorStart, int colorEnd, int z) {
-        RenderSystem.disableTexture();
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        fillGradient(matrices.peek().getPositionMatrix(), bufferBuilder, startX, startY, endX, endY, z, colorStart, colorEnd);
-        tessellator.draw();
-        RenderSystem.disableBlend();
-        RenderSystem.enableTexture();
+    private static void drawTexture(Identifier texture, DrawContext context, float x0, float x1, float y0, float y1, float z, float regionWidth, float regionHeight, float u, float v, float textureWidth, float textureHeight) {
+        drawTexturedQuad(texture, context, x0, x1, y0, y1, z, (u + 0.0f) / textureWidth, (u + regionWidth) / textureWidth, (v + 0.0f) / textureHeight, (v + regionHeight) / textureHeight);
     }
 
-    protected static void fillGradient(Matrix4f matrix, BufferBuilder builder, float startX, float startY, float endX, float endY, int colorStart, int colorEnd, int z) {
-        float f = (float)(colorStart >> 24 & 0xFF) / 255.0f;
-        float g = (float)(colorStart >> 16 & 0xFF) / 255.0f;
-        float h = (float)(colorStart >> 8 & 0xFF) / 255.0f;
-        float i = (float)(colorStart & 0xFF) / 255.0f;
-        float j = (float)(colorEnd >> 24 & 0xFF) / 255.0f;
-        float k = (float)(colorEnd >> 16 & 0xFF) / 255.0f;
-        float l = (float)(colorEnd >> 8 & 0xFF) / 255.0f;
-        float m = (float)(colorEnd & 0xFF) / 255.0f;
-        builder.vertex(matrix, endX, startY, z).color(g, h, i, f).next();
-        builder.vertex(matrix, startX, startY, z).color(g, h, i, f).next();
-        builder.vertex(matrix, startX, endY, z).color(k, l, m, j).next();
-        builder.vertex(matrix, endX, endY, z).color(k, l, m, j).next();
-    }
-
-    private static void drawTexture(MatrixStack matrices, float x0, float x1, float y0, float y1, float z, float regionWidth, float regionHeight, float u, float v, float textureWidth, float textureHeight) {
-        drawTexturedQuad(matrices.peek().getPositionMatrix(), x0, x1, y0, y1, z, (u + 0.0f) / (float)textureWidth, (u + (float)regionWidth) / (float)textureWidth, (v + 0.0f) / (float)textureHeight, (v + (float)regionHeight) / (float)textureHeight);
-    }
-
-    private static void drawTexturedQuad(Matrix4f matrix, float x0, float x1, float y0, float y1, float z, float u0, float u1, float v0, float v1) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+    private static void drawTexturedQuad(Identifier texture, DrawContext context, float x1, float x2, float y1, float y2, float z, float u1, float u2, float v1, float v2) {
+        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        Matrix4f matrix4f = context.getMatrices().peek().getPositionMatrix();
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        bufferBuilder.vertex(matrix, x0, y1, z).texture(u0, v1).next();
-        bufferBuilder.vertex(matrix, x1, y1, z).texture(u1, v1).next();
-        bufferBuilder.vertex(matrix, x1, y0, z).texture(u1, v0).next();
-        bufferBuilder.vertex(matrix, x0, y0, z).texture(u0, v0).next();
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+        bufferBuilder.vertex(matrix4f, x1, y1, z).texture(u1, v1).next();
+        bufferBuilder.vertex(matrix4f, x1, y2, z).texture(u1, v2).next();
+        bufferBuilder.vertex(matrix4f, x2, y2, z).texture(u2, v2).next();
+        bufferBuilder.vertex(matrix4f, x2, y1, z).texture(u2, v1).next();
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
     }
 }
