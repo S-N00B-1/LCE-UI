@@ -17,7 +17,7 @@
     "container.ShulkerBoxScreenMixin",
     "creativeinv.CreativeInvMixin",
     "hotbar.HotbarMixin",
-    "sign.SignScreenMixin",
+    "sign.AbstractSignScreenMixin",
     "survivalinv.InventoryMixin",
     "titlescreen.TitleScreenMixin",
     "whatsthis.HandledScreenMixin"

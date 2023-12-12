@@ -15,14 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class CreativeInvMixin {
     @Shadow public abstract void removed();
 
-    @Inject(method = "init", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "init", at = @At("HEAD"))
     public void hijackInit(CallbackInfo ci) {
         if (LCEUIMod.getConfig().creativeInventory) {
             MinecraftClient client = ((ScreenAccessor) ((CreativeInventoryScreen) (Object) this)).client();
             if (client != null) {
-                this.removed();
                 client.setScreen(new LCECreativeInventoryScreen(client.player));
-                ci.cancel();
             }
         }
     }

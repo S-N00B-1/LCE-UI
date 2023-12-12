@@ -30,14 +30,15 @@ public class LCEDrawableHelper {
                 blackText.append(Text.literal(String.valueOf((char)codePoint)).setStyle(style.withColor((color) & 0xFF000000)));
                 return true;
             }));
-            textRenderer.draw(blackText.asOrderedText(), x + 1.0f / 3.0f, y + 1.0f / 3.0f, (color) & 0xFF000000, false, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880);
-            width = 1.0f/3.0f + textRenderer.draw(text, x, y, color, false, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880);
+            matrices.translate(x + 1.0f/3.0f, y + 1.0f/3.0f, 0.0f);
+            context.drawText(textRenderer, blackText.asOrderedText(), 0, 0, color & 0xFF000000, false);
+            matrices.translate(-1.0f/3.0f, -1.0f/3.0f, 0.0f);
+            width = 1.0f/3.0f + context.drawText(textRenderer, text, 0, 0, color, false);
+            matrices.scale(1/scale, 1/scale, 1.0f);
+            matrices.translate(-x, -y, 0.0f);
         } else {
             width = textRenderer.draw(text, x, y, color, true, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880);
         }
-        matrices.translate(x, y, 0.0f);
-        matrices.scale(1/scale, 1/scale, 1.0f);
-        matrices.translate(-x, -y, 0.0f);
         return width * scale;
     }
 
@@ -49,9 +50,7 @@ public class LCEDrawableHelper {
         MatrixStack matrices = context.getMatrices();
         matrices.translate(x, y, 0.0f);
         matrices.scale(scale, scale, 1.0f);
-        matrices.translate(-x, -y, 0.0f);
-        int width = textRenderer.draw(text, x, y, color, false, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(), TextRenderer.TextLayerType.NORMAL, 0, 15728880);
-        matrices.translate(x, y, 0.0f);
+        int width = context.drawText(textRenderer, text, 0, 0, color, false);
         matrices.scale(1/scale, 1/scale, 1.0f);
         matrices.translate(-x, -y, 0.0f);
         return width * scale;

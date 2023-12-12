@@ -10,6 +10,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractSignEditScreen;
 import net.minecraft.client.gui.screen.ingame.HangingSignEditScreen;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
@@ -19,7 +20,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-// TODO: fix selection (cursor in the middle of text and stuff like that)
 @Mixin(AbstractSignEditScreen.class)
 public abstract class AbstractSignScreenMixin {
     @Shadow protected abstract Vector3f getTextScale();
@@ -60,7 +60,7 @@ public abstract class AbstractSignScreenMixin {
 
     @WrapOperation(method = "renderSignText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawText(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)I", ordinal = 1))
     private int doNotDrawCursorInCustomUI(DrawContext instance, TextRenderer textRenderer, String text, int x, int y, int color, boolean shadow, Operation<Integer> original) {
-        return LCEUIMod.getConfig().sign ? 0 : original.call(instance, textRenderer, text, x, y, color, shadow);
+        return LCEUIMod.getConfig().sign && text.equals("_") ? 0 : original.call(instance, textRenderer, text, x, y, color, shadow);
     }
 
     @ModifyVariable(method = "renderSignText", at = @At(value = "STORE"), index = 4)
@@ -79,6 +79,32 @@ public abstract class AbstractSignScreenMixin {
             matrices.scale(93.75f, -93.75F, 93.75F);
             matrices.scale(0.010416667F, -0.010416667F, 0.010416667F);
         }
+    }
+
+    @WrapOperation(method = "renderSignText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"))
+    private void renderSmallerSelection1(DrawContext instance, int x1, int y1, int x2, int y2, int color, Operation<Void> original) {
+        MatrixStack matrices = instance.getMatrices();
+        if (LCEUIMod.getConfig().sign) {
+            matrices.scale(1.0f/this.getTextScale().x, 1.0f/this.getTextScale().y, 1.0f/this.getTextScale().z);
+            matrices.scale(2.0f/3.0f, 2.0f/3.0f, 0.0f);
+            original.call(instance, x1, y1 + (int)(this.currentRow * 5.5f) - 7, x2, y2 + (int)(this.currentRow * 5.5f) - 7, color);
+            matrices.scale(3.0f/2.0f, 3.0f/2.0f, 0.0f);
+            matrices.scale(this.getTextScale().x, this.getTextScale().y, this.getTextScale().z);
+        } else
+            original.call(instance, x1, y1, x2, y2, color);
+    }
+
+    @WrapOperation(method = "renderSignText", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(Lnet/minecraft/client/render/RenderLayer;IIIII)V"))
+    private void renderSmallerSelection2(DrawContext instance, RenderLayer layer, int x1, int y1, int x2, int y2, int color, Operation<Void> original) {
+        MatrixStack matrices = instance.getMatrices();
+        if (LCEUIMod.getConfig().sign) {
+            matrices.scale(1.0f/this.getTextScale().x, 1.0f/this.getTextScale().y, 1.0f/this.getTextScale().z);
+            matrices.scale(2.0f/3.0f, 2.0f/3.0f, 0.0f);
+            original.call(instance, layer, x1, y1 + (int)(this.currentRow * 5.5f) - 7, x2, y2 + (int)(this.currentRow * 5.5f) - 7, color);
+            matrices.scale(3.0f/2.0f, 3.0f/2.0f, 0.0f);
+            matrices.scale(this.getTextScale().x, this.getTextScale().y, this.getTextScale().z);
+        } else
+            original.call(instance, layer, x1, y1, x2, y2, color);
     }
 
     // TODO: make new mixins for SignEditScreen and HangingSignEditScreen

@@ -1,6 +1,8 @@
 package net.kyrptonaught.lceui.mixin.chat;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
@@ -29,14 +31,14 @@ public abstract class ChatMixin {
     @Unique
     private static final int left = 37;
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
-    private int renderWithLCEShadow1(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color) {
-        return (int)LCEDrawableHelper.drawTextWithShadow(instance, textRenderer, text, x, y, 1.0f, color);
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
+    private int renderWithLCEShadow1(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color, Operation<Integer> original) {
+        return LCEUIMod.getConfig().closerTextShadows ? (int)LCEDrawableHelper.drawTextWithShadow(instance, textRenderer, text, x, y, 1.0f, color) : original.call(instance, textRenderer, text, x, y, color);
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I"))
-    private int renderWithLCEShadow2(DrawContext instance, TextRenderer textRenderer, OrderedText text, int x, int y, int color) {
-        return (int)LCEDrawableHelper.drawTextWithShadow(instance, textRenderer, text, x, y, 1.0f, color);
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I"))
+    private int renderWithLCEShadow2(DrawContext instance, TextRenderer textRenderer, OrderedText text, int x, int y, int color, Operation<Integer> original) {
+        return LCEUIMod.getConfig().closerTextShadows ? (int)LCEDrawableHelper.drawTextWithShadow(instance, textRenderer, text, x, y, 1.0f, color) : original.call(instance, textRenderer, text, x, y, color);
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V", ordinal = 0))
@@ -109,11 +111,4 @@ public abstract class ChatMixin {
     private void getIndicatorX(double x, ChatHudLine.Visible line, MessageIndicator indicator, CallbackInfoReturnable<Boolean> cir) {
         if (LCEUIMod.getConfig().chatWidth) cir.setReturnValue(false);
     }
-
-//    @ModifyReturnValue(method = "getVisibleLineCount", at = @At("RETURN"))
-//    private int getVisibleLineCount(int original) {
-//        if (LCEUIMod.getConfig().chatHeight)
-//            return (int)(this.getHeight() / (35.0 / 3.0));
-//        return original;
-//    }
 }

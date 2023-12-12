@@ -35,6 +35,7 @@
   "options.lceui.screens.containerInventory": "Generic Container Inventory",
   "options.lceui.screens.container3x3Inventory": "Generic 3x3 Container Inventory",
   "options.lceui.screens.hopperInventory": "Hopper Inventory",
+  "options.lceui.screens.shulkerBoxInventory": "Shulker Box Inventory",
   "options.lceui.screens.chatWidth": "Chat Width",
   "options.lceui.screens.chatYPos": "Chat Y Position",
   "options.lceui.screens.recolorChat": "Recolor Chat",
