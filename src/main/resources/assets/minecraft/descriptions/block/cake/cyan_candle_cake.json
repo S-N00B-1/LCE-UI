@@ -1,0 +1,7 @@
+{
+  "model": "lceui:item/cake_popup",
+  "text": {
+    "name": "block.minecraft.cake",
+    "description": "block.minecraft.cake.description"
+  }
+}

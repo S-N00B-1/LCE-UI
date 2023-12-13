@@ -19,6 +19,8 @@
     "minecraft:dragon_egg",
     "minecraft:farmland",
     "minecraft:filled_map",
-    "minecraft:suspicious_stew"
+    "minecraft:suspicious_stew",
+    "minecraft:ender_dragon_spawn_egg",
+    "minecraft:wither_spawn_egg"
   ]
 }
