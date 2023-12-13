@@ -121,6 +121,7 @@
     "minecraft:sculk_shrieker",
     "minecraft:frogspawn",
     "minecraft:turtle_egg",
+    "minecraft:sniffer_egg",
     "minecraft:creeper_spawn_egg",
     "minecraft:skeleton_spawn_egg",
     "minecraft:wither_skeleton_spawn_egg",
@@ -192,6 +193,10 @@
     "minecraft:trader_llama_spawn_egg",
     "minecraft:warden_spawn_egg",
     "minecraft:zoglin_spawn_egg",
+    "minecraft:camel_spawn_egg",
+    "minecraft:iron_golem_spawn_egg",
+    "minecraft:sniffer_spawn_egg",
+    "minecraft:snow_golem_spawn_egg",
     "minecraft:music_disc_13",
     "minecraft:music_disc_cat",
     "minecraft:music_disc_blocks",
@@ -207,6 +212,7 @@
     "minecraft:music_disc_otherside",
     "minecraft:music_disc_5",
     "minecraft:music_disc_pigstep",
+    "minecraft:music_disc_relic",
     {
       "item": "minecraft:firework_rocket",
       "nbt": "{Fireworks:{Flight:1,Explosions:[{Type:0,Flicker:1,Trail:0,Colors:[I;6719955]}]}}"

@@ -8,5 +8,6 @@
     "lceui:tools_weapons_and_armor",
     "lceui:brewing",
     "lceui:miscellaneous"
-  ]
+  ],
+  "automatic_tabs": true
 }
