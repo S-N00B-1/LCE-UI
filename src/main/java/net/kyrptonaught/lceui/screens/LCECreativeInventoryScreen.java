@@ -117,10 +117,12 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
     public void scroll(CustomItemGroup group, int scrollPosition) {
         Integer oldPosition = this.scrolls.get(group);
-        if (oldPosition != null && oldPosition < scrollPosition) {
-            this.downArrowOpacity = 0;
-        } else {
-            this.upArrowOpacity = 0;
+        if (oldPosition != null) {
+            if (oldPosition < scrollPosition) {
+                this.downArrowOpacity = 0;
+            } else if (oldPosition > scrollPosition) {
+                this.upArrowOpacity = 0;
+            }
         }
         this.scrolls.put(group, scrollPosition);
         this.handler.scrollItems(scrollPosition);
