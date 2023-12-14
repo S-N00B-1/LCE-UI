@@ -143,6 +143,15 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
         }
     }
 
+    public int getCurrentItemGroupsSize() {
+        for (int i = 7; i >= 0; i--) {
+            if (currentItemGroups[i] != null) {
+                return i + 1;
+            }
+        }
+        return 0;
+    }
+
     @Override
     protected void onMouseClick(@Nullable Slot slot, int slotId, int button, SlotActionType actionType) {
         boolean bl = actionType == SlotActionType.QUICK_MOVE;
@@ -344,12 +353,12 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     }
 
     public void incrementItemGroup(int amount) {
-        if (selectedTab + amount > 7) {
+        if (selectedTab + amount >= this.getCurrentItemGroupsSize()) {
             this.cycleItemGroupGroup(1);
             this.setSelectedTab(currentItemGroups[0]);
         } else if (selectedTab + amount < 0) {
             this.cycleItemGroupGroup(-1);
-            this.setSelectedTab(currentItemGroups[7]);
+            this.setSelectedTab(currentItemGroups[this.getCurrentItemGroupsSize() - 1]);
         } else {
             this.setSelectedTab(currentItemGroups[selectedTab + amount]);
         }
@@ -369,10 +378,13 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     }
 
     private void cycleItemGroupGroup(int amount) {
-        if (this.currentItemGroupGroup + amount < 0 || this.currentItemGroupGroup + amount > MathHelper.ceil((float)CustomItemGroup.ITEM_GROUPS.size() / 8) - 1) {
-            return;
+        if (this.currentItemGroupGroup + amount < 0) {
+            this.setItemGroupGroup(MathHelper.ceil((float)CustomItemGroup.ITEM_GROUPS.size() / 8));
+        } else if (this.currentItemGroupGroup + amount > MathHelper.ceil((float)CustomItemGroup.ITEM_GROUPS.size() / 8) - 1) {
+            this.setItemGroupGroup(0);
+        } else {
+            this.setItemGroupGroup(this.currentItemGroupGroup + amount);
         }
-        this.setItemGroupGroup(this.currentItemGroupGroup + amount);
     }
 
     private boolean isClickInLeftTabButton(double mouseX, double mouseY) {
