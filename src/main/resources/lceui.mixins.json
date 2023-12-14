@@ -21,9 +21,9 @@
     "hotbar.HotbarMixin",
     "sign.AbstractSignScreenMixin",
     "survivalinv.InventoryMixin",
+    "survivalinv.PlayerScreenHandlerMixin",
     "titlescreen.TitleScreenMixin",
-    "whatsthis.HandledScreenMixin",
-    "survivalinv.PlayerScreenHandlerMixin"
+    "whatsthis.HandledScreenMixin"
   ],
   "injectors": {
     "maxShiftBy": 5,
