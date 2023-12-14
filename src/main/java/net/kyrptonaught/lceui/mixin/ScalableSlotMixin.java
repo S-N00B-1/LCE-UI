@@ -33,11 +33,11 @@ public class ScalableSlotMixin {
     private void drawSlotHighlightRedirect(DrawContext context, int x, int y, int z, Operation<Void> original, @Local(name = "slot") Slot slot) {
         MatrixStack matrices = context.getMatrices();
         if (slot instanceof ScalableSlot scalableSlot) {
-            matrices.translate(scalableSlot.floatX, scalableSlot.floatY, z);
-            matrices.scale(scalableSlot.scale, scalableSlot.scale, scalableSlot.scale);
-            original.call(context, 0, 0, 0);
-            matrices.scale(1.0f/scalableSlot.scale, 1.0f/scalableSlot.scale, 1.0f/scalableSlot.scale);
-            matrices.translate(-scalableSlot.floatX, -scalableSlot.floatY, -z);
+            matrices.translate(scalableSlot.floatX, scalableSlot.floatY, 0.0f);
+            matrices.scale(scalableSlot.scale, scalableSlot.scale, 1.0f);
+            original.call(context, 0, 0, z);
+            matrices.scale(1.0f/scalableSlot.scale, 1.0f/scalableSlot.scale, 1.0f);
+            matrices.translate(-scalableSlot.floatX, -scalableSlot.floatY, 0.0f);
         } else {
             original.call(context, x, y, z);
         }
@@ -47,11 +47,11 @@ public class ScalableSlotMixin {
     private void fill(DrawContext context, int x, int y, int maxX, int maxY, int color, Operation<Void> original, @Local(name = "slot") Slot slot) {
         MatrixStack matrices = context.getMatrices();
         if (slot instanceof ScalableSlot scalableSlot) {
-            matrices.translate(x, y, 0);
-            matrices.scale(scalableSlot.scale, scalableSlot.scale, 0);
+            matrices.translate(x, y, 0.0f);
+            matrices.scale(scalableSlot.scale, scalableSlot.scale, 1.0f);
             original.call(context, 0, 0, 16, 16, color);
-            matrices.scale(1.0f/scalableSlot.scale, 1.0f/scalableSlot.scale, 0);
-            matrices.translate(-x, -y, 0);
+            matrices.scale(1.0f/scalableSlot.scale, 1.0f/scalableSlot.scale, 1.0f);
+            matrices.translate(-x, -y, 0.0f);
         } else {
             original.call(context, x, y, maxX, maxY, color);
         }
@@ -61,11 +61,11 @@ public class ScalableSlotMixin {
     private void drawSprite(DrawContext instance, int x, int y, int z, int width, int height, Sprite sprite, Operation<Void> original) {
         MatrixStack matrices = instance.getMatrices();
         if (ScalableSlot.scalableSlotToDraw != null) {
-            matrices.translate(ScalableSlot.scalableSlotToDraw.floatX, ScalableSlot.scalableSlotToDraw.floatY, z);
-            matrices.scale(ScalableSlot.scalableSlotToDraw.scale, ScalableSlot.scalableSlotToDraw.scale, ScalableSlot.scalableSlotToDraw.scale);
-            original.call(instance, 0, 0, 0, width, height, sprite);
-            matrices.scale(1.0f/ScalableSlot.scalableSlotToDraw.scale, 1.0f/ScalableSlot.scalableSlotToDraw.scale, 1.0f/ScalableSlot.scalableSlotToDraw.scale);
-            matrices.translate(-ScalableSlot.scalableSlotToDraw.floatX, -ScalableSlot.scalableSlotToDraw.floatY, -z);
+            matrices.translate(ScalableSlot.scalableSlotToDraw.floatX, ScalableSlot.scalableSlotToDraw.floatY, 0.0f);
+            matrices.scale(ScalableSlot.scalableSlotToDraw.scale, ScalableSlot.scalableSlotToDraw.scale, 1.0f);
+            original.call(instance, 0, 0, z, width, height, sprite);
+            matrices.scale(1.0f/ScalableSlot.scalableSlotToDraw.scale, 1.0f/ScalableSlot.scalableSlotToDraw.scale, 1.0f);
+            matrices.translate(-ScalableSlot.scalableSlotToDraw.floatX, -ScalableSlot.scalableSlotToDraw.floatY, 0.0f);
         } else {
             original.call(instance, x, y, z, width, height, sprite);
         }

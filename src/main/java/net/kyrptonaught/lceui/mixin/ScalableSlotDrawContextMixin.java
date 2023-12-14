@@ -23,7 +23,7 @@ public abstract class ScalableSlotDrawContextMixin {
     private void scaleMatrixBasedOnSlot(LivingEntity entity, World world, ItemStack stack, int x, int y, int seed, int z, CallbackInfo ci) {
         MatrixStack matrices = this.getMatrices();
         if (ScalableSlot.scalableSlotToDraw != null) {
-            matrices.translate(ScalableSlot.scalableSlotToDraw.scale / 2 - 0.5f,  0.5f - ScalableSlot.scalableSlotToDraw.scale / 2, 0);
+            matrices.translate(ScalableSlot.scalableSlotToDraw.scale / 2 - 0.5f,  0.5f - ScalableSlot.scalableSlotToDraw.scale / 2, 0.0f);
             matrices.scale(ScalableSlot.scalableSlotToDraw.itemScale, ScalableSlot.scalableSlotToDraw.itemScale, 1.0f);
         } else if (LCEUIMod.getConfig().smallerItemsOutsideOfScalableSlots) {
             float itemScale = 7.0f/8.0f;
