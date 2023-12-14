@@ -41,7 +41,7 @@ public class HandledScreenMixin {
         return original.call(instance, textRenderer, text, x, y, color, shadow);
     }
 
-    @Inject(method = "init", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "init", at = @At("HEAD"))
     private void init(CallbackInfo ci) {
         MinecraftClient client = ((ScreenAccessor) this).client();
         if (client != null) {

@@ -18,7 +18,7 @@ public class ClientTagHelper {
 
     public static boolean isInTag(Identifier tagId, Identifier item) {
         Collection<Identifier> tag = getTag(tagId);
-        return tag != null && tag.contains(item);
+        return tag != null && (tag.contains(item));
     }
 
     public static Map<Identifier, Collection<Identifier>> getTagsInPath(Identifier id) {

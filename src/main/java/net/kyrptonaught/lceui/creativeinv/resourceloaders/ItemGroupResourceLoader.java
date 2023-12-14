@@ -48,12 +48,17 @@ public class ItemGroupResourceLoader implements SimpleSynchronousResourceReloadL
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<ItemStack> itemsWithoutGroup = new ArrayList<>();
         for (Item item : Registries.ITEM) {
-            if (!ClientTagHelper.isInTag(ClientTags.NOT_IN_CREATIVE_INVENTORY, Registries.ITEM.getId(item)) && !CustomItemGroup.contain(item))
-                itemsWithoutGroup.add(new ItemStack(item));
+            Identifier itemID = Registries.ITEM.getId(item);
+            if (!ClientTagHelper.isInTag(ClientTags.NOT_IN_CREATIVE_INVENTORY, itemID) && !CustomItemGroup.contain(item)) {
+                Optional<CustomItemGroup> optional = CustomItemGroup.getById(new Identifier(LCEUIMod.MOD_ID, "mod." + itemID.getNamespace()));
+                if (optional.isEmpty()) {
+                    CustomItemGroup.createAndRegister(new Identifier(LCEUIMod.MOD_ID, "mod." + itemID.getNamespace()), Collections.singletonList(new ItemStack(item)));
+                } else {
+                    optional.get().getItemStackList().add(new ItemStack(item));
+                }
+            }
         }
-        if (!itemsWithoutGroup.isEmpty()) CustomItemGroup.createAndRegister(new Identifier(LCEUIMod.MOD_ID, "items_without_group"), itemsWithoutGroup);
     }
 
     private void registerGroups(Map<Identifier, Resource> resources) {

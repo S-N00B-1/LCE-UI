@@ -286,7 +286,9 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
             if (itemGroup == null) continue;
             matrices.push();
             float widthAndHeight = 24.0f * (2.0f/3.0f);
-            LCEDrawableHelper.drawTexture(itemGroup.getResourceLocation(), context, (80.0f/3.0f) * (itemGroup.getIndex() % 8) + 1 + ((26.0f - widthAndHeight) / 2.0f),  ((26.0f - widthAndHeight) / 2.0f) + (itemGroup.getIndex() % 8 == selectedTab % 8 ? 0 : 1 + (1.0f/3.0f)) - (2.0f * (2.0f/3.0f)) - 1.0f/3.0f, widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
+            Identifier textureLocation = itemGroup.getResourceLocation();
+            if (this.client.getResourceManager().getResource(textureLocation).isEmpty()) textureLocation = new Identifier(LCEUIMod.MOD_ID, "textures/gui/creativeinv/tabs/unknown.png");
+            LCEDrawableHelper.drawTexture(textureLocation, context, (80.0f/3.0f) * (itemGroup.getIndex() % 8) + 1 + ((26.0f - widthAndHeight) / 2.0f),  ((26.0f - widthAndHeight) / 2.0f) + (itemGroup.getIndex() % 8 == selectedTab % 8 ? 0 : 1 + (1.0f/3.0f)) - (2.0f * (2.0f/3.0f)) - 1.0f/3.0f, widthAndHeight, widthAndHeight, 0, 0, 26, 26, 26, 26);
             matrices.pop();
         }
         int amountOfPages = this.getAmountOfPages();
