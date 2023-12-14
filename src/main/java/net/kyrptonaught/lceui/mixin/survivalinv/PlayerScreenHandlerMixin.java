@@ -7,6 +7,7 @@ import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEUIMod;
+import net.kyrptonaught.lceui.screens.LCESurvivalInventoryScreen;
 import net.kyrptonaught.lceui.util.ScalableCraftingResultSlot;
 import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.MinecraftClient;
@@ -21,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -72,9 +74,9 @@ public abstract class PlayerScreenHandlerMixin {
         float itemScale = 7.0f/8.0f;
 
         if (LCEUIMod.getConfig().survivalInventory) {
-            int y = (slot.y - 8) / 18;
-            EquipmentSlot equipmentSlot = EQUIPMENT_SLOT_ORDER[y];
-            return original.call(instance, new ScalableSlot(this.owner.getInventory(), slot.getIndex(), LCEUIMod.getConfig().classicCrafting ? 9 : 42, 9 + 1.0f/3.0f + y * (18 * slotScale - 1.0f/4.0f), slotScale, slotScale * itemScale) {
+            int yNew = (slot.y - 8) / 18;
+            EquipmentSlot equipmentSlot = EQUIPMENT_SLOT_ORDER[yNew];
+            return original.call(instance, new ScalableSlot(this.owner.getInventory(), slot.getIndex(), LCEUIMod.getConfig().classicCrafting ? 9 : 42, 9 + 1.0f/3.0f + yNew * (18 * slotScale - 1.0f/4.0f), slotScale, slotScale * itemScale) {
                 public void setStack(ItemStack stack) {
                     onEquipStack(owner, equipmentSlot, stack, this.getStack());
                     super.setStack(stack);
@@ -91,6 +93,12 @@ public abstract class PlayerScreenHandlerMixin {
                 public boolean canTakeItems(PlayerEntity playerEntity) {
                     ItemStack itemStack = this.getStack();
                     return (itemStack.isEmpty() || playerEntity.isCreative() || !EnchantmentHelper.hasBindingCurse(itemStack)) && super.canTakeItems(playerEntity);
+                }
+
+                @Nullable
+                @Override
+                public Pair<Identifier, Identifier> getBackgroundSprite() {
+                    return Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, LCEUIMod.getConfig().ps4BackgroundSprites ? LCESurvivalInventoryScreen.EMPTY_PS4_ARMOR_SLOT_TEXTURES[yNew] : LCESurvivalInventoryScreen.EMPTY_ARMOR_SLOT_TEXTURES[yNew]);
                 }
             });
         }

@@ -28,11 +28,26 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvivalInventoryScreen.SurvivalScreenHandler> {
     private float mouseX;
     private float mouseY;
     private boolean mouseDown;
+
+    public static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[] {
+            new Identifier(LCEUIMod.MOD_ID, "item/empty_armor_slot_helmet"),
+            new Identifier(LCEUIMod.MOD_ID, "item/empty_armor_slot_chestplate"),
+            new Identifier(LCEUIMod.MOD_ID, "item/empty_armor_slot_leggings"),
+            new Identifier(LCEUIMod.MOD_ID, "item/empty_armor_slot_boots")
+    };
+
+    public static final Identifier[] EMPTY_PS4_ARMOR_SLOT_TEXTURES = new Identifier[] {
+            new Identifier(LCEUIMod.MOD_ID, "item/ps4_edition_empty_armor_slot_helmet"),
+            new Identifier(LCEUIMod.MOD_ID, "item/ps4_edition_empty_armor_slot_chestplate"),
+            new Identifier(LCEUIMod.MOD_ID, "item/ps4_edition_empty_armor_slot_leggings"),
+            new Identifier(LCEUIMod.MOD_ID, "item/ps4_edition_empty_armor_slot_boots")
+    };
 
     public LCESurvivalInventoryScreen(PlayerEntity player) {
         super(new SurvivalScreenHandler(player), player.getInventory(), Text.translatable("container.inventory"));
@@ -118,6 +133,7 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
 
 
             for(y = 0; y < 4; ++y) {
+                final int i = y;
                 final EquipmentSlot equipmentSlot = EQUIPMENT_SLOT_ORDER[y];
                 this.addSlot(new ScalableSlot(player.getInventory(), 39 - y, LCEUIMod.getConfig().classicCrafting ? 9 : 42, 9 + 1.0f/3.0f + y * (18 * slotScale - 1.0f/4.0f), slotScale, slotScale * itemScale) {
                     public void setStack(ItemStack stack) {
@@ -136,6 +152,12 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
                     public boolean canTakeItems(PlayerEntity playerEntity) {
                         ItemStack itemStack = this.getStack();
                         return (itemStack.isEmpty() || playerEntity.isCreative() || !EnchantmentHelper.hasBindingCurse(itemStack)) && super.canTakeItems(playerEntity);
+                    }
+
+                    @Nullable
+                    @Override
+                    public Pair<Identifier, Identifier> getBackgroundSprite() {
+                        return Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, LCEUIMod.getConfig().ps4BackgroundSprites ? LCESurvivalInventoryScreen.EMPTY_PS4_ARMOR_SLOT_TEXTURES[i] : LCESurvivalInventoryScreen.EMPTY_ARMOR_SLOT_TEXTURES[i]);
                     }
                 });
             }
