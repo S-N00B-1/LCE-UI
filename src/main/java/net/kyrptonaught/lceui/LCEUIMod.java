@@ -57,8 +57,10 @@ public class LCEUIMod implements ClientModInitializer {
         buf.writeBoolean(getConfig().renamedItemsHaveGoldName);
         buf.writeBoolean(getConfig().smallerItemsOutsideOfScalableSlots);
 
+        buf.writeBoolean(getConfig().compatibilityMode);
         buf.writeBoolean(getConfig().creativeInventory);
         buf.writeBoolean(getConfig().survivalInventory);
+        buf.writeBoolean(getConfig().ps4BackgroundSprites);
         buf.writeBoolean(getConfig().classicCrafting);
         buf.writeBoolean(getConfig().containerInventory);
         buf.writeBoolean(getConfig().container3x3Inventory);

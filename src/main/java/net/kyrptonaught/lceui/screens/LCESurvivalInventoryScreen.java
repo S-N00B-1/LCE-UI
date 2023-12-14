@@ -1,6 +1,7 @@
 package net.kyrptonaught.lceui.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.datafixers.util.Pair;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
@@ -81,14 +82,6 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
         InventoryScreen.drawEntity(context, i + (LCEUIMod.getConfig().classicCrafting ? 48 : 81), j + 57, 22, (float)(i + (LCEUIMod.getConfig().classicCrafting ? 48 : 81)) - this.mouseX, (float)(j + 22) - this.mouseY, this.client.player);
     }
 
-    public boolean isPointWithinBounds(int x, int y, int width, int height, double pointX, double pointY) {
-        return super.isPointWithinBounds(x, y, width, height, pointX, pointY);
-    }
-
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return super.mouseClicked(mouseX, mouseY, button);
-    }
-
     public boolean mouseReleased(double mouseX, double mouseY, int button) {
         if (this.mouseDown) {
             this.mouseDown = false;
@@ -128,9 +121,8 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
                 final EquipmentSlot equipmentSlot = EQUIPMENT_SLOT_ORDER[y];
                 this.addSlot(new ScalableSlot(player.getInventory(), 39 - y, LCEUIMod.getConfig().classicCrafting ? 9 : 42, 9 + 1.0f/3.0f + y * (18 * slotScale - 1.0f/4.0f), slotScale, slotScale * itemScale) {
                     public void setStack(ItemStack stack) {
-                        ItemStack itemStack = this.getStack();
+                        PlayerScreenHandler.onEquipStack(player, equipmentSlot, stack, this.getStack());
                         super.setStack(stack);
-                        player.onEquipStack(equipmentSlot, itemStack, stack);
                     }
 
                     public int getMaxItemCount() {
@@ -158,7 +150,16 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
                 this.addSlot(new ScalableSlot(player.getInventory(), x, 9 + x * (18 * slotScale - 1.0f/4.0f), 124, slotScale, slotScale * itemScale));
             }
 
-            this.addSlot(new ScalableSlot(player.getInventory(), 40, LCEUIMod.getConfig().classicCrafting ? 74 : 107, 51 + 1.0f/3.0f, slotScale, slotScale * itemScale));
+            this.addSlot(new ScalableSlot(player.getInventory(), 40, LCEUIMod.getConfig().classicCrafting ? 74 : 107, 51 + 1.0f/3.0f, slotScale, slotScale * itemScale) {
+                public void setStack(ItemStack stack) {
+                    PlayerScreenHandler.onEquipStack(player, EquipmentSlot.OFFHAND, stack, this.getStack());
+                    super.setStack(stack);
+                }
+
+                public Pair<Identifier, Identifier> getBackgroundSprite() {
+                    return LCEUIMod.getConfig().ps4BackgroundSprites ? Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(LCEUIMod.MOD_ID, "item/ps4_edition_empty_armor_slot_shield")) : null;
+                }
+            });
         }
 
         public boolean canUse(PlayerEntity player) {

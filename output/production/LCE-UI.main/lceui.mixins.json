@@ -13,6 +13,8 @@
     "container.ContainerInventoryAccessor",
     "container.Generic3x3ContainerMixin",
     "container.GenericContainerMixin",
+    "container.GenericContainerScreenHandlerMixin",
+    "container.HandledScreenMixin",
     "container.HopperScreenMixin",
     "container.ShulkerBoxScreenMixin",
     "creativeinv.CreativeInvMixin",
@@ -20,7 +22,8 @@
     "sign.AbstractSignScreenMixin",
     "survivalinv.InventoryMixin",
     "titlescreen.TitleScreenMixin",
-    "whatsthis.HandledScreenMixin"
+    "whatsthis.HandledScreenMixin",
+    "survivalinv.PlayerScreenHandlerMixin"
   ],
   "injectors": {
     "maxShiftBy": 5,

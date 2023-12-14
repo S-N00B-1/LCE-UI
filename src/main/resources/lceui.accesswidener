@@ -7,3 +7,4 @@ accessible field net/minecraft/client/gui/screen/TitleScreen backgroundRenderer 
 accessible method net/minecraft/client/gui/screen/ingame/HandledScreen isPointWithinBounds (IIIIDD)Z
 
 accessible class net/minecraft/client/font/TextRenderer$Drawer
+accessible method net/minecraft/screen/PlayerScreenHandler onEquipStack (Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)V

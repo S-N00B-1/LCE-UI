@@ -1,5 +1,7 @@
 package net.kyrptonaught.lceui.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -7,6 +9,7 @@ import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.util.ScalableSlot;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
@@ -26,31 +29,45 @@ public class ScalableSlotMixin {
 
     @Shadow protected int y;
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawSlotHighlight(Lnet/minecraft/client/gui/DrawContext;III)V"))
-    private void drawSlotHighlightRedirect(DrawContext context, int x, int y, int z, @Local(name = "slot") Slot slot) {
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawSlotHighlight(Lnet/minecraft/client/gui/DrawContext;III)V"))
+    private void drawSlotHighlightRedirect(DrawContext context, int x, int y, int z, Operation<Void> original, @Local(name = "slot") Slot slot) {
         MatrixStack matrices = context.getMatrices();
         if (slot instanceof ScalableSlot scalableSlot) {
             matrices.translate(scalableSlot.floatX, scalableSlot.floatY, z);
             matrices.scale(scalableSlot.scale, scalableSlot.scale, scalableSlot.scale);
-            HandledScreen.drawSlotHighlight(context, 0, 0, 0);
+            original.call(context, 0, 0, 0);
             matrices.scale(1.0f/scalableSlot.scale, 1.0f/scalableSlot.scale, 1.0f/scalableSlot.scale);
             matrices.translate(-scalableSlot.floatX, -scalableSlot.floatY, -z);
         } else {
-            HandledScreen.drawSlotHighlight(context, x, y, z);
+            original.call(context, x, y, z);
         }
     }
 
-    @Redirect(method = "drawSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"))
-    private void fill(DrawContext context, int x, int y, int maxX, int maxY, int color, @Local(name = "slot") Slot slot) {
+    @WrapOperation(method = "drawSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"))
+    private void fill(DrawContext context, int x, int y, int maxX, int maxY, int color, Operation<Void> original, @Local(name = "slot") Slot slot) {
         MatrixStack matrices = context.getMatrices();
         if (slot instanceof ScalableSlot scalableSlot) {
             matrices.translate(x, y, 0);
             matrices.scale(scalableSlot.scale, scalableSlot.scale, 0);
-            context.fill(0, 0, 16, 16, color);
+            original.call(context, 0, 0, 16, 16, color);
             matrices.scale(1.0f/scalableSlot.scale, 1.0f/scalableSlot.scale, 0);
             matrices.translate(-x, -y, 0);
         } else {
-            context.fill(x, y, maxX, maxY, color);
+            original.call(context, x, y, maxX, maxY, color);
+        }
+    }
+
+    @WrapOperation(method = "drawSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawSprite(IIIIILnet/minecraft/client/texture/Sprite;)V"))
+    private void drawSprite(DrawContext instance, int x, int y, int z, int width, int height, Sprite sprite, Operation<Void> original) {
+        MatrixStack matrices = instance.getMatrices();
+        if (ScalableSlot.scalableSlotToDraw != null) {
+            matrices.translate(ScalableSlot.scalableSlotToDraw.floatX, ScalableSlot.scalableSlotToDraw.floatY, z);
+            matrices.scale(ScalableSlot.scalableSlotToDraw.scale, ScalableSlot.scalableSlotToDraw.scale, ScalableSlot.scalableSlotToDraw.scale);
+            original.call(instance, 0, 0, 0, width, height, sprite);
+            matrices.scale(1.0f/ScalableSlot.scalableSlotToDraw.scale, 1.0f/ScalableSlot.scalableSlotToDraw.scale, 1.0f/ScalableSlot.scalableSlotToDraw.scale);
+            matrices.translate(-ScalableSlot.scalableSlotToDraw.floatX, -ScalableSlot.scalableSlotToDraw.floatY, -z);
+        } else {
+            original.call(instance, x, y, z, width, height, sprite);
         }
     }
 

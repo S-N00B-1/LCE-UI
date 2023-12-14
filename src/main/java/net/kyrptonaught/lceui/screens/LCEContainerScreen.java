@@ -43,6 +43,7 @@ public class LCEContainerScreen extends HandledScreen<LCEContainerScreen.LCEGene
         this.client.getSoundManager().play(PositionedSoundInstance.master(LCESounds.UI_BACK, 1.0f, 3.0f));
     }
 
+    @Override
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
         LCEDrawableHelper.drawText(context, this.textRenderer, this.title, 9 + 1.0f/3.0f, 7 + 1.0f/3.0f, 2.0f/3.0f, 0x373737);
         LCEDrawableHelper.drawText(context, this.textRenderer, Text.translatable("container.inventory"), 9 + 1.0f/3.0f, this.playerInventoryTitleY, 2.0f/3.0f, 0x373737);

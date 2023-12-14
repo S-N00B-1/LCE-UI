@@ -10,10 +10,14 @@ public class LCEConfigOptions implements AbstractConfigFile {
     public boolean renamedItemsHaveGoldName = true;
     @Comment("Makes items smaller even outside of scalable slots")
     public boolean smallerItemsOutsideOfScalableSlots = true;
+    @Comment("Enables compatibility mode (screens are done entirely through mixins)")
+    public boolean compatibilityMode = false;
     @Comment("Enables the LCE Creative mode inventory")
     public boolean creativeInventory = true;
     @Comment("Enables the LCE Survival mode inventory")
     public boolean survivalInventory = true;
+    @Comment("Makes the inventory armor and off-hand slots have the PS4 empty icons")
+    public boolean ps4BackgroundSprites = true;
     @Comment("Enables classic crafting (normal Java crafting)")
     public boolean classicCrafting = false;
     @Comment("Enables the LCE generic container inventory")
