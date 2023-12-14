@@ -1,6 +1,5 @@
 package net.kyrptonaught.lceui.whatsThis;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
@@ -71,7 +70,7 @@ public class DescriptionRenderer {
 
         BakedModel bakedModel = renderingDescription.getDisplayModel(client);
 
-        render(client, context, x, 20, renderingDescription.getNameTranslation(), renderingDescription.getDescTranslation(), renderingDescription.getItemStack(), bakedModel, bakedModel != null);
+        render(client, context, x, 20 + (FabricLoader.getInstance().isModLoaded("raised") ? dev.yurisuika.raised.client.option.RaisedConfig.getHud() : 0), renderingDescription.getNameTranslation(), renderingDescription.getDescTranslation(), renderingDescription.getItemStack(), bakedModel, bakedModel != null);
     }
 
     private static void render(MinecraftClient client, DrawContext context, int x, int y, Text titleText, Text descriptionText, ItemStack stack, BakedModel model, boolean displayModel) {
@@ -93,7 +92,7 @@ public class DescriptionRenderer {
         if (displayModel) {
             float scale = 4.0f / 3.0f;
             float slotX = x + 218.0f / 3.0f;
-            float slotY = 9.0f / 3.0f + lineHeight;
+            float slotY = y + 9.0f / 3.0f + lineHeight - 20;
 
             LCEDrawableHelper.drawTexture(slot, context, slotX, slotY, 0, 0, 64.0f / 3.0f, 64.0f / 3.0f, 64.0f / 3.0f, 64.0f / 3.0f);
             renderGuiItemModel(context, client, stack, slotX + 8.0f / 3.0f, slotY + 8.0f / 3.0f, 0, scale * 54.0f / 64.0f, model);

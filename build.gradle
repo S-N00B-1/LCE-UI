@@ -38,6 +38,14 @@ repositories {
 			includeGroup "maven.modrinth"
 		}
 	}
+	ivy {
+		url = "https://github.com/yurisuika"
+		patternLayout {
+			artifact "[organisation]/releases/download/[revision]/[module]-[revision].jar"
+			m2compatible = true
+		}
+		metadataSources { artifact() }
+	}
 }
 
 dependencies {
@@ -59,7 +67,11 @@ dependencies {
 		exclude group: 'com.google.code.gson'
 		exclude group: 'com.google.guava'
 	}
+
 	modImplementation 'org.aperlambda:lambdajcommon:1.8.1'
+
+	// Mod support (not required)
+	modImplementation "Raised:raised-fabric-${project.minecraft_version}:3.1.0"
 }
 
 loom {
