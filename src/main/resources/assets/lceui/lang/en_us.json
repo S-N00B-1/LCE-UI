@@ -1017,7 +1017,7 @@
   "item.explorerscompass.explorerscompass.description": "Allows you to locate a specified structure's location.",
 
   "_comment": "Mod: Upgraded Ender Chests",
-  "block.upgradedechests.spatialchest.description": "An Ender Chest with double the normal capacity. The top half of this Ender Chest is present in the normal variant.",
+  "block.upgradedechests.spatialchest.description": "An Ender Chest with double the normal capacity. The top half of this Ender Chest's inventory can also be accessed from normal Ender Chests.",
   "block.upgradedechests.riftchest.description": "Allows other players to access the Ender Chest inventory of the person who placed it.",
 
   "_comment": "Mod: Upgraded Shulkers",

@@ -22,6 +22,9 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 
+import java.util.HashMap;
+import java.util.Map;
+
 // Hello.
 // Before you look through rendering code,
 // be warned that you may find some things weird.
@@ -51,6 +54,7 @@ public class LCEUIMod implements ClientModInitializer {
             }
         });
     }
+
 
     public static void syncConfig() {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());

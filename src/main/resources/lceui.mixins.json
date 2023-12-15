@@ -16,6 +16,7 @@
     "container.GenericContainerMixin",
     "container.GenericContainerScreenHandlerMixin",
     "container.HandledScreenMixin",
+    "container.HopperScreenHandlerMixin",
     "container.HopperScreenMixin",
     "container.ShulkerBoxScreenMixin",
     "creativeinv.CreativeInvMixin",
