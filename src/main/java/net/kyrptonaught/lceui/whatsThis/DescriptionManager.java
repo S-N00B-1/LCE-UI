@@ -9,6 +9,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Language;
 
 import java.util.*;
 
@@ -30,7 +31,7 @@ public class DescriptionManager {
         return Optional.empty();
     }
 
-    public ItemDescription getDescriptionForEntity(EntityType<?> entity) {
+    public Optional<ItemDescription> getDescriptionForEntity(EntityType<?> entity) {
         Identifier id = Registries.ENTITY_TYPE.getId(entity);
         id = new Identifier(id.getNamespace(), "entity/" + id.getPath());
         ItemDescription blockDescription = itemDescriptions.getOrDefault(id, new ItemDescription());
@@ -38,7 +39,7 @@ public class DescriptionManager {
         return getDescription(id, blockDescription, entity.getTranslationKey(), false);
     }
 
-    public ItemDescription getDescriptionForBlock(BlockState blockState) {
+    public Optional<ItemDescription> getDescriptionForBlock(BlockState blockState) {
         Identifier id = Registries.BLOCK.getId(blockState.getBlock());
         id = new Identifier(id.getNamespace(), "block/" + id.getPath());
         ItemDescription blockDescription = itemDescriptions.getOrDefault(id, new ItemDescription());
@@ -46,7 +47,7 @@ public class DescriptionManager {
         return getDescription(id, blockDescription, blockState.getBlock().getTranslationKey(), true);
     }
 
-    public ItemDescription getDescriptionForItem(ItemStack itemStack) {
+    public Optional<ItemDescription> getDescriptionForItem(ItemStack itemStack) {
         ItemStack itemStack1 = itemStack.copy();
         Identifier id = Registries.ITEM.getId(itemStack1.getItem());
         id = new Identifier(id.getNamespace(), "item/" + id.getPath());
@@ -59,8 +60,9 @@ public class DescriptionManager {
         return getDescription(id, itemDescription, itemStack1.getTranslationKey(), true);
     }
 
-    private ItemDescription getDescription(Identifier itemID, ItemDescription itemDescription, String defaultKey, Boolean defaultIconDisplay) {
+    private Optional<ItemDescription> getDescription(Identifier itemID, ItemDescription itemDescription, String defaultKey, Boolean defaultIconDisplay) {
         tryInherit(itemID, itemDescription, new HashSet<>());
+        if (itemDescription.isFieldBlank(itemDescription.text.description) && !Language.getInstance().hasTranslation(defaultKey + ".description")) return Optional.empty();
         boolean isXof = false;
         Identifier foxId = EntityType.getId(EntityType.FOX);
         if (itemID.equals(new Identifier(foxId.getNamespace(), "entity/" + foxId.getPath())) && new Random().nextFloat() < 0.01f) {
@@ -81,7 +83,7 @@ public class DescriptionManager {
         if (itemDescription.isFieldBlank(itemDescription.group)) {
             itemDescription.group = findTagForID(itemID).orElse(itemID.toString());
         }
-        return itemDescription;
+        return Optional.of(itemDescription);
     }
 
     public void tryInherit(Identifier id, ItemDescription itemDescription, HashSet<Identifier> trace) {
@@ -94,12 +96,22 @@ public class DescriptionManager {
             Identifier parentID = itemDescription.getParent();
             ItemDescription parent = itemDescriptions.get(parentID);
             if (parent == null) {
-                if (id.getPath().contains("block"))
-                    parent = getDescriptionForBlock(Registries.BLOCK.get(WhatsThisInit.getCleanIdentifier(parentID)).getDefaultState());
-                else if (id.getPath().contains("item"))
-                    parent = getDescriptionForItem(Registries.ITEM.get(WhatsThisInit.getCleanIdentifier(parentID)).getDefaultStack());
-                else if (id.getPath().contains("entity"))
-                    parent = getDescriptionForEntity(Registries.ENTITY_TYPE.get(WhatsThisInit.getCleanIdentifier(id)));
+                if (id.getPath().contains("block")) {
+                    Optional<ItemDescription> optional = getDescriptionForBlock(Registries.BLOCK.get(WhatsThisInit.getCleanIdentifier(parentID)).getDefaultState());
+                    if (optional.isPresent()) {
+                        parent = optional.get();
+                    }
+                } else if (id.getPath().contains("item")) {
+                    Optional<ItemDescription> optional = getDescriptionForItem(Registries.ITEM.get(WhatsThisInit.getCleanIdentifier(parentID)).getDefaultStack());
+                    if (optional.isPresent()) {
+                        parent = optional.get();
+                    }
+                } else if (id.getPath().contains("entity")) {
+                    Optional<ItemDescription> optional = getDescriptionForEntity(Registries.ENTITY_TYPE.get(WhatsThisInit.getCleanIdentifier(id)));
+                    if (optional.isPresent()) {
+                        parent = optional.get();
+                    }
+                }
             }
             if (parent != null) {
                 tryInherit(parentID, parent, trace);

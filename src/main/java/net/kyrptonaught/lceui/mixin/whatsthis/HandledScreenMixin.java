@@ -9,7 +9,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 @Mixin(HandledScreen.class)
@@ -41,8 +42,11 @@ public class HandledScreenMixin extends Screen {
             return;
         if (WhatsThisInit.isKeybindPressed(button, InputUtil.Type.MOUSE)) {
             if (focusedSlot != null && !focusedSlot.getStack().isEmpty()) {
-                DescriptionInstance descriptionInstance = DescriptionInstance.ofItem(focusedSlot.getStack()).bindToScreen(this);
-                DescriptionRenderer.setToRender(descriptionInstance, true);
+                Optional<DescriptionInstance> optional = DescriptionInstance.ofItem(focusedSlot.getStack());
+                if (optional.isPresent()) {
+                    DescriptionInstance descriptionInstance = optional.get().bindToScreen(this);
+                    DescriptionRenderer.setToRender(descriptionInstance, true);
+                }
             }
             callbackInfoReturnable.setReturnValue(true);
         }
@@ -54,8 +58,11 @@ public class HandledScreenMixin extends Screen {
             return;
         if (WhatsThisInit.isKeybindPressed(keycode, InputUtil.Type.KEYSYM)) {
             if (focusedSlot != null && !focusedSlot.getStack().isEmpty()) {
-                DescriptionInstance descriptionInstance = DescriptionInstance.ofItem(focusedSlot.getStack()).bindToScreen(this);
-                DescriptionRenderer.setToRender(descriptionInstance, true);
+                Optional<DescriptionInstance> optional = DescriptionInstance.ofItem(focusedSlot.getStack());
+                if (optional.isPresent()) {
+                    DescriptionInstance descriptionInstance = optional.get().bindToScreen(this);
+                    DescriptionRenderer.setToRender(descriptionInstance, true);
+                }
 //                shiftAmount = x;
 //                shiftAmount = Math.max(25, this.x - 100);
 //                shiftAmount = 250;

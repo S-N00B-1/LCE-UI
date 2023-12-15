@@ -32,6 +32,7 @@ import net.minecraft.util.hit.HitResult;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 public class WhatsThisInit {
     public static DescriptionManager descriptionManager;
@@ -49,14 +50,20 @@ public class WhatsThisInit {
                 if (hit instanceof BlockHitResult blockHitResult) {
                     BlockState state = world.getBlockState(blockHitResult.getBlockPos());
                     if (!state.isAir()) {
-                        DescriptionInstance descriptionInstance = DescriptionInstance.ofBlock(world, blockHitResult.getBlockPos(), state).bindToScreen(null);
-                        DescriptionRenderer.setToRender(descriptionInstance, false);
+                        Optional<DescriptionInstance> optional = DescriptionInstance.ofBlock(world, blockHitResult.getBlockPos(), state);
+                        if (optional.isPresent()) {
+                            DescriptionInstance descriptionInstance = optional.get().bindToScreen(null);
+                            DescriptionRenderer.setToRender(descriptionInstance, false);
+                        }
                     }
                 } else if (hit instanceof EntityHitResult entityHitResult) {
                     Entity entity = entityHitResult.getEntity();
                     if (entity.isAlive()) {
-                        DescriptionInstance descriptionInstance = DescriptionInstance.ofEntity(entity).bindToScreen(null);
-                        DescriptionRenderer.setToRender(descriptionInstance, false);
+                        Optional<DescriptionInstance> optional = DescriptionInstance.ofEntity(entity);
+                        if (optional.isPresent()) {
+                            DescriptionInstance descriptionInstance = optional.get().bindToScreen(null);
+                            DescriptionRenderer.setToRender(descriptionInstance, false);
+                        }
                     }
                 }
             }

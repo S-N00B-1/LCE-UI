@@ -11,12 +11,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class DescriptionInstance {
     private ItemStack displayStack;
@@ -27,8 +27,9 @@ public class DescriptionInstance {
     private float openTicks = 150.0f;
 
 
-    public static DescriptionInstance ofItem(ItemStack stack) {
-        return ofItem(stack, WhatsThisInit.descriptionManager.getDescriptionForItem(stack));
+    public static Optional<DescriptionInstance> ofItem(ItemStack stack) {
+        Optional<ItemDescription> optional = WhatsThisInit.descriptionManager.getDescriptionForItem(stack);
+        return optional.map(itemDescription -> ofItem(stack, itemDescription));
     }
 
     public static DescriptionInstance ofItem(ItemStack stack, ItemDescription itemDescription) {
@@ -38,8 +39,9 @@ public class DescriptionInstance {
         return instance;
     }
 
-    public static DescriptionInstance ofEntity(Entity entity) {
-        return ofEntity(entity, WhatsThisInit.descriptionManager.getDescriptionForEntity(entity.getType()));
+    public static Optional<DescriptionInstance> ofEntity(Entity entity) {
+        Optional<ItemDescription> optional = WhatsThisInit.descriptionManager.getDescriptionForEntity(entity.getType());
+        return optional.map(itemDescription -> ofEntity(entity, itemDescription));
     }
 
     public static DescriptionInstance ofEntity(Entity entity, ItemDescription itemDescription) {
@@ -49,8 +51,10 @@ public class DescriptionInstance {
         return instance;
     }
 
-    public static DescriptionInstance ofBlock(World world, BlockPos pos, BlockState blockState) {
-        return ofBlock(world, pos, blockState, WhatsThisInit.descriptionManager.getDescriptionForBlock(blockState));
+    public static Optional<DescriptionInstance> ofBlock(World world, BlockPos pos, BlockState blockState) {
+        Optional<ItemDescription> optional = WhatsThisInit.descriptionManager.getDescriptionForBlock(blockState);
+        if (optional.isEmpty()) return Optional.empty();
+        return Optional.of(ofBlock(world, pos, blockState, WhatsThisInit.descriptionManager.getDescriptionForBlock(blockState).get()));
     }
 
     public static DescriptionInstance ofBlock(World world, BlockPos pos, BlockState blockState, ItemDescription itemDescription) {
