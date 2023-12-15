@@ -1114,5 +1114,9 @@
   "block.botanypots.hopper_brown_botany_pot.description": "A version of the Brown Botany Pot that automatically harvests and stores your crops.",
   "block.botanypots.hopper_green_botany_pot.description": "A version of the Green Botany Pot that automatically harvests and stores your crops.",
   "block.botanypots.hopper_red_botany_pot.description": "A version of the Red Botany Pot that automatically harvests and stores your crops.",
-  "block.botanypots.hopper_black_botany_pot.description": "A version of the Black Botany Pot that automatically harvests and stores your crops."
+  "block.botanypots.hopper_black_botany_pot.description": "A version of the Black Botany Pot that automatically harvests and stores your crops.",
+
+  "_comment": "Mod: Backpacked",
+  "item.backpacked.backpack.description": "Can be used to store items.",
+  "block.backpacked.backpack_shelf.description": "Displays your backpack."
 }
