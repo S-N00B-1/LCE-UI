@@ -24,8 +24,16 @@ public class HotbarMixin {
         return formatting;
     }
 
-    @WrapOperation(method = "renderHeldItemTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
-    private int changeTextRenderer(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color, Operation<Integer> original) {
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
+    private int changeTextRenderer1(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color, Operation<Integer> original) {
+        if (LCEUIMod.getConfig().hotbarText) {
+            return (int) LCEDrawableHelper.drawTextWithShadow(instance, textRenderer, text, -textRenderer.getWidth(text) / 3.0f, y - textRenderer.fontHeight / 3.0f, 2.0f/3.0f, color);
+        }
+        return original.call(instance, textRenderer, text, x, y, color);
+    }
+
+    @WrapOperation(method = "renderHeldItemTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I", ordinal = 0))
+    private int changeTextRenderer2(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color, Operation<Integer> original) {
         if (LCEUIMod.getConfig().hotbarText) {
             return (int) LCEDrawableHelper.drawTextWithShadow(instance, textRenderer, text, (this.scaledWidth - (textRenderer.getWidth(text) * 2.0f/3.0f)) / 2.0f, y - textRenderer.fontHeight / 3.0f, 2.0f/3.0f, color);
         }

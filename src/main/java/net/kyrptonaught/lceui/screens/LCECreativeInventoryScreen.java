@@ -12,7 +12,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
 import net.minecraft.client.gui.screen.ingame.CreativeInventoryListener;
+import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -33,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Environment(value=EnvType.CLIENT)
-public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreativeInventoryScreen.CreativeScreenHandler> {
+public class LCECreativeInventoryScreen extends HandledScreen<LCECreativeInventoryScreen.CreativeScreenHandler> {
     static final SimpleInventory INVENTORY = new SimpleInventory(50);
     private static int selectedTab = 0;
     private CreativeInventoryListener listener;
@@ -325,6 +327,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        this.client.getSoundManager().play(PositionedSoundInstance.master(LCESounds.CLICK_STEREO, 1.0f, 3.0f));
         if (button == 0) {
             double d = mouseX - (double)this.x;
             double e = mouseY - (double)this.y;
@@ -353,6 +356,7 @@ public class LCECreativeInventoryScreen extends AbstractInventoryScreen<LCECreat
     }
 
     public void incrementItemGroup(int amount) {
+        this.client.getSoundManager().play(PositionedSoundInstance.master(LCESounds.UI_MOVECURSOR, this.client.world == null || this.client.world.random.nextBoolean() ? 1.0f : 1.05f, 3.0f));
         if (selectedTab + amount >= this.getCurrentItemGroupsSize()) {
             this.cycleItemGroupGroup(1);
             this.setSelectedTab(currentItemGroups[0]);

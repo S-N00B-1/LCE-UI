@@ -8,5 +8,10 @@
     "sounds": [
       "lceui:ui_back"
     ]
+  },
+  "ui_movecursor": {
+    "sounds": [
+      "lceui:ui_movecursor"
+    ]
   }
 }
