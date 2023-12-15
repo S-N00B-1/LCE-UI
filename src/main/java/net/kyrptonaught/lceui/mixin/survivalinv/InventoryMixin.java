@@ -66,22 +66,28 @@ public abstract class InventoryMixin extends AbstractInventoryScreen<LCESurvival
         }
     }
 
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;renderBackground(Lnet/minecraft/client/gui/DrawContext;)V"))
+    private void renderOnlyIfNotLCE1(InventoryScreen instance, DrawContext context, Operation<Void> original) {
+        if (!LCEUIMod.getConfig().survivalInventory) {
+            original.call(instance, context);
+        }
+    }
+
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/recipebook/RecipeBookWidget;render(Lnet/minecraft/client/gui/DrawContext;IIF)V"))
-    private void renderOnlyIfNotLCE1(RecipeBookWidget instance, DrawContext context, int mouseX, int mouseY, float delta, Operation<Void> original) {
+    private void renderOnlyIfNotLCE2(RecipeBookWidget instance, DrawContext context, int mouseX, int mouseY, float delta, Operation<Void> original) {
         if (!LCEUIMod.getConfig().survivalInventory) {
             original.call(instance, context, mouseX, mouseY, delta);
         }
     }
 
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/recipebook/RecipeBookWidget;drawGhostSlots(Lnet/minecraft/client/gui/DrawContext;IIZF)V"))
-    private void renderOnlyIfNotLCE2(RecipeBookWidget instance, DrawContext context, int x, int y, boolean notInventory, float delta, Operation<Void> original) {
+    private void renderOnlyIfNotLCE3(RecipeBookWidget instance, DrawContext context, int x, int y, boolean notInventory, float delta, Operation<Void> original) {
         if (!LCEUIMod.getConfig().survivalInventory) {
             original.call(instance, context, x, y, notInventory, delta);
         }
     }
-
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/recipebook/RecipeBookWidget;drawTooltip(Lnet/minecraft/client/gui/DrawContext;IIII)V"))
-    private void renderOnlyIfNotLCE3(RecipeBookWidget instance, DrawContext context, int x, int y, int mouseX, int mouseY, Operation<Void> original) {
+    private void renderOnlyIfNotLCE4(RecipeBookWidget instance, DrawContext context, int x, int y, int mouseX, int mouseY, Operation<Void> original) {
         if (!LCEUIMod.getConfig().survivalInventory) {
             original.call(instance, context, x, y, mouseX, mouseY);
         }

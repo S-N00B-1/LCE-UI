@@ -12,6 +12,7 @@
     "chat.ChatMixin",
     "container.ContainerInventoryAccessor",
     "container.Generic3x3ContainerMixin",
+    "container.Generic3x3ContainerScreenHandlerMixin",
     "container.GenericContainerMixin",
     "container.GenericContainerScreenHandlerMixin",
     "container.HandledScreenMixin",

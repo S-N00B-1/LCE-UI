@@ -22,6 +22,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class LCEShulkerBoxScreen extends HandledScreen<LCEShulkerBoxScreen.LCEShulkerBoxScreenHandler> implements ScreenHandlerProvider<LCEShulkerBoxScreen.LCEShulkerBoxScreenHandler> {
+    public static final Identifier TEXTURE = new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/shulker_box.png");
+
     public LCEShulkerBoxScreen(ShulkerBoxScreenHandler handler, PlayerEntity player, Text title) {
         super(new LCEShulkerBoxScreenHandler(player, handler), player.getInventory(), title);
         this.backgroundWidth = 430/3;
@@ -57,7 +59,7 @@ public class LCEShulkerBoxScreen extends HandledScreen<LCEShulkerBoxScreen.LCESh
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        LCEDrawableHelper.drawTexture(new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/shulker_box.png"), context, i, j, 0, 0, 430.0f/3.0f, 415.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
+        LCEDrawableHelper.drawTexture(TEXTURE, context, i, j, 0, 0, 430.0f/3.0f, 415.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
     }
 
     @Environment(EnvType.CLIENT)

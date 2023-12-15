@@ -21,6 +21,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class LCEContainerScreen extends HandledScreen<LCEContainerScreen.LCEGenericContainerScreenHandler> implements ScreenHandlerProvider<LCEContainerScreen.LCEGenericContainerScreenHandler> {
+    public static final Identifier TEXTURE = new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/generic_54.png");
+
     private final int rows;
 
     public LCEContainerScreen(GenericContainerScreenHandler handler, PlayerEntity player, Text title) {
@@ -59,10 +61,9 @@ public class LCEContainerScreen extends HandledScreen<LCEContainerScreen.LCEGene
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
-        Identifier texture = new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/generic_54.png");
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        LCEDrawableHelper.drawTexture(texture, context, i, j, 0, 0, 430.0f/3.0f, (this.rows * 42 + 50.0f)/3.0f, 1024.0f/3.0f, 1024.0f/3.0f);
-        LCEDrawableHelper.drawTexture(texture, context, i, j + this.rows * 42.0f/3.0f + 16 + 2.0f/3.0f, 0, 442, 430.0f/3.0f, 239.0f/3.0f, 1024.0f/3.0f, 1024.0f/3.0f);
+        LCEDrawableHelper.drawTexture(TEXTURE, context, i, j, 0, 0, 430.0f/3.0f, (this.rows * 42 + 50.0f)/3.0f, 1024.0f/3.0f, 1024.0f/3.0f);
+        LCEDrawableHelper.drawTexture(TEXTURE, context, i, j + this.rows * 42.0f/3.0f + 16 + 2.0f/3.0f, 0, 442, 430.0f/3.0f, 239.0f/3.0f, 1024.0f/3.0f, 1024.0f/3.0f);
     }
 
     @Environment(EnvType.CLIENT)

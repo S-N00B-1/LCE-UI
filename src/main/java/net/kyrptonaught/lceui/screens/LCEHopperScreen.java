@@ -23,6 +23,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class LCEHopperScreen extends HandledScreen<LCEHopperScreen.LCEHopperScreenHandler> implements ScreenHandlerProvider<LCEHopperScreen.LCEHopperScreenHandler> {
+    public static final Identifier TEXTURE = new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/hopper.png");
+
     public LCEHopperScreen(HopperScreenHandler handler, PlayerEntity player, Text title) {
         super(new LCEHopperScreenHandler(player, handler), player.getInventory(), title);
         this.backgroundWidth = 430/3;
@@ -58,7 +60,7 @@ public class LCEHopperScreen extends HandledScreen<LCEHopperScreen.LCEHopperScre
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
-        LCEDrawableHelper.drawTexture(new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/hopper.png"), context, i, j, 0, 0, 430.0f/3.0f, 321.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
+        LCEDrawableHelper.drawTexture(TEXTURE, context, i, j, 0, 0, 430.0f/3.0f, 321.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
     }
 
     @Environment(EnvType.CLIENT)

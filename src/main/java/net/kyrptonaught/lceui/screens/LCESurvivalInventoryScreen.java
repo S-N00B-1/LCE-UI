@@ -31,6 +31,8 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvivalInventoryScreen.SurvivalScreenHandler> {
+    public static final Identifier TEXTURE = new Identifier(LCEUIMod.MOD_ID, "textures/gui/survival_inventory.png");
+
     private float mouseX;
     private float mouseY;
     private boolean mouseDown;
@@ -92,7 +94,7 @@ public class LCESurvivalInventoryScreen extends AbstractInventoryScreen<LCESurvi
         matrices.scale(1.0f/3.0f, 1.0f/3.0f, 1.0f);
         matrices.translate(-this.x, -this.y, 0);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        LCEDrawableHelper.drawTexture(new Identifier(LCEUIMod.MOD_ID, "textures/gui/survival_inventory.png"), context, i, j, LCEUIMod.getConfig().classicCrafting ? 431 : 0, 0, 431, 435, 1024, 1024);
+        LCEDrawableHelper.drawTexture(TEXTURE, context, i, j, LCEUIMod.getConfig().classicCrafting ? 431 : 0, 0, 431, 435, 1024, 1024);
         matrices.pop();
         InventoryScreen.drawEntity(context, i + (LCEUIMod.getConfig().classicCrafting ? 48 : 81), j + 57, 22, (float)(i + (LCEUIMod.getConfig().classicCrafting ? 48 : 81)) - this.mouseX, (float)(j + 22) - this.mouseY, this.client.player);
     }

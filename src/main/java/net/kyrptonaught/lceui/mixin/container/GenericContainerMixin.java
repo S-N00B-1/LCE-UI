@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.kyrptonaught.lceui.LCEDrawableHelper;
 import net.kyrptonaught.lceui.LCEUIMod;
+import net.kyrptonaught.lceui.screens.LCEContainerScreen;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.GenericContainerScreen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -44,11 +45,8 @@ public abstract class GenericContainerMixin extends HandledScreen<GenericContain
     @WrapOperation(method = "drawBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V", ordinal = 0))
     private void drawBackground1(DrawContext instance, Identifier texture, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
         if (LCEUIMod.getConfig().containerInventory) {
-            this.backgroundWidth = 430/3;
-            this.backgroundHeight = (289 + this.rows * 42)/3;
-            Identifier newTexture = new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/generic_54.png");
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            LCEDrawableHelper.drawTexture(newTexture, instance, x, y, 0, 0, 430.0f/3.0f, (this.rows * 42 + 50.0f)/3.0f, 1024.0f/3.0f, 1024.0f/3.0f);
+            LCEDrawableHelper.drawTexture(LCEContainerScreen.TEXTURE, instance, x, y, 0, 0, 430.0f/3.0f, (this.rows * 42 + 50.0f)/3.0f, 1024.0f/3.0f, 1024.0f/3.0f);
         } else {
             original.call(instance, texture, x, y, u, v, width, height);
         }
@@ -57,8 +55,7 @@ public abstract class GenericContainerMixin extends HandledScreen<GenericContain
     @WrapOperation(method = "drawBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V", ordinal = 1))
     private void drawBackground2(DrawContext instance, Identifier texture, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
         if (LCEUIMod.getConfig().containerInventory) {
-            Identifier newTexture = new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/generic_54.png");
-            LCEDrawableHelper.drawTexture(newTexture, instance, x, y - this.rows * 18 - 17 + this.rows * 42.0f/3.0f + 16 + 2.0f/3.0f, 0, 442, 430.0f/3.0f, 239.0f/3.0f, 1024.0f/3.0f, 1024.0f/3.0f);
+            LCEDrawableHelper.drawTexture(LCEContainerScreen.TEXTURE, instance, x, y - this.rows * 18 - 17 + this.rows * 42.0f/3.0f + 16 + 2.0f/3.0f, 0, 442, 430.0f/3.0f, 239.0f/3.0f, 1024.0f/3.0f, 1024.0f/3.0f);
         } else {
             original.call(instance, texture, x, y, u, v, width, height);
         }

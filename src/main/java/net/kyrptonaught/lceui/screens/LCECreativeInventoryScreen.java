@@ -36,6 +36,8 @@ import java.util.Map;
 
 @Environment(value=EnvType.CLIENT)
 public class LCECreativeInventoryScreen extends HandledScreen<LCECreativeInventoryScreen.CreativeScreenHandler> {
+    public static final Identifier TEXTURE = new Identifier(LCEUIMod.MOD_ID, "textures/gui/creativeinv/creative_inventory.png");
+
     static final SimpleInventory INVENTORY = new SimpleInventory(50);
     private static int selectedTab = 0;
     private CreativeInventoryListener listener;
@@ -265,7 +267,7 @@ public class LCECreativeInventoryScreen extends HandledScreen<LCECreativeInvento
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(r, g, b, a);
 
-        LCEDrawableHelper.drawTexture(new Identifier(LCEUIMod.MOD_ID, "textures/gui/creativeinv/creative_inventory.png"), context, x, y, width/3.0f, height/3.0f, u, v, width, height, 1024, 1024);
+        LCEDrawableHelper.drawTexture(TEXTURE, context, x, y, width/3.0f, height/3.0f, u, v, width, height, 1024, 1024);
         matrices.pop();
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
     }

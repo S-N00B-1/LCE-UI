@@ -23,6 +23,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class LCE3x3ContainerScreen extends HandledScreen<LCE3x3ContainerScreen.LCE3x3GenericContainerScreenHandler> implements ScreenHandlerProvider<LCE3x3ContainerScreen.LCE3x3GenericContainerScreenHandler> {
+    public static final Identifier TEXTURE = new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/generic_3x3.png");
+
     public LCE3x3ContainerScreen(Generic3x3ContainerScreenHandler handler, PlayerEntity player, Text title) {
         super(new LCE3x3GenericContainerScreenHandler(player, handler), player.getInventory(), title);
         this.backgroundWidth = 430/3;
@@ -58,7 +60,7 @@ public class LCE3x3ContainerScreen extends HandledScreen<LCE3x3ContainerScreen.L
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        LCEDrawableHelper.drawTexture(new Identifier(LCEUIMod.MOD_ID, "textures/gui/container/generic_3x3.png"), context, i, j, 0, 0, 430.0f/3.0f, 405.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
+        LCEDrawableHelper.drawTexture(TEXTURE, context, i, j, 0, 0, 430.0f/3.0f, 405.0f/3.0f, 512.0f/3.0f, 512.0f/3.0f);
     }
 
     @Environment(EnvType.CLIENT)
