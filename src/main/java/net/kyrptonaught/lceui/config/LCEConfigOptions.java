@@ -10,6 +10,8 @@ public class LCEConfigOptions implements AbstractConfigFile {
     public boolean renamedItemsHaveGoldName = true;
     @Comment("Makes items smaller even outside of scalable slots")
     public boolean smallerItemsOutsideOfScalableSlots = true;
+    @Comment("Changes the hotbar's tooltip to LCE's tooltip")
+    public boolean hotbarText = true;
     @Comment("Enables compatibility mode (screens are done entirely through mixins)")
     public boolean compatibilityMode = false;
     @Comment("Enables the LCE Creative mode inventory")

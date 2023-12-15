@@ -30,6 +30,7 @@
   "options.lceui.general.textShadows": "Closer Text Shadows",
   "options.lceui.general.renamedItemsHaveGoldName": "Renamed Items Have Gold Name",
   "options.lceui.general.smallerItemsOutsideOfScalableSlots": "Smaller Items Outside of Scalable Slots",
+  "options.lceui.general.hotbarText": "Hotbar Text",
   "options.lceui.screens": "Screens",
   "options.lceui.screens.compatibilityMode": "Compatibility Mode",
   "options.lceui.screens.compatibilityMode.tooltip": "Turn this on if other mods are not working properly",

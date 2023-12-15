@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.impl.client.screen.ScreenEventFactory;
+import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.kyrptconfig.config.ConfigManager;
 import net.kyrptonaught.lceui.config.LCEConfigOptions;
 import net.kyrptonaught.lceui.creativeinv.CustomItemGroup;
@@ -56,6 +57,7 @@ public class LCEUIMod implements ClientModInitializer {
         buf.writeBoolean(getConfig().closerTextShadows);
         buf.writeBoolean(getConfig().renamedItemsHaveGoldName);
         buf.writeBoolean(getConfig().smallerItemsOutsideOfScalableSlots);
+        buf.writeBoolean(getConfig().hotbarText);
 
         buf.writeBoolean(getConfig().compatibilityMode);
         buf.writeBoolean(getConfig().creativeInventory);
