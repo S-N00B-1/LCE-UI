@@ -25,13 +25,8 @@ public class LCEDrawableHelper {
         matrices.translate(-x, -y, 0.0f);
         float width;
         if (LCEUIMod.getConfig().closerTextShadows) {
-            MutableText blackText = Text.literal("");
-            text.accept(((index, style, codePoint) -> {
-                blackText.append(Text.literal(String.valueOf((char)codePoint)).setStyle(style.withColor((color) & 0xFF000000)));
-                return true;
-            }));
             matrices.translate(x + 1.0f/3.0f, y + 1.0f/3.0f, 0.0f);
-            context.drawText(textRenderer, blackText.asOrderedText(), 0, 0, color & 0xFF000000, false);
+            context.drawText(textRenderer, text, 0, 0, 0xFF000000, false);
             matrices.translate(-1.0f/3.0f, -1.0f/3.0f, 0.0f);
             width = 1.0f/3.0f + context.drawText(textRenderer, text, 0, 0, color, false);
             matrices.scale(1/scale, 1/scale, 1.0f);

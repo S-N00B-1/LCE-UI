@@ -7,7 +7,6 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.function.Consumer;
 

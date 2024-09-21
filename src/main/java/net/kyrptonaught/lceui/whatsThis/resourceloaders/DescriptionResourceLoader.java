@@ -1,7 +1,5 @@
 package net.kyrptonaught.lceui.whatsThis.resourceloaders;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -16,13 +14,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collection;
-import java.util.Collections;
+
 import java.util.Map;
 
 public class DescriptionResourceLoader implements SimpleSynchronousResourceReloadListener {
     public static final Identifier ID = new Identifier(LCEUIMod.MOD_ID, "descriptions");
-    private static final Gson GSON = (new GsonBuilder()).create();
 
     @Override
     public Identifier getFabricId() {

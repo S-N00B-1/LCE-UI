@@ -16,11 +16,5 @@ public class LCEKeyBindings {
                 GLFW.GLFW_KEY_N,
                 "key.categories.lceui"
         ));
-        openSecondaryInventory = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.lceui.secondary_inventory",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_I,
-                "key.categories.lceui"
-        ));
     }
 }

@@ -31,6 +31,12 @@ public abstract class ChatMixin {
     @Unique
     private static final int left = 37;
 
+    /*
+
+    // The functionality of the 'Closer text shadows' has been moved to the Glyph Mixin.
+    // However this does change the black shadow that was present in the original method.
+    // So I'm leaving this here incase we need to come back to it at some point.
+
     @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
     private int renderWithLCEShadow1(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color, Operation<Integer> original) {
         return LCEUIMod.getConfig().closerTextShadows ? (int)LCEDrawableHelper.drawTextWithShadow(instance, textRenderer, text, x, y, 1.0f, color) : original.call(instance, textRenderer, text, x, y, color);
@@ -40,6 +46,7 @@ public abstract class ChatMixin {
     private int renderWithLCEShadow2(DrawContext instance, TextRenderer textRenderer, OrderedText text, int x, int y, int color, Operation<Integer> original) {
         return LCEUIMod.getConfig().closerTextShadows ? (int)LCEDrawableHelper.drawTextWithShadow(instance, textRenderer, text, x, y, 1.0f, color) : original.call(instance, textRenderer, text, x, y, color);
     }
+    */
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V", ordinal = 0))
     private void fillRedirect1(DrawContext instance, int x1, int y1, int x2, int y2, int color) {

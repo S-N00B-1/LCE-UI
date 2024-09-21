@@ -39,7 +39,7 @@ public class DescriptionRenderer {
     public static DescriptionInstance renderingDescription;
 
     public static boolean setToRender(DescriptionInstance descriptionInstance, boolean bypassViewedCheck) {
-        if ((renderingDescription != null && !bypassViewedCheck) || descriptionInstance == null)
+        if ((renderingDescription != null && !bypassViewedCheck) || descriptionInstance == null || !LCEUIMod.getConfig().whatsThis)
             return false;
 
         if (!bypassViewedCheck) {
@@ -54,7 +54,7 @@ public class DescriptionRenderer {
     }
 
     public static void renderDescription(MinecraftClient client, DrawContext context, float delta) {
-        if (renderingDescription == null) return;
+        if (renderingDescription == null || !LCEUIMod.getConfig().whatsThis) return;
 
         if (!client.isPaused())
             renderingDescription.tickOpen(delta);
@@ -70,7 +70,7 @@ public class DescriptionRenderer {
 
         BakedModel bakedModel = renderingDescription.getDisplayModel(client);
 
-        render(client, context, x, 20 + (FabricLoader.getInstance().isModLoaded("raised") ? dev.yurisuika.raised.client.option.RaisedConfig.getHud() : 0), renderingDescription.getNameTranslation(), renderingDescription.getDescTranslation(), renderingDescription.getItemStack(), bakedModel, bakedModel != null);
+        render(client, context, x, 20, renderingDescription.getNameTranslation(), renderingDescription.getDescTranslation(), renderingDescription.getItemStack(), bakedModel, bakedModel != null);
     }
 
     private static void render(MinecraftClient client, DrawContext context, int x, int y, Text titleText, Text descriptionText, ItemStack stack, BakedModel model, boolean displayModel) {

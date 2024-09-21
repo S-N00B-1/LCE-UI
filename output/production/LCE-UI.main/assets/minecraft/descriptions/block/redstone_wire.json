@@ -1,7 +1,0 @@
-{
-  "model": "item/redstone",
-  "text": {
-    "name": "block.minecraft.redstone_wire",
-    "description": "item.minecraft.redstone.description"
-  }
-}

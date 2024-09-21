@@ -18,31 +18,22 @@ public class ModMenuIntegration implements ModMenuApi {
             ConfigScreen configScreen = new ConfigScreen(screen, Text.translatable("options.lceui"));
             configScreen.setSavingEvent(() -> {
                 LCEUIMod.configManager.save();
-                if (MinecraftClient.getInstance().player != null)
+                MinecraftClient client = MinecraftClient.getInstance();
+                if (client.player != null)
                     LCEUIMod.syncConfig();
             });
 
             ConfigSection displaySection = new ConfigSection(configScreen, Text.translatable("options.lceui.general"));
-            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.textShadows"), configOptions.closerTextShadows, true).setSaveConsumer(val -> configOptions.closerTextShadows = val));
-            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.renamedItemsHaveGoldName"), configOptions.renamedItemsHaveGoldName, true).setSaveConsumer(val -> configOptions.renamedItemsHaveGoldName = val));
-            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.smallerItemsOutsideOfScalableSlots"), configOptions.smallerItemsOutsideOfScalableSlots, true).setSaveConsumer(val -> configOptions.smallerItemsOutsideOfScalableSlots = val));
-            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.hotbarText"), configOptions.hotbarText, true).setSaveConsumer(val -> configOptions.hotbarText = val));
+            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.textShadows"), configOptions.closerTextShadows, true).setSaveConsumer(val -> configOptions.closerTextShadows = val)).setToolTip(Text.translatable("options.lceui.general.textShadows.tooltip"));
+            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.whatsThis"), configOptions.whatsThis, true).setSaveConsumer(val -> configOptions.whatsThis = val)).setToolTip(Text.translatable("options.lceui.general.whatsThis.tooltip"));
+            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.tooltips"), configOptions.tooltips, true).setSaveConsumer(val -> configOptions.tooltips = val)).setToolTip(Text.translatable("options.lceui.general.tooltips.tooltip"));
+
 
             ConfigSection screensSection = new ConfigSection(configScreen, Text.translatable("options.lceui.screens"));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.compatibilityMode"), configOptions.compatibilityMode, false).setSaveConsumer(val -> configOptions.compatibilityMode = val).setToolTip(Text.translatable("options.lceui.screens.compatibilityMode.tooltip")));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.creativeInventory"), configOptions.creativeInventory, true).setSaveConsumer(val -> configOptions.creativeInventory = val));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.survivalInventory"), configOptions.survivalInventory, true).setSaveConsumer(val -> configOptions.survivalInventory = val).setToolTip(Text.translatable("options.lceui.requiresRestart")));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.ps4BackgroundSprites"), configOptions.ps4BackgroundSprites, true).setSaveConsumer(val -> configOptions.ps4BackgroundSprites = val));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.classicCrafting"), configOptions.classicCrafting, true).setSaveConsumer(val -> configOptions.classicCrafting = val).setToolTip(Text.translatable("options.lceui.requiresOtherOptionAndRestart", Text.translatable("options.lceui.screens.survivalInventory"))));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.containerInventory"), configOptions.containerInventory, true).setSaveConsumer(val -> configOptions.containerInventory = val).setToolTip(Text.translatable("options.lceui.requiresRestart")));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.container3x3Inventory"), configOptions.container3x3Inventory, true).setSaveConsumer(val -> configOptions.container3x3Inventory = val).setToolTip(Text.translatable("options.lceui.requiresRestart")));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.hopperInventory"), configOptions.hopperInventory, true).setSaveConsumer(val -> configOptions.hopperInventory = val).setToolTip(Text.translatable("options.lceui.requiresRestart")));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.shulkerBoxInventory"), configOptions.shulkerBoxInventory, true).setSaveConsumer(val -> configOptions.shulkerBoxInventory = val).setToolTip(Text.translatable("options.lceui.requiresRestart")));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatWidth"), configOptions.chatWidth, true).setSaveConsumer(val -> configOptions.chatWidth = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatYPos"), configOptions.chatYPos, true).setSaveConsumer(val -> configOptions.chatYPos = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.recolorChat"), configOptions.recolorChat, true).setSaveConsumer(val -> configOptions.recolorChat = val));
             screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.rescaleChatText"), configOptions.rescaleChatText, true).setSaveConsumer(val -> configOptions.rescaleChatText = val));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.sign"), configOptions.sign, true).setSaveConsumer(val -> configOptions.sign = val));
 
             return configScreen;
         };

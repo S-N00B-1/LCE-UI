@@ -3,11 +3,9 @@ package net.kyrptonaught.lceui.whatsThis;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 
@@ -59,10 +57,7 @@ public class DescriptionInstance {
 
     public static DescriptionInstance ofBlock(World world, BlockPos pos, BlockState blockState, ItemDescription itemDescription) {
         if (blockState == null || blockState.isAir() || itemDescription == null) return null;
-        ItemStack itemStack = Item.fromBlock(blockState.getBlock()).getDefaultStack();
-
-        if (itemStack.isEmpty())
-            itemStack = blockState.getBlock().getPickStack(world, pos, blockState);
+        ItemStack itemStack = blockState.getBlock().asItem().getDefaultStack();
 
         return ofItem(itemStack, itemDescription);
     }
@@ -77,7 +72,7 @@ public class DescriptionInstance {
     }
 
     public boolean shouldHide(MinecraftClient client) {
-        return client.options.debugEnabled;
+        return false;
     }
 
     public boolean shouldClose(MinecraftClient client) {

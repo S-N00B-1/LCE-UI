@@ -70,8 +70,7 @@ dependencies {
 
 	modImplementation 'org.aperlambda:lambdajcommon:1.8.1'
 
-	// Mod support (not required)
-	modImplementation "Raised:raised-fabric-${project.minecraft_version}:3.1.0"
+	
 }
 
 loom {

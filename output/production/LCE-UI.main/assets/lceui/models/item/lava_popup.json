@@ -1,7 +1,0 @@
-{
-  "parent": "lceui:item/fluid_popup",
-  "textures": {
-    "0": "minecraft:block/lava_still",
-    "1": "minecraft:block/lava_flow"
-  }
-}

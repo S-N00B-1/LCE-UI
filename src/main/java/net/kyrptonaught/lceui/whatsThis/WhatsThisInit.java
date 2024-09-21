@@ -6,14 +6,12 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.kyrptonaught.lceui.util.LCEKeyBindings;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.kyrptonaught.lceui.util.ClientTagHelper;
 import net.kyrptonaught.lceui.whatsThis.resourceloaders.DescriptionResourceLoader;
-import net.kyrptonaught.lceui.whatsThis.resourceloaders.ModelResourceLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -39,7 +37,6 @@ public class WhatsThisInit {
 
     public static void init() {
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new DescriptionResourceLoader());
-        ModelLoadingRegistry.INSTANCE.registerModelProvider(ModelResourceLoader::loadModels);
 
         descriptionManager = new DescriptionManager();
 

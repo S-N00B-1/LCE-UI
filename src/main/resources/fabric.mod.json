@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "lceui",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "name": "Legacy Console UI",
   "description": "Legacy Console UI",
   "authors": [
@@ -17,9 +17,6 @@
   "entrypoints": {
     "client": [
       "net.kyrptonaught.lceui.LCEUIMod"
-    ],
-    "preLaunch": [
-      "net.kyrptonaught.lceui.LCEUIPreLaunch"
     ],
     "modmenu": [
       "net.kyrptonaught.lceui.config.ModMenuIntegration"
