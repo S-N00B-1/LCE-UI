@@ -30,7 +30,7 @@ body:
   - type: checkboxes
     id: confirm
     attributes:
-      label: "**PLEASE CHECK TO BE SURE THAT THIS UI HASN'T ALREADY BEEN REQUESTED/DENIED**"
+      label: "PLEASE CHECK TO BE SURE THAT THIS UI HASN'T ALREADY BEEN REQUESTED/DENIED"
       options:
         - label: I have checked both the open and closed issues and can confirm this request is new.
           required: true
