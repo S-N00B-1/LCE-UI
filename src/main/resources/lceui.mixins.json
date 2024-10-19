@@ -8,7 +8,13 @@
     "chat.ChatMixin",
     "chat.GlyphMixin",
     "chat.SplashMixin",
-    "tooltip.TooltipMixin"
+    "gui.BackgroundRendererMixin",
+    "gui.HudRendererMixin",
+    "titlescreen.AccessibilityOnboardingScreenMixin",
+    "titlescreen.CubeMapRendererMixin",
+    "titlescreen.TitleScreenMixin",
+    "tooltip.TooltipMixin",
+    "whatsthis.HandledScreenMixin"
   ],
   "injectors": {
     "maxShiftBy": 5,

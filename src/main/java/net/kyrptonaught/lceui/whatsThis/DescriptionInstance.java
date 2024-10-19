@@ -58,6 +58,8 @@ public class DescriptionInstance {
     public static DescriptionInstance ofBlock(World world, BlockPos pos, BlockState blockState, ItemDescription itemDescription) {
         if (blockState == null || blockState.isAir() || itemDescription == null) return null;
         ItemStack itemStack = blockState.getBlock().asItem().getDefaultStack();
+        if (itemStack.isEmpty())
+            itemStack = blockState.getBlock().getPickStack(world, pos, blockState);
 
         return ofItem(itemStack, itemDescription);
     }

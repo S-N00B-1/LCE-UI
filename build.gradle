@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -51,16 +51,15 @@ repositories {
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation ('net.kyrptonaught:kyrptconfig:1.5.8-1.20')
-	include ('net.kyrptonaught:kyrptconfig:1.5.8-1.20')
+	modImplementation ('net.kyrptonaught:kyrptconfig:1.6.0-1.20.4')
+	include ('net.kyrptonaught:kyrptconfig:1.6.0-1.20.4')
 
-	modImplementation "com.github.LlamaLad7.MixinExtras:mixinextras-fabric:${project.mixinextras_version}"
-
-	modImplementation "maven.modrinth:midnightcontrols:Ek4mkpRw"
-	modImplementation "maven.modrinth:midnightlib:YXz8kIQl"
+	modImplementation "maven.modrinth:midnightcontrols:Wv0OBKYv"
+	modImplementation "maven.modrinth:midnightlib:EQNuBJf5"
 
 	modImplementation "dev.lambdaurora:spruceui:${project.spruceui_version}"
 	api('org.aperlambda:lambdajcommon:1.8.1') {

@@ -24,13 +24,10 @@ import java.util.Optional;
 @Environment(EnvType.CLIENT)
 @Mixin(HandledScreen.class)
 public class HandledScreenMixin extends Screen {
-    private float shiftAmount;
     @Shadow
     @Nullable
     protected Slot focusedSlot;
 
-    @Shadow
-    protected int x;
 
     protected HandledScreenMixin(Text title) {
         super(title);
@@ -63,23 +60,8 @@ public class HandledScreenMixin extends Screen {
                     DescriptionInstance descriptionInstance = optional.get().bindToScreen(this);
                     DescriptionRenderer.setToRender(descriptionInstance, true);
                 }
-//                shiftAmount = x;
-//                shiftAmount = Math.max(25, this.x - 100);
-//                shiftAmount = 250;
-//
-//                org.lwjgl.glfw.GLFW.glfwSetCursorPos(net.minecraft.client.MinecraftClient.getInstance().getWindow().getHandle(), this.focusedSlot.x, client.mouse.getY());
             }
             callbackInfoReturnable.setReturnValue(true);
         }
-    }
-
-    @Inject(method = "render", at = @At(value = "HEAD"))
-    public void fixRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        context.getMatrices().translate(-shiftAmount, 0, 0);
-    }
-
-    @Inject(method = "render", at = @At(value = "TAIL"))
-    public void fixRender2(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        context.getMatrices().translate(shiftAmount, 0, 0);
     }
 }

@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.kyrptonaught.kyrptconfig.config.ConfigManager;
 import net.kyrptonaught.lceui.config.LCEConfigOptions;
 import net.kyrptonaught.lceui.resourceloaders.TagResourceLoader;
+import net.kyrptonaught.lceui.titlescreen.PanResourceReloader;
 import net.kyrptonaught.lceui.util.LCEKeyBindings;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
 import net.minecraft.network.PacketByteBuf;
@@ -31,6 +32,7 @@ public class LCEUIMod implements ClientModInitializer {
     public void onInitializeClient() {
         MixinExtrasBootstrap.init();
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new TagResourceLoader());
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(new PanResourceReloader());
         configManager.registerFile("config.json5", new LCEConfigOptions());
         configManager.load();
         LCEKeyBindings.init();
@@ -49,6 +51,12 @@ public class LCEUIMod implements ClientModInitializer {
         buf.writeBoolean(getConfig().chatWidth);
         buf.writeBoolean(getConfig().recolorChat);
         buf.writeBoolean(getConfig().rescaleChatText);
+        buf.writeBoolean(getConfig().hideHudWhenInUI);
+        buf.writeBoolean(getConfig().removeTransparentBG);
+        buf.writeBoolean(getConfig().renderPanoramaEverywhere);
+
+        buf.writeBoolean(getConfig().lcePan);
+        buf.writeBoolean(getConfig().l4jPanSupport);
         ClientPlayNetworking.send(new Identifier(LCEUIMod.MOD_ID, "sync_config_packet"), buf);
     }
 

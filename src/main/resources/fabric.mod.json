@@ -1,15 +1,20 @@
 {
   "schemaVersion": 1,
   "id": "lceui",
-  "version": "0.0.8",
-  "name": "Legacy Console UI",
-  "description": "Legacy Console UI",
+  "version": "0.1.1",
+  "name": "Console-Idated's LCE UI",
+  "description": "A mod that brings various UI elements from Legacy Console Edition into the modern version of the game.",
   "authors": [
+    "S-N00B-1",
+    "Pedro270707",
     "kyrptonaught"
   ],
+  "contributors": [
+    "chilly",
+    "dbtderpbox"
+  ],
   "contact": {
-    "homepage": "https://github.com/kyrptonaught/lceui",
-    "sources": "https://github.com/kyrptonaught/lceui"
+    "sources": "https://github.com/S-N00B-1/CI-LCE-UI"
   },
   "license": "MIT",
   "icon": "assets/lceui/icon.png",
@@ -31,9 +36,13 @@
   ],
   "depends": {
     "minecraft": "~1.20",
-    "fabric-api": "*"
+    "fabric-api": "*",
+    "kyrptconfig": ">=1.6.0-1.20.4"
   },
   "recommends": {
-    "midnightcontrols": "*"
+    "lemclienthelper": "*"
+  },
+  "breaks": {
+    "legacy": "*"
   }
 }
