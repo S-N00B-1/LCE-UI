@@ -11,6 +11,8 @@ body:
       options:
         - label: The feature I am requesting is a UI element.
           required: true
+      validations:
+        required: true
   - type: input
     id: element
     attributes:
@@ -34,3 +36,5 @@ body:
       options:
         - label: I have checked both the open and closed issues and can confirm this request is new.
           required: true
+    validations:
+      required: true

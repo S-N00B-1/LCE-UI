@@ -34,3 +34,5 @@ body:
       options:
         - label: I have checked both the open and closed issues and can confirm this request is new.
           required: true
+    validations:
+      required: true
