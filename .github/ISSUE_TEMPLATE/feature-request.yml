@@ -29,4 +29,10 @@ body:
       required: false
   - type: markdown
     attributes:
-      value: "PLEASE CHECK TO BE SURE THAT THIS UI HASN'T ALREADY BEEN REQUESTED/DENIED"
+      value: "**PLEASE CHECK TO BE SURE THAT THIS UI HASN'T ALREADY BEEN REQUESTED/DENIED**"
+  - type: checkboxes
+    id: confirm
+    attributes:
+      options:
+        - label: I have checked both the open and closed issues and can confirm this request is new.
+          required: true
