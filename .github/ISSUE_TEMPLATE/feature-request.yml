@@ -11,8 +11,6 @@ body:
       options:
         - label: The feature I am requesting is a UI element.
           required: true
-      validations:
-        required: true
   - type: input
     id: element
     attributes:
