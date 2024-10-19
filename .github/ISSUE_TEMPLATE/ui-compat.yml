@@ -1,0 +1,32 @@
+name: UI Compatibility 
+description: Request compatibility for another mod's UI 
+title: "[UI COMPAT]: "
+labels: ["UI COMPAT"]
+body:
+  - type: input
+    id: link
+    attributes:
+      label: Link to Mod
+      description: "Link to the Mod. Preferably Github"
+      placeholder: https://...
+    validations:
+      required: true
+  - type: textarea
+    id: brokenui
+    attributes:
+      label: UI's That do not work
+      render: markdown
+      description: List of UI's from the Mod that do not work.
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      render: markdown
+      label: Additional Information
+      description: Any other information/screenshots.
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: "PLEASE CHECK TO BE SURE THAT THIS MOD HASN'T ALREADY BEEN REQUESTED/DENIED"

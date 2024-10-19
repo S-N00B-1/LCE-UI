@@ -1,0 +1,32 @@
+name: Feature Request 
+description: Request a feature for the mod 
+title: "[UI REQUEST]: "
+labels: ["UI REQ"]
+body:
+  - type: checkboxes
+    id: isUI
+    attributes:
+      label: UI
+      description: This mod is only for UI, no gameplay changes will be implemented.
+    options:
+      - label: The feature I am requesting is UI related.
+        required: true
+  - type: input
+    id: element
+    attributes:
+      label: UI Element
+      description: "Please keep the amount of ui's being requested brief"
+      placeholder: Crafting UI
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      render: markdown
+      label: Additional Information
+      description: Any other information about the UI/screenshots of what it looks like.
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: "PLEASE CHECK TO BE SURE THAT THIS UI HASN'T ALREADY BEEN REQUESTED/DENIED"
