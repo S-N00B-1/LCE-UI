@@ -8,9 +8,9 @@ body:
     attributes:
       label: UI
       description: This mod is only for UI, no gameplay changes will be implemented.
-    options:
-      - label: The feature I am requesting is UI related.
-        required: true
+      options:
+        - label: The feature I am requesting is a UI element.
+          required: true
   - type: input
     id: element
     attributes:
