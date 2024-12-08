@@ -2,49 +2,170 @@ package net.kyrptonaught.lceui.config;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import net.kyrptonaught.kyrptconfig.config.screen.ConfigScreen;
-import net.kyrptonaught.kyrptconfig.config.screen.ConfigSection;
-import net.kyrptonaught.kyrptconfig.config.screen.items.BooleanItem;
+import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import net.kyrptonaught.lceui.LCEUIMod;
-import net.kyrptonaught.lceui.titlescreen.LegacyPanoramaRenderer;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 public class ModMenuIntegration implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return (screen) -> {
             LCEConfigOptions configOptions = LCEUIMod.getConfig();
-
-            ConfigScreen configScreen = new ConfigScreen(screen, Text.translatable("options.lceui"));
-            configScreen.setSavingEvent(() -> {
-                LCEUIMod.configManager.save();
-                MinecraftClient client = MinecraftClient.getInstance();
-                if (client.player != null)
-                    LCEUIMod.syncConfig();
-            });
-
-            ConfigSection displaySection = new ConfigSection(configScreen, Text.translatable("options.lceui.general"));
-            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.textShadows"), configOptions.closerTextShadows, true).setSaveConsumer(val -> configOptions.closerTextShadows = val)).setToolTip(Text.translatable("options.lceui.general.textShadows.tooltip"));
-            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.whatsThis"), configOptions.whatsThis, true).setSaveConsumer(val -> configOptions.whatsThis = val)).setToolTip(Text.translatable("options.lceui.general.whatsThis.tooltip"));
-            displaySection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.general.tooltips"), configOptions.tooltips, true).setSaveConsumer(val -> configOptions.tooltips = val)).setToolTip(Text.translatable("options.lceui.general.tooltips.tooltip"));
-
-
-            ConfigSection screensSection = new ConfigSection(configScreen, Text.translatable("options.lceui.screens"));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatWidth"), configOptions.chatWidth, true).setSaveConsumer(val -> configOptions.chatWidth = val));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.chatYPos"), configOptions.chatYPos, true).setSaveConsumer(val -> configOptions.chatYPos = val));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.recolorChat"), configOptions.recolorChat, true).setSaveConsumer(val -> configOptions.recolorChat = val));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.rescaleChatText"), configOptions.rescaleChatText, false).setSaveConsumer(val -> configOptions.rescaleChatText = val));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.hideHudWhenInUI"), configOptions.hideHudWhenInUI, true).setSaveConsumer(val -> configOptions.hideHudWhenInUI = val)).setToolTip(Text.translatable("options.lceui.screens.hideHudWhenInUI.tooltip"));
-            screensSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.screens.removeTransparentBG"), configOptions.removeTransparentBG, true).setSaveConsumer(val -> configOptions.removeTransparentBG = val)).setToolTip(Text.translatable("options.lceui.screens.removeTransparentBG.tooltip"));
-
-
-            ConfigSection panoramaSection = new ConfigSection(configScreen, Text.translatable("options.lceui.panorama"));
-            panoramaSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.panorama.legacyPanorama"), configOptions.lcePan, true).setSaveConsumer(val -> configOptions.lcePan = val)).setToolTip(Text.translatable("options.lceui.panorama.legacyPanorama.tooltip"));
-            panoramaSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.panorama.l4jpansupport"), configOptions.l4jPanSupport, true).setSaveConsumer(val -> {configOptions.l4jPanSupport = val; LegacyPanoramaRenderer.resetPanDimensions();})).setToolTip(Text.translatable("options.lceui.panorama.l4jpansupport.tooltip"));
-            panoramaSection.addConfigItem(new BooleanItem(Text.translatable("options.lceui.panorama.renderPanoramaEverywhere"), configOptions.renderPanoramaEverywhere, false).setSaveConsumer(val -> configOptions.renderPanoramaEverywhere = val));
-
-            return configScreen;
+            return YetAnotherConfigLib.createBuilder()
+                    .title(Text.translatable("options.lceui"))
+                    .category(ConfigCategory.createBuilder()
+                            .name(Text.translatable("options.lceui.general"))
+                            .option(Option.<Boolean>createBuilder()
+                                    .name(Text.translatable("options.lceui.general.textShadows"))
+                                    .description(
+                                            value -> OptionDescription.createBuilder()
+                                                    .text(Text.translatable("options.lceui.general.textShadows.tooltip"))
+                                                    .image(new Identifier(LCEUIMod.MOD_ID, "config/textshadows.png"),864, 496)
+                                                    .build()
+                                    )
+                                    .binding(true, () -> configOptions.closerTextShadows, newVal -> configOptions.closerTextShadows = newVal)
+                                    .controller(TickBoxControllerBuilder::create)
+                                    .build())
+                            .option(Option.<Boolean>createBuilder()
+                                    .name(Text.translatable("options.lceui.general.whatsThis"))
+                                    .description(
+                                            value -> OptionDescription.createBuilder()
+                                                    .text(Text.translatable("options.lceui.general.whatsThis.tooltip"))
+                                                    .image(new Identifier(LCEUIMod.MOD_ID, "config/whatsthis.png"),864, 496)
+                                                    .build()
+                                    )
+                                    .binding(true, () -> configOptions.whatsThis, newVal -> configOptions.whatsThis = newVal)
+                                    .controller(TickBoxControllerBuilder::create)
+                                    .build())
+                            .option(Option.<Boolean>createBuilder()
+                                    .name(Text.translatable("options.lceui.general.tooltips"))
+                                    .description(
+                                            value -> OptionDescription.createBuilder()
+                                                    .text(Text.translatable("options.lceui.general.tooltips.tooltip"))
+                                                    .image(new Identifier(LCEUIMod.MOD_ID, "config/tooltips.png"),864, 496)
+                                                    .build()
+                                    )
+                                    .binding(true, () -> configOptions.tooltips, newVal -> configOptions.tooltips = newVal)
+                                    .controller(TickBoxControllerBuilder::create)
+                                    .build())
+                            .build())
+                    .category(ConfigCategory.createBuilder()
+                            .name(Text.translatable("options.lceui.screens"))
+                            .group(OptionGroup.createBuilder()
+                                    .name(Text.translatable("options.lceui.screens.chat"))
+                                    .description(OptionDescription.of(Text.translatable("options.lceui.screens.chat.tooltip")))
+                                    .option(Option.<Boolean>createBuilder()
+                                            .name(Text.translatable("options.lceui.screens.chatWidth"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.screens.chatWidth.tooltip"))
+                                                            .image(new Identifier(LCEUIMod.MOD_ID, "config/chatwidth.png"),864, 496)
+                                                            .build()
+                                            )
+                                            .binding(true, () -> configOptions.chatWidth, newVal -> configOptions.chatWidth = newVal)
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build())
+                                    .option(Option.<Boolean>createBuilder()
+                                            .name(Text.translatable("options.lceui.screens.chatYPos"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.screens.chatYPos.tooltip"))
+                                                            .image(new Identifier(LCEUIMod.MOD_ID, "config/chatypos.png"),864, 496)
+                                                            .build()
+                                            )
+                                            .binding(true, () -> configOptions.chatYPos, newVal -> configOptions.chatYPos = newVal)
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build())
+                                    .option(Option.<Boolean>createBuilder()
+                                            .name(Text.translatable("options.lceui.screens.recolorChat"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.screens.recolorChat.tooltip"))
+                                                            .image(new Identifier(LCEUIMod.MOD_ID, "config/recolorchat.png"),864, 496)
+                                                            .build()
+                                            )
+                                            .binding(true, () -> configOptions.recolorChat, newVal -> configOptions.recolorChat = newVal)
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build())
+                                    .option(Option.<Boolean>createBuilder()
+                                            .name(Text.translatable("options.lceui.screens.rescaleChatText"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.screens.rescaleChatText.tooltip"))
+                                                            .image(new Identifier(LCEUIMod.MOD_ID, "config/rescalechattext.png"),864, 496)
+                                                            .build()
+                                            )
+                                            .binding(false, () -> configOptions.rescaleChatText, newVal -> configOptions.rescaleChatText = newVal)
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build())
+                                    .build())
+                            .group(OptionGroup.createBuilder()
+                                    .name(Text.translatable("options.lceui.screens.ui"))
+                                    .option(Option.<Boolean>createBuilder()
+                                            .name(Text.translatable("options.lceui.screens.removeTransparentBG"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.screens.removeTransparentBG.tooltip"))
+                                                            .image(new Identifier(LCEUIMod.MOD_ID, "config/removedarkbg.png"),864, 496)
+                                                            .build()
+                                            )
+                                            .binding(true, () -> configOptions.removeTransparentBG, newVal -> configOptions.removeTransparentBG = newVal)
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build())
+                                    .option(Option.<Boolean>createBuilder()
+                                            .name(Text.translatable("options.lceui.screens.hideHudWhenInUI"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.screens.hideHudWhenInUI.tooltip"))
+                                                            .image(new Identifier(LCEUIMod.MOD_ID, "config/hidehudinui.png"),864, 496)
+                                                            .build()
+                                            )
+                                            .binding(true, () -> configOptions.hideHudWhenInUI, newVal -> configOptions.hideHudWhenInUI = newVal)
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build())
+                                    .build())
+                            .build())
+                    .category(ConfigCategory.createBuilder()
+                            .name(Text.translatable("options.lceui.panorama"))
+                                    .option(Option.<Boolean>createBuilder()
+                                            .name(Text.translatable("options.lceui.panorama.legacyPanorama"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.panorama.legacyPanorama.tooltip"))
+                                                            .image(new Identifier(LCEUIMod.MOD_ID, "config/lcepan.png"),864, 496)
+                                                            .build()
+                                            )
+                                            .binding(true, () -> configOptions.lcePan, newVal -> configOptions.lcePan = newVal)
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build())
+                                    .option(Option.<Boolean>createBuilder()
+                                            .name(Text.translatable("options.lceui.panorama.renderPanoramaEverywhere"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.panorama.renderPanoramaEverywhere.tooltip"))
+                                                            .image(new Identifier(LCEUIMod.MOD_ID, "config/renderpaneverywhere.png"),864, 496)
+                                                            .build()
+                                            )
+                                            .binding(false, () -> configOptions.renderPanoramaEverywhere, newVal -> configOptions.renderPanoramaEverywhere = newVal)
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build())
+                            .group(OptionGroup.createBuilder()
+                                    .name(Text.translatable("options.lceui.panorama.compat"))
+                                    .option(Option.<Boolean>createBuilder()
+                                            .name(Text.translatable("options.lceui.panorama.l4jpansupport"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.panorama.l4jpansupport.tooltip")).build()
+                                            )
+                                            .binding(true, () -> configOptions.l4jPanSupport, newVal -> configOptions.l4jPanSupport = newVal)
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .build())
+                                    .build())
+                            .build())
+                    .build()
+                    .generateScreen(screen);
         };
     }
 }

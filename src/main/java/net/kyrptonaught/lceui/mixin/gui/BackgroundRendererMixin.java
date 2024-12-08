@@ -32,7 +32,7 @@ public class BackgroundRendererMixin {
 
     @Inject(method = "renderBackgroundTexture", at=@At("HEAD"), cancellable = true)
     public void renderBackgroundTexture(DrawContext context, CallbackInfo ci) {
-        if (this.client.currentScreen != null && LCEUIMod.getConfig().renderPanoramaEverywhere) {
+        if (this.client.currentScreen != null && LCEUIMod.getConfig().renderPanoramaEverywhere && LCEUIMod.getConfig().lcePan) {
             if (LCEUIMod.getConfig().l4jPanSupport && this.client.getResourceManager().getResource(l4jPan).isPresent()) {
                 L4J_SUPPORT_PANORAMA_CUBE_MAP.render(context, context.getMatrices(), client.getTickDelta());
             } else if (this.client.getResourceManager().getResource(lceuiPan).isPresent()) {
