@@ -3,6 +3,7 @@ package net.kyrptonaught.lceui.config;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import dev.isxander.yacl3.api.*;
+import dev.isxander.yacl3.api.controller.FloatSliderControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.text.Text;
@@ -124,6 +125,31 @@ public class ModMenuIntegration implements ModMenuApi {
                                             )
                                             .binding(true, () -> configOptions.hideHudWhenInUI, newVal -> configOptions.hideHudWhenInUI = newVal)
                                             .controller(TickBoxControllerBuilder::create)
+                                            .build())
+                                    .build())
+                            .group(OptionGroup.createBuilder()
+                                    .name(Text.translatable("options.lceui.screens.crosshair"))
+                                    .option(Option.<Boolean>createBuilder()
+                                            .name(Text.translatable("options.lceui.screens.crosshair.lcecrosshair"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.screens.crosshair.lcecrosshair.tooltip"))
+                                                            .image(new Identifier(LCEUIMod.MOD_ID, "config/lcecrosshair.png"),864, 496)
+                                                            .build()
+                                            )
+                                            .controller(TickBoxControllerBuilder::create)
+                                            .binding(true, () -> configOptions.lceCrosshair, newVal -> configOptions.lceCrosshair = newVal)
+                                            .build())
+                                    .option(Option.<Float>createBuilder()
+                                            .name(Text.translatable("options.lceui.screens.crosshair.lcecrosshairopacity"))
+                                            .description(
+                                                    value -> OptionDescription.createBuilder()
+                                                            .text(Text.translatable("options.lceui.screens.crosshair.lcecrosshairopacity.tooltip"))
+                                                            .build()
+                                            )
+                                            .binding(0.8f, () -> configOptions.lceCrosshairOpacity, newVal -> configOptions.lceCrosshairOpacity = newVal)
+                                            .controller(opt -> FloatSliderControllerBuilder.create(opt).range(0.0f,1.0f).step(0.1f))
+                                            .available(configOptions.lceCrosshair)
                                             .build())
                                     .build())
                             .build())

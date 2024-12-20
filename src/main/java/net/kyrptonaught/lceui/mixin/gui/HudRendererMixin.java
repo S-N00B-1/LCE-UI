@@ -1,5 +1,6 @@
 package net.kyrptonaught.lceui.mixin.gui;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.kyrptonaught.lceui.LCEUIMod;
 import net.minecraft.client.MinecraftClient;
@@ -16,6 +17,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(InGameHud.class)
@@ -50,5 +52,24 @@ public class HudRendererMixin {
             ci.cancel();
         }
     }
+
+    @Redirect(method = "renderCrosshair", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFuncSeparate(Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;)V"))
+    public void renderCrosshair(GlStateManager.SrcFactor srcFactor, GlStateManager.DstFactor dstFactor, GlStateManager.SrcFactor srcAlpha, GlStateManager.DstFactor dstAlpha) {
+        if (!LCEUIMod.getConfig().lceCrosshair) {
+            RenderSystem.blendFuncSeparate(srcFactor,dstFactor,srcAlpha,dstAlpha);
+        } else {
+            RenderSystem.setShaderColor(1.0f,1.0f,1.0f, LCEUIMod.getConfig().lceCrosshairOpacity);
+            RenderSystem.enableBlend();
+            //RenderSystem.blendFuncSeparate(774, 768, 1, 0); // sweet mother of snoob this is bad.
+        }
+    }
+
+    @Inject(method = "renderCrosshair", at= @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;defaultBlendFunc()V", shift = At.Shift.AFTER))
+    public void renderCrosshair(DrawContext context, CallbackInfo ci) {
+        if (LCEUIMod.getConfig().lceCrosshair) {
+            RenderSystem.setShaderColor(1.0f,1.0f,1.0f,1.0f);
+        }
+    }
+
 
 }
