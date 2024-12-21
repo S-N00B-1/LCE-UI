@@ -42,23 +42,23 @@ public class LCEUIMod implements ClientModInitializer {
 
     public static void syncConfig() {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-        buf.writeBoolean(getConfig().whatsThis);
-
         buf.writeBoolean(getConfig().closerTextShadows);
-
+        buf.writeBoolean(getConfig().whatsThis);
         buf.writeBoolean(getConfig().tooltips);
 
         buf.writeBoolean(getConfig().chatWidth);
+        buf.writeBoolean(getConfig().chatYPos);
         buf.writeBoolean(getConfig().recolorChat);
         buf.writeBoolean(getConfig().rescaleChatText);
-        buf.writeBoolean(getConfig().hideHudWhenInUI);
+
         buf.writeBoolean(getConfig().removeTransparentBG);
-        buf.writeBoolean(getConfig().renderPanoramaEverywhere);
+        buf.writeBoolean(getConfig().hideHudWhenInUI);
 
         buf.writeBoolean(getConfig().lceCrosshair);
         buf.writeFloat(getConfig().lceCrosshairOpacity);
 
         buf.writeBoolean(getConfig().lcePan);
+        buf.writeBoolean(getConfig().renderPanoramaEverywhere);
         buf.writeBoolean(getConfig().l4jPanSupport);
         ClientPlayNetworking.send(new Identifier(LCEUIMod.MOD_ID, "sync_config_packet"), buf);
     }
