@@ -55,6 +55,9 @@ public class LCEUIMod implements ClientModInitializer {
         buf.writeBoolean(getConfig().removeTransparentBG);
         buf.writeBoolean(getConfig().renderPanoramaEverywhere);
 
+        buf.writeBoolean(getConfig().lceCrosshair);
+        buf.writeFloat(getConfig().lceCrosshairOpacity);
+
         buf.writeBoolean(getConfig().lcePan);
         buf.writeBoolean(getConfig().l4jPanSupport);
         ClientPlayNetworking.send(new Identifier(LCEUIMod.MOD_ID, "sync_config_packet"), buf);
