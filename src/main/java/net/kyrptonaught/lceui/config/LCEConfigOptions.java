@@ -31,6 +31,12 @@ public class LCEConfigOptions implements AbstractConfigFile {
     @Comment("Opacity of the crosshair if LCE Crosshair is enabled")
     public float lceCrosshairOpacity = 0.8f;
 
+    @Comment("Enables fade out of hotbar when idle.")
+    public boolean fadeOut = true;
+    @Comment("Amount of ticks of being idle before fadeout starts")
+    public int idleInputTimeout = 60;
+    @Comment("The minimum opacity the hotbar can fade to.")
+    public float minFadeValue = 0.2f;
 
     @Comment("Makes the panorama a 2D scrolling texture, like LCE.")
     public boolean lcePan = true;

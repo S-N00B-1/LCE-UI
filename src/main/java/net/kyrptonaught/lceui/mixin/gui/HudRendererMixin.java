@@ -71,5 +71,8 @@ public class HudRendererMixin {
         }
     }
 
+   /* TODO: Hud Transparency,this is going to be one messy mixin.
+      //RenderSystem.setShaderColor(1.0f,1.0f,1.0f, FadeOutTracker.getFadeOutAmount());
+    */
 
 }
