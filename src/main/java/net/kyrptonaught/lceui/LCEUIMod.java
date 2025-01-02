@@ -9,6 +9,7 @@ import net.kyrptonaught.kyrptconfig.config.ConfigManager;
 import net.kyrptonaught.lceui.config.LCEConfigOptions;
 import net.kyrptonaught.lceui.resourceloaders.TagResourceLoader;
 import net.kyrptonaught.lceui.titlescreen.PanResourceReloader;
+import net.kyrptonaught.lceui.util.FadeOutTracker;
 import net.kyrptonaught.lceui.util.LCEKeyBindings;
 import net.kyrptonaught.lceui.whatsThis.WhatsThisInit;
 import net.minecraft.network.PacketByteBuf;
@@ -37,6 +38,7 @@ public class LCEUIMod implements ClientModInitializer {
         configManager.load();
         LCEKeyBindings.init();
         WhatsThisInit.init();
+        FadeOutTracker.init();
     }
 
 

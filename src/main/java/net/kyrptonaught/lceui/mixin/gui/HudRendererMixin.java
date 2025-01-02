@@ -3,6 +3,7 @@ package net.kyrptonaught.lceui.mixin.gui;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.kyrptonaught.lceui.LCEUIMod;
+import net.kyrptonaught.lceui.util.FadeOutTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.BossBarHud;
@@ -11,6 +12,8 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.entity.Entity;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -58,7 +61,13 @@ public class HudRendererMixin {
         if (!LCEUIMod.getConfig().lceCrosshair) {
             RenderSystem.blendFuncSeparate(srcFactor,dstFactor,srcAlpha,dstAlpha);
         } else {
-            RenderSystem.setShaderColor(1.0f,1.0f,1.0f, LCEUIMod.getConfig().lceCrosshairOpacity);
+            if (!LCEUIMod.getConfig().fadeOut) {
+                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, LCEUIMod.getConfig().lceCrosshairOpacity);
+            }
+            else {
+                RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, (LCEUIMod.getConfig().lceCrosshairOpacity * FadeOutTracker.getFadeOutAmount()));
+
+            }
             RenderSystem.enableBlend();
             //RenderSystem.blendFuncSeparate(774, 768, 1, 0); // sweet mother of snoob this is bad.
         }
@@ -70,9 +79,4 @@ public class HudRendererMixin {
             RenderSystem.setShaderColor(1.0f,1.0f,1.0f,1.0f);
         }
     }
-
-   /* TODO: Hud Transparency,this is going to be one messy mixin.
-      //RenderSystem.setShaderColor(1.0f,1.0f,1.0f, FadeOutTracker.getFadeOutAmount());
-    */
-
 }

@@ -10,6 +10,8 @@
     "chat.SplashMixin",
     "gui.BackgroundRendererMixin",
     "gui.HudRendererMixin",
+    "gui.HudTransperencyMixin",
+    "gui.syncSelectedSlotMixin",
     "titlescreen.AccessibilityOnboardingScreenMixin",
     "titlescreen.CubeMapRendererMixin",
     "titlescreen.TitleScreenMixin",
