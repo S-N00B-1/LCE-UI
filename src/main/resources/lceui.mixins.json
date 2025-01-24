@@ -11,6 +11,7 @@
     "gui.BackgroundRendererMixin",
     "gui.HudRendererMixin",
     "gui.HudTransperencyMixin",
+    "gui.ItemRendererTransMixin",
     "gui.syncSelectedSlotMixin",
     "titlescreen.AccessibilityOnboardingScreenMixin",
     "titlescreen.CubeMapRendererMixin",
